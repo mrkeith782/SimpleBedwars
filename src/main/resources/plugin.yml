@@ -1,0 +1,8 @@
+name: bedwars
+version: '${project.version}'
+main: mrkeith782.bedwars.Bedwars
+api-version: 1.19
+commands:
+  hello:
+    description: Says hello.
+    usage: /hello

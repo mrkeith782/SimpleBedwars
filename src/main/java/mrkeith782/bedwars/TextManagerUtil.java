@@ -1,0 +1,58 @@
+package mrkeith782.bedwars;
+
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TextManagerUtil {
+
+    /**
+     * Used to parse strings with easy to type colors into color strings.
+     *
+     * @param string String to be parsed
+     * @return TextComponent with valid color codes
+     */
+    public TextComponent parseColoredString(String string) {
+        string = string.replace("%%black%%", "§0");
+        string = string.replace("%%dark_blue%%", "§1");
+        string = string.replace("%%dark_green%%", "§2");
+        string = string.replace("%%dark_aqua%%", "§3");
+        string = string.replace("%%dark_red%%", "§4");
+        string = string.replace("%%dark_purple%%", "§5");
+        string = string.replace("%%gold%%", "§6");
+        string = string.replace("%%gray%%", "§7");
+        string = string.replace("%%dark_gray%%", "§8");
+        string = string.replace("%%blue%%", "§9");
+        string = string.replace("%%green%%", "§a");
+        string = string.replace("%%aqua%%", "§b");
+        string = string.replace("%%red%%", "§c");
+        string = string.replace("%%light_purple%%", "§d");
+        string = string.replace("%%yellow%%", "§e");
+        string = string.replace("%%white%%", "§f");
+        string = string.replace("%%obf%%", "§k");
+        string = string.replace("%%obfuscated%%", "§k");
+        string = string.replace("%%bold%%", "§l");
+        string = string.replace("%%strike%%", "§m");
+        string = string.replace("%%underline%%", "§n");
+        string = string.replace("%%italic%%", "§o");
+        string = string.replace("%%reset%%", "§r");
+        return new net.md_5.bungee.api.chat.TextComponent(string);
+    }
+
+    /**
+     * Used to add hover-over text to existing TextComponents.
+     *
+     * @param string TextComponent to hover over
+     * @param hoverString TextComponent that appears on hover
+     * @return TextComponent with hover
+     */
+    public TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
+        string.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverString.getText())));
+        return string;
+    }
+    //TODO: Click component?
+}
