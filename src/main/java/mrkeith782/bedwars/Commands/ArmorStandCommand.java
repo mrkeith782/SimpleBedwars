@@ -25,10 +25,10 @@ public class ArmorStandCommand implements CommandExecutor {
             }
 
             //no real reason to do this atm, but it's what it'll look like in the future
-            TextComponent coloredDisplayName = textutil.parseColoredString(args[1]);
+            String coloredDisplayName = textutil.parseColoredString(args[1]);
             bedwars.getAsm().spawnNewArmorStand(player.getLocation(), coloredDisplayName, args[0]);
 
-            player.spigot().sendMessage(new TextComponent("Spawned an armor stand with name " + coloredDisplayName.getText() + "."));
+            player.spigot().sendMessage(new TextComponent("Spawned an armor stand with name " + coloredDisplayName + "."));
             return true;
         }
 
@@ -37,10 +37,10 @@ public class ArmorStandCommand implements CommandExecutor {
                 return false;
             }
 
-            TextComponent coloredDisplayName = textutil.parseColoredString(args[1]);
+            String coloredDisplayName = textutil.parseColoredString(args[1]);
             boolean success = bedwars.getAsm().editArmorStandDisplay(args[0], coloredDisplayName);
             if (success) {
-                player.spigot().sendMessage(new TextComponent("Edited an armor stand to " + coloredDisplayName.getText() + "."));
+                player.spigot().sendMessage(new TextComponent("Edited an armor stand to " + coloredDisplayName + "."));
                 return true;
             }
             else {

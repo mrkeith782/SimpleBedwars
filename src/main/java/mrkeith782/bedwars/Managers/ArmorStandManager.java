@@ -11,26 +11,26 @@ import java.util.Map;
 public class ArmorStandManager {
     private final Map<String, ArmorStand> holograms = new HashMap<>();
 
-    public void spawnNewArmorStand(Location location, TextComponent name, String ID) {
+    public void spawnNewArmorStand(Location location, String name, String ID) {
         if (location.getWorld() == null) {
             return;
         }
         ArmorStand as = location.getWorld().spawn(location, ArmorStand.class);
         as.setSmall(true);
         as.setMarker(true);
-        as.setCustomName(name.getText());
+        as.setCustomName(name);
         as.setCustomNameVisible(true);
         as.setVisible(false);
         holograms.put(ID, as);
     }
 
-    public boolean editArmorStandDisplay(String ID, TextComponent name) {
+    public boolean editArmorStandDisplay(String ID, String name) {
         ArmorStand as = holograms.get(ID);
         if (as == null) {
             return false;
         }
 
-        as.setCustomName(name.getText());
+        as.setCustomName(name);
         return true;
     }
 

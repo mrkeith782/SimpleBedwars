@@ -8,11 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShopMenu implements Menu {
+public class UpgradeMenu implements Menu{
     private final Bedwars bedwars = Bedwars.getInstance();
     private final MenuManager mm = bedwars.getMm();
-    String menuID = "SHOP_MENU";
-    String menuName = "Shop";
+    String menuID = "UPGRADE_MENU";
+    String menuName = "Upgrades";
 
     @Override
     public void createMenu() {

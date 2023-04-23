@@ -12,7 +12,7 @@ public class TextUtil {
      * @param string String to be parsed
      * @return TextComponent with valid color codes
      */
-    public TextComponent parseColoredString(String string) {
+    public String parseColoredString(String string) {
         string = string.replace("%%black%%", "§0");
         string = string.replace("%%dark_blue%%", "§1");
         string = string.replace("%%dark_green%%", "§2");
@@ -36,7 +36,7 @@ public class TextUtil {
         string = string.replace("%%underline%%", "§n");
         string = string.replace("%%italic%%", "§o");
         string = string.replace("%%reset%%", "§r");
-        return new net.md_5.bungee.api.chat.TextComponent(string);
+        return string;
     }
 
     /**
