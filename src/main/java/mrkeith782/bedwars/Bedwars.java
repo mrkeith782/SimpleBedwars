@@ -1,6 +1,5 @@
 package mrkeith782.bedwars;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {

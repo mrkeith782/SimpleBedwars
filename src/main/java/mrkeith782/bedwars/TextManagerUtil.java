@@ -1,12 +1,8 @@
 package mrkeith782.bedwars;
 
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TextManagerUtil {
 
