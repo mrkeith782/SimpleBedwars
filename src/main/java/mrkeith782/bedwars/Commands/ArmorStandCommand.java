@@ -53,6 +53,7 @@ public class ArmorStandCommand implements CommandExecutor {
             bedwars.getAsm().printAllArmorStands();
             return true;
         }
+
         return false;
     }
 }

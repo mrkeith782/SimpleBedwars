@@ -3,14 +3,13 @@ package mrkeith782.bedwars.Managers;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ArmorStandManager {
-    Map<String, ArmorStand> holograms = new HashMap<>();
+    private final Map<String, ArmorStand> holograms = new HashMap<>();
 
     public void spawnNewArmorStand(Location location, TextComponent name, String ID) {
         if (location.getWorld() == null) {
@@ -35,6 +34,16 @@ public class ArmorStandManager {
         return true;
     }
 
+    public boolean removeArmorStand(String ID) {
+        ArmorStand as = holograms.get(ID);
+        if (as == null) {
+            return false;
+        }
+
+        as.remove();
+        return true;
+    }
+
     public void removeAllArmorStands() {
         for (ArmorStand as : holograms.values()) {
             as.remove();
@@ -44,7 +53,7 @@ public class ArmorStandManager {
     public void printAllArmorStands() {
         Bukkit.broadcastMessage("PRINTING ALL ARMOR STANDS:");
         Bukkit.broadcastMessage("ID | NAME");
-        for(String key : holograms.keySet()) {
+        for (String key : holograms.keySet()) {
             String hologramDisplay = holograms.get(key).getName();
             Bukkit.broadcastMessage(key + " " + hologramDisplay);
         }

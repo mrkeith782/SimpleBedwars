@@ -3,9 +3,6 @@ version: '${project.version}'
 main: mrkeith782.bedwars.Bedwars
 api-version: 1.19
 commands:
-  hello:
-    description: Says hello.
-    usage: /hello
   placearmorstand:
     description: Spawns a armor stand.
     usage: /placearmorstand <id> <string>
@@ -15,3 +12,6 @@ commands:
   printarmorstands:
     description: Prints all currently placed armor stands.
     usage: /printarmorstands
+  openmenu:
+    description: Opens a debug menu.
+    usage: /openmenu <menu>
