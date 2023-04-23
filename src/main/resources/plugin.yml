@@ -6,3 +6,12 @@ commands:
   hello:
     description: Says hello.
     usage: /hello
+  placearmorstand:
+    description: Spawns a armor stand.
+    usage: /placearmorstand <id> <string>
+  editarmorstand:
+    description: Edits an armor stand.
+    usage: /editarmorstand <id> <string>
+  printarmorstands:
+    description: Prints all currently placed armor stands.
+    usage: /printarmorstands

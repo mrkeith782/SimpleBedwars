@@ -1,4 +1,4 @@
-package mrkeith782.bedwars;
+package mrkeith782.bedwars.Util;
 
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -50,5 +50,6 @@ public class TextManagerUtil {
         string.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverString.getText())));
         return string;
     }
+
     //TODO: Click component?
 }
