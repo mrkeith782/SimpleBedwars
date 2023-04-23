@@ -4,7 +4,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
-public class TextManagerUtil {
+public class TextUtil {
 
     /**
      * Used to parse strings with easy to type colors into color strings.

@@ -2,7 +2,7 @@ package mrkeith782.bedwars;
 
 import mrkeith782.bedwars.Commands.ArmorStandCommand;
 import mrkeith782.bedwars.Commands.HelloWorldCommand;
-import mrkeith782.bedwars.Util.ArmorStandManager;
+import mrkeith782.bedwars.Managers.ArmorStandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
@@ -14,7 +14,6 @@ public final class Bedwars extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
         asm = new ArmorStandManager();
 
         getCommand("hello").setExecutor(new HelloWorldCommand());

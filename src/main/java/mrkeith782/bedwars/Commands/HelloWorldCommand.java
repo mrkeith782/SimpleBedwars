@@ -1,6 +1,6 @@
 package mrkeith782.bedwars.Commands;
 
-import mrkeith782.bedwars.Util.TextManagerUtil;
+import mrkeith782.bedwars.Util.TextUtil;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +13,7 @@ public class HelloWorldCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            TextManagerUtil tmu = new TextManagerUtil();
+            TextUtil tmu = new TextUtil();
             TextComponent baseString = tmu.parseColoredString("%%gray%%" + player.getDisplayName() + " executed a command!");
             TextComponent hoverString = tmu.parseColoredString("%%green%%Nerds!");
             TextComponent sendString = tmu.addHoverText(baseString, hoverString);
