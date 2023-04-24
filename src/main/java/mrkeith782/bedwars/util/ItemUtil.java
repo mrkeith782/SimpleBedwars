@@ -5,13 +5,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.w3c.dom.Text;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemUtil {
-    private final TextUtil textUtil = new TextUtil();
     private final Bedwars bedwars = Bedwars.getInstance();
     private final ItemStack item;
 
@@ -27,7 +27,7 @@ public class ItemUtil {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) return;
 
-        itemMeta.setDisplayName(textUtil.parseColoredString(string));
+        itemMeta.setDisplayName(TextUtil.parseColoredString(string));
         item.setItemMeta(itemMeta);
     }
 
@@ -41,7 +41,7 @@ public class ItemUtil {
 
         List<String> coloredLore = new ArrayList<>();
         for(String string : lore) {
-            coloredLore.add(textUtil.parseColoredString(string));
+            coloredLore.add(TextUtil.parseColoredString(string));
         }
 
         itemMeta.setLore(coloredLore);

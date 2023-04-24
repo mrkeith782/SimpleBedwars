@@ -12,7 +12,7 @@ public class TextUtil {
      * @param string String to be parsed
      * @return TextComponent with valid color codes
      */
-    public String parseColoredString(String string) {
+    public static String parseColoredString(String string) {
         string = string.replace("%%black%%", "§0");
         string = string.replace("%%dark_blue%%", "§1");
         string = string.replace("%%dark_green%%", "§2");
@@ -46,7 +46,7 @@ public class TextUtil {
      * @param hoverString TextComponent that appears on hover
      * @return TextComponent with hover
      */
-    public TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
+    public static TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
         string.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverString.getText())));
         return string;
     }

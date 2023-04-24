@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 public class ArmorStandCommand implements CommandExecutor {
     private final Bedwars bedwars = Bedwars.getInstance();
-    private final TextUtil textutil = new TextUtil();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -25,7 +24,7 @@ public class ArmorStandCommand implements CommandExecutor {
             }
 
             //no real reason to do this atm, but it's what it'll look like in the future
-            String coloredDisplayName = textutil.parseColoredString(args[1]);
+            String coloredDisplayName = TextUtil.parseColoredString(args[1]);
             bedwars.getAsm().spawnNewArmorStand(player.getLocation(), coloredDisplayName, args[0]);
 
             player.spigot().sendMessage(new TextComponent("Spawned an armor stand with name " + coloredDisplayName + "."));
@@ -37,7 +36,7 @@ public class ArmorStandCommand implements CommandExecutor {
                 return false;
             }
 
-            String coloredDisplayName = textutil.parseColoredString(args[1]);
+            String coloredDisplayName = TextUtil.parseColoredString(args[1]);
             boolean success = bedwars.getAsm().editArmorStandDisplay(args[0], coloredDisplayName);
             if (success) {
                 player.spigot().sendMessage(new TextComponent("Edited an armor stand to " + coloredDisplayName + "."));
