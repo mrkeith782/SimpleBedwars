@@ -1,18 +1,12 @@
-package mrkeith782.bedwars.Util;
+package mrkeith782.bedwars.util;
 
 import mrkeith782.bedwars.Bedwars;
-import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

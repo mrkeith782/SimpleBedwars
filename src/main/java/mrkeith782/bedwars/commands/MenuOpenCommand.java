@@ -1,14 +1,12 @@
-package mrkeith782.bedwars.Commands;
+package mrkeith782.bedwars.commands;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.Managers.MenuManager;
-import mrkeith782.bedwars.Menus.Menu;
-import org.bukkit.Bukkit;
+import mrkeith782.bedwars.managers.MenuManager;
+import mrkeith782.bedwars.menus.Menu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 

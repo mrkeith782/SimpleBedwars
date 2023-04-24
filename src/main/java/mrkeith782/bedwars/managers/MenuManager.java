@@ -1,6 +1,6 @@
-package mrkeith782.bedwars.Managers;
+package mrkeith782.bedwars.managers;
 
-import mrkeith782.bedwars.Menus.Menu;
+import mrkeith782.bedwars.menus.Menu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

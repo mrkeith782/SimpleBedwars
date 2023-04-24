@@ -1,7 +1,7 @@
-package mrkeith782.bedwars.Commands;
+package mrkeith782.bedwars.commands;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.Util.TextUtil;
+import mrkeith782.bedwars.util.TextUtil;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
