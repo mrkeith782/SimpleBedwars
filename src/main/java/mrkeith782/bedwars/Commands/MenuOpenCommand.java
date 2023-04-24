@@ -24,7 +24,7 @@ public class MenuOpenCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         List<Menu> menus = mm.getMenus();
-        for(Menu menu : menus) {
+        for (Menu menu : menus) {
             if (menu.getMenuID().equalsIgnoreCase(args[0])) {
                 menu.openMenu(player);
                 return true;

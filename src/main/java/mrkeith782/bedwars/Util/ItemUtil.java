@@ -11,6 +11,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
+import javax.annotation.Nullable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,32 @@ public class ItemUtil {
         if (itemMeta == null) return;
         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
         item.setItemMeta(itemMeta);
+    }
+
+    /**
+     * Reads an NBT string from the current ItemStack
+     * @param id ID of the NBT value
+     * @return NBT String
+     */
+    @Nullable
+    public String readNBTString(String id) {
+        NamespacedKey key = new NamespacedKey(bedwars, id);
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta == null) return null;
+        return itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+    }
+
+    /**
+     * Reads an NBT integer from the current ItemStack
+     * @param id ID of the NBT value
+     * @return NBT String
+     */
+    @Nullable
+    public Integer readNBTInteger(String id) {
+        NamespacedKey key = new NamespacedKey(bedwars, id);
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta == null) return null;
+        return itemMeta.getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
     }
 
     public void setStackSize(int count) {

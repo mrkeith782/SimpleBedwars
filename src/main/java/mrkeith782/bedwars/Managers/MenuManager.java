@@ -68,16 +68,14 @@ public class MenuManager {
 
     /**
      * Opens a menu for the player
-     * @param id ID of the menu
+     * @param id     ID of the menu
      * @param player
-     * @return True if the menu could be opened, false if not
      */
-    public boolean openMenu(String id, Player player) {
+    public void openMenu(String id, Player player) {
         player.closeInventory();
         Inventory inventory = getMenuByID(id);
-        if (inventory == null) return false;
+        if (inventory == null) return;
         player.openInventory(inventory);
-        return true;
     }
 
     /**
@@ -102,6 +100,10 @@ public class MenuManager {
         return blankItem;
     }
 
+    /**
+     * Fills the empty slots of the menu with blank panes.
+     * @param id ID of the menu
+     */
     public void fillWithBlanks(String id) {
         ItemStack blankPane = getBlankItem();
         if (blankPane == null) return;
