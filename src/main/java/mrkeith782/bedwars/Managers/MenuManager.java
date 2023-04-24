@@ -9,10 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
@@ -103,6 +100,22 @@ public class MenuManager {
 
         blankItem = item;
         return blankItem;
+    }
+
+    public void fillWithBlanks(String id) {
+        ItemStack blankPane = getBlankItem();
+        if (blankPane == null) return;
+
+        Inventory inventory = getMenuByID(id);
+        if (inventory == null) return;
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack mat = inventory.getItem(i);
+            if (mat == null || mat.getType() == Material.AIR) {
+                inventory.setItem(i, blankPane);
+            }
+        }
+        inventories.replace(id, inventory);
     }
 
     public List<Menu> getMenus() {

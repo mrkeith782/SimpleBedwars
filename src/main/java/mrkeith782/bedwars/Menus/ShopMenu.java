@@ -2,10 +2,14 @@ package mrkeith782.bedwars.Menus;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.Managers.MenuManager;
+import mrkeith782.bedwars.Util.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShopMenu implements Menu {
@@ -16,18 +20,11 @@ public class ShopMenu implements Menu {
 
     @Override
     public void createMenu() {
-        ItemStack blankPane = mm.getBlankItem();
         Map<Integer, ItemStack> layout = new HashMap<>();
-        layout.put(0, blankPane);
-        layout.put(1, blankPane);
-        layout.put(2, blankPane);
-        layout.put(3, blankPane);
-        layout.put(4, blankPane);
-        layout.put(5, blankPane);
-        layout.put(6, blankPane);
-        layout.put(7, blankPane);
-        layout.put(8, blankPane);
+        layout.put(4, getWoolItem());
+
         mm.registerMenu(menuName, menuID, 1, layout);
+        mm.fillWithBlanks(menuID);
     }
 
     @Override
@@ -38,5 +35,16 @@ public class ShopMenu implements Menu {
     @Override
     public String getMenuID() {
         return menuID;
+    }
+
+    private ItemStack getWoolItem() {
+        ItemUtil woolItem = new ItemUtil(new ItemStack(Material.WHITE_WOOL));
+        woolItem.setName("%%white%%White Wool %%gray%%x16");
+        woolItem.setStackSize(16);
+        List<String> woolLore = new ArrayList<>();
+        woolLore.add("%%green%%Cost: %%white%%4 Iron");
+        woolItem.setLore(woolLore);
+        woolItem.addNBTData("item", "WOOL_16");
+        return woolItem.getItem();
     }
 }
