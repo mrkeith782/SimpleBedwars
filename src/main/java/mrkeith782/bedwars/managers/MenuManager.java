@@ -42,6 +42,16 @@ public class MenuManager {
     }
 
     /**
+     * Registers multiple menus at once
+     * @param menus
+     */
+    public void registerMenus(List<Menu> menus) {
+        for (Menu menu : menus) {
+            registerMenu(menu);
+        }
+    }
+
+    /**
      * Returns a stored inventory in the MenuManager
      * @param id ID of the stored menu
      * @return Requested menu. Can be null.

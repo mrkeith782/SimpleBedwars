@@ -2,14 +2,18 @@ package mrkeith782.bedwars;
 
 import mrkeith782.bedwars.commands.ArmorStandCommand;
 import mrkeith782.bedwars.commands.MenuOpenCommand;
+import mrkeith782.bedwars.listeners.InventoryClickListener;
 import mrkeith782.bedwars.managers.ArmorStandManager;
 import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.menus.ShopMenu;
+import mrkeith782.bedwars.menus.UpgradeMenu;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
     private static Bedwars instance;
     public ArmorStandManager asm;
+
     public MenuManager mm;
 
     @Override
@@ -24,6 +28,8 @@ public final class Bedwars extends JavaPlugin {
         getCommand("openmenu").setExecutor(new MenuOpenCommand());
 
         mm.registerMenu(new ShopMenu());
+        mm.registerMenu(new UpgradeMenu());
+        Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
     }
 
     @Override

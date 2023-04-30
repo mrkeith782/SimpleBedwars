@@ -3,6 +3,7 @@ package mrkeith782.bedwars.menus;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.managers.MenuManager;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -33,6 +34,17 @@ public class UpgradeMenu implements Menu{
     @Override
     public void openMenu(Player player) {
         mm.openMenu(menuID, player);
+    }
+
+    @Override
+    public void handleClick(InventoryClickEvent e) {
+        e.setCancelled(true);
+        e.getWhoClicked().sendMessage("Clicked in the UPGRADE_MENU!");
+    }
+
+    @Override
+    public String getMenuName() {
+        return menuName;
     }
 
     @Override
