@@ -32,11 +32,6 @@ public class UpgradeMenu implements Menu{
     }
 
     @Override
-    public void openMenu(Player player) {
-        mm.openMenu(menuID, player);
-    }
-
-    @Override
     public void handleClick(InventoryClickEvent e) {
         e.setCancelled(true);
         e.getWhoClicked().sendMessage("Clicked in the UPGRADE_MENU!");

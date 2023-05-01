@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -51,16 +52,21 @@ public class InventoryUtil {
      * @param amount Amount of material to check
      * @return True if the player can hold the item, false if not.
      */
-    public static boolean checkForSpace(Player player, Material material, int amount) {
+    public static boolean hasSpace(Player player, ItemStack material, int amount) {
+        if (player.getInventory().firstEmpty() != -1) { //They have an empty slot
+            return true;
+        }
+
+        //Check if the player has space on a partial stack in their inventory
         int emptySpace = 0;
         for (ItemStack item : player.getInventory()) {
-            if (item == null) { //should mean that the player has a slot open
-                emptySpace += 64;
+            if (item == null) {
                 continue;
-            } else if (item.getType() == material) {
-                emptySpace += 64 - item.getAmount();
+            } else if (item.isSimilar(material)) {
+                emptySpace += (64 - item.getAmount());
             }
         }
-        return emptySpace >= amount;
+
+        return (emptySpace >= amount);
     }
 }

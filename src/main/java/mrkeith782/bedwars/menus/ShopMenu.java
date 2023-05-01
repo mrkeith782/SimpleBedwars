@@ -24,15 +24,19 @@ public class ShopMenu implements Menu {
     @Override
     public void createMenu() {
         Map<Integer, ItemStack> layout = new HashMap<>();
-        layout.put(4, getWoolItem());
+        layout.put(0, getMainMenuItem());
+        layout.put(9, mm.getBlankItem());
+        layout.put(10, mm.getBlankItem());
+        layout.put(11, mm.getBlankItem());
+        layout.put(12, mm.getBlankItem());
+        layout.put(13, mm.getBlankItem());
+        layout.put(14, mm.getBlankItem());
+        layout.put(15, mm.getBlankItem());
+        layout.put(16, mm.getBlankItem());
+        layout.put(17, mm.getBlankItem());
+        layout.put(18, getWoolItem());
 
-        mm.registerMenu(menuName, menuID, 1, layout);
-        mm.fillWithBlanks(menuID);
-    }
-
-    @Override
-    public void openMenu(Player player) {
-        mm.openMenu(menuID, player);
+        mm.registerMenu(menuName, menuID, 6, layout);
     }
 
     @Override
@@ -41,8 +45,10 @@ public class ShopMenu implements Menu {
         Player player = (Player) e.getWhoClicked();
         ItemStack clickedItem = e.getCurrentItem();
 
-        if (Objects.equals(clickedItem, getWoolItem())) {
-            if (!InventoryUtil.checkForSpace(player, Material.WHITE_WOOL, 16)) {
+        if (clickedItem == null) return;
+
+        if (clickedItem.isSimilar(getWoolItem())) {
+            if (!InventoryUtil.hasSpace(player, new ItemStack(Material.WHITE_WOOL), 16)) {
                 player.sendMessage(TextUtil.parseColoredString("%%red%%You don't have the required space to hold this!"));
                 //todo: play failure sound
                 return;
@@ -72,8 +78,14 @@ public class ShopMenu implements Menu {
         woolItem.setName("%%white%%White Wool %%gray%%x16");
         woolItem.setStackSize(16);
         List<String> woolLore = new ArrayList<>();
-        woolLore.add("%%green%%Cost: %%white%%4 Iron");
+        woolLore.add("%%gold%%Cost: %%white%%4 Iron");
         woolItem.setLore(woolLore);
         return woolItem.getItem();
+    }
+
+    private ItemStack getMainMenuItem() {
+        ItemUtil mainMenuItem = new ItemUtil(new ItemStack(Material.WHITE_WOOL));
+        mainMenuItem.setName("%%yellow%%All Items");
+        return mainMenuItem.getItem();
     }
 }
