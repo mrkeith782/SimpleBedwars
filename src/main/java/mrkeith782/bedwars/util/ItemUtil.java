@@ -5,7 +5,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.w3c.dom.Text;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

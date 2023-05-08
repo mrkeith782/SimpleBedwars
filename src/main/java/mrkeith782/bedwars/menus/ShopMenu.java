@@ -5,15 +5,15 @@ import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.util.InventoryUtil;
 import mrkeith782.bedwars.util.ItemUtil;
 import mrkeith782.bedwars.util.TextUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ShopMenu implements Menu {
     private final Bedwars bedwars = Bedwars.getInstance();

@@ -1,6 +1,5 @@
 package mrkeith782.bedwars.menus;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public interface Menu {
