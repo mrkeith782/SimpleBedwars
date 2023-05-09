@@ -15,3 +15,6 @@ commands:
   openmenu:
     description: Opens a debug menu.
     usage: /openmenu <menu>
+  openscoreboard:
+    description: Opens the debug scoreboard.
+    usage: /openscoreboard
