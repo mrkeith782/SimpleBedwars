@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class ScoreboardOpenCommand implements CommandExecutor {
     private final Bedwars bedwars = Bedwars.getInstance();
