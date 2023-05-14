@@ -2,15 +2,13 @@ package mrkeith782.bedwars.commands;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
-import mrkeith782.bedwars.managers.MenuManager;
-import mrkeith782.bedwars.menus.Menu;
 import mrkeith782.bedwars.util.TextUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.awt.*;
 import java.util.*;
@@ -42,41 +40,54 @@ public class ScoreboardOpenCommand implements CommandExecutor {
             int loopTime = 0;
             final Color bedwarsColor = new Color(255, 255, 0);
 
-            /*
-                Currmode can be
-                YELLOW
-                MOVE_ORANGE
-                FLASH
-             */
+            //This is so we don't have to repeat this logic infinitely
+            final Map<Integer, String> lineCache = new HashMap<>();
 
             @Override
             public void run() {
                 loopTime++;
-                StringBuilder bw = null;
+                StringBuilder bw = new StringBuilder("    ");
 
-                bw = new StringBuilder("    ");
-                if (loopTime >= 0 && loopTime < 60) { //YELLOW MODE
-                    bw.append(net.md_5.bungee.api.ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
-                } else if (loopTime >= 60 && loopTime < 180) { //MOVE ORANGE THROUGH TEXT
-                    int orangeTime = (int) ((loopTime - 60) * 1.5);
-                    LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%B"), new Color(255, 195 - orangeTime >= 100 ? 195 - orangeTime : 255, 195 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%E"), new Color(255, 205 - orangeTime >= 100 ? 205 - orangeTime : 255, 205 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%D"), new Color(255, 215 - orangeTime >= 100 ? 215 - orangeTime : 255, 215 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%W"), new Color(255, 225 - orangeTime >= 100 ? 225 - orangeTime : 255, 225 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%A"), new Color(255, 235 - orangeTime >= 100 ? 235 - orangeTime : 255, 235 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%R"), new Color(255, 245 - orangeTime >= 100 ? 245 - orangeTime : 255, 245 - orangeTime >= 100 ? 0 : 255));
-                    colorMap.put(TextUtil.parseColoredString("%%bold%%S"), new Color(255, 255 - orangeTime >= 100 ? 255 - orangeTime : 255, 255 - orangeTime >= 100 ? 0 : 255));
+                if (loopTime >= 0 && loopTime < 10) { //YELLOW MODE
+                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                } else if (loopTime >= 10 && loopTime < 100) { //MOVE ORANGE THROUGH TEXT
+                    String cachedLine = lineCache.get(loopTime);
+                    if (cachedLine != null) {
+                        bw.append(cachedLine);
+                    } else {
+                        int orangeTime = (loopTime - 10) * 2;
 
-                    for (String string : colorMap.keySet()) {
-                        bw.append(net.md_5.bungee.api.ChatColor.of(colorMap.get(string))).append(string);
+                        //We could hypothetically make this more efficient by dropping the colors and using purely hex codes in chat, but that's for a less angry keith
+                        Map<String, Color> colorMap = new LinkedHashMap<>();
+                        int temp = (int) (255 - orangeTime * 1.25);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%B"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 1.20);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%E"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 1.15);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%D"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 1.10);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%W"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 1.05);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%A"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 1.00);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%R"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+                        temp = (int) (255 - orangeTime * 0.95);
+                        colorMap.put(TextUtil.parseColoredString("%%bold%%S"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
+
+                        StringBuilder completedLine = new StringBuilder();
+                        for (String string : colorMap.keySet()) {
+                            completedLine.append(ChatColor.of(colorMap.get(string))).append(string);
+                        }
+
+                        bw.append(completedLine);
+                        lineCache.put(loopTime, completedLine.toString());
                     }
-                } else if (loopTime >= 180 && loopTime < 195) {
-                    bw.append(net.md_5.bungee.api.ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
-                } else if (loopTime >= 195 && loopTime < 210) {
+                } else if (loopTime >= 100 && loopTime < 120) {
+                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                } else if (loopTime >= 120 && loopTime < 140) {
                     bw.append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
-                } else if (loopTime >= 210 && loopTime < 225) {
-                    bw.append(net.md_5.bungee.api.ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                } else if (loopTime >= 140 && loopTime < 180) {
+                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                     loopTime = 0;
                 }
                 bw.append("   ");

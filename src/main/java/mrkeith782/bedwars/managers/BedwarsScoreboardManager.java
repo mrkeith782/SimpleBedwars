@@ -19,7 +19,7 @@ public class BedwarsScoreboardManager {
         scoreboardManager = bedwars.getServer().getScoreboardManager();
     }
 
-    public Scoreboard createNewScoreboard(Player player, List<String> lines) {
+    public void createNewScoreboard(Player player, List<String> lines) {
         Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
 
         Objective objective = scoreboard.registerNewObjective("Identifier", Criteria.DUMMY, TextUtil.parseColoredString(" "));
@@ -33,7 +33,6 @@ public class BedwarsScoreboardManager {
         }
 
         scoreboards.put(player.getName(), scoreboard);
-        return scoreboard;
     }
 
     public void refreshScoreboard(Player player) {
