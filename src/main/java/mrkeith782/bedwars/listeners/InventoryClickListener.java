@@ -13,6 +13,7 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        //We only care about the click if we're in a Menu, so let's check if we are.
         for (Menu menu : mm.getMenus()) {
             String menuName = menu.getMenuName();
             if (menuName == null || e.getClickedInventory() == null) {

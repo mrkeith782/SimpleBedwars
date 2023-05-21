@@ -36,11 +36,13 @@ public class ScoreboardOpenCommand implements CommandExecutor {
         scoreboardManager.createNewScoreboard(player, scoreboardLines);
         scoreboardManager.refreshScoreboard(player);
 
+        //TODO: Refactor so that this logic runs only once for all players, not once per player.
         BukkitRunnable bedwarsColors = new BukkitRunnable() {
+            //Gets where we are in the color display. Since there are multiple stages, this is the most elegant way to do it.
             int loopTime = 0;
             final Color bedwarsColor = new Color(255, 255, 0);
 
-            //This is so we don't have to repeat this logic infinitely
+            //If we've already created a line before, the runnable will attempt to get it again here.
             final Map<Integer, String> lineCache = new HashMap<>();
 
             @Override
@@ -48,16 +50,21 @@ public class ScoreboardOpenCommand implements CommandExecutor {
                 loopTime++;
                 StringBuilder bw = new StringBuilder("    ");
 
-                if (loopTime >= 0 && loopTime < 10) { //YELLOW MODE
+                if (loopTime >= 0 && loopTime < 10) { //Display yellow text
                     bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
-                } else if (loopTime >= 10 && loopTime < 100) { //MOVE ORANGE THROUGH TEXT
+                } else if (loopTime >= 10 && loopTime < 100) { //Display orange moving through yellow text
                     String cachedLine = lineCache.get(loopTime);
                     if (cachedLine != null) {
                         bw.append(cachedLine);
                     } else {
                         int orangeTime = (loopTime - 10) * 2;
 
-                        //We could hypothetically make this more efficient by dropping the colors and using purely hex codes in chat, but that's for a less angry keith
+                        /*
+                            Okay idk what crack I was on when I made this but we're incrementing the color to
+                            make it more orange until we reach a specific rgb value, where we'll set the color to white.
+                         */
+
+                        //todo: refactor into arraylist?
                         Map<String, Color> colorMap = new LinkedHashMap<>();
                         int temp = (int) (255 - orangeTime * 1.25);
                         colorMap.put(TextUtil.parseColoredString("%%bold%%B"), new Color(255, temp >= 100 ? temp : 255, temp >= 100 ? 0 : 255));
@@ -82,12 +89,13 @@ public class ScoreboardOpenCommand implements CommandExecutor {
                         bw.append(completedLine);
                         lineCache.put(loopTime, completedLine.toString());
                     }
-                } else if (loopTime >= 100 && loopTime < 120) {
+                } else if (loopTime >= 100 && loopTime < 120) { //Flash white and orange, and then reset.
                     bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime >= 120 && loopTime < 140) {
                     bw.append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime >= 140 && loopTime < 180) {
                     bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                } else if (loopTime == 180) { //Complete the loop, reset to first stage.
                     loopTime = 0;
                 }
                 bw.append("   ");

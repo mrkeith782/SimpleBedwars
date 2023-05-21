@@ -24,7 +24,9 @@ public class ItemUtil {
      */
     public void setName(String string) {
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return;
+        if (itemMeta == null) {
+            return;
+        }
 
         itemMeta.setDisplayName(TextUtil.parseColoredString(string));
         item.setItemMeta(itemMeta);
@@ -36,7 +38,9 @@ public class ItemUtil {
      */
     public void setLore(List<String> lore) {
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return;
+        if (itemMeta == null) {
+            return;
+        }
 
         List<String> coloredLore = new ArrayList<>();
         for(String string : lore) {
@@ -55,7 +59,9 @@ public class ItemUtil {
     public void addNBTData(String id, int value) {
         NamespacedKey key = new NamespacedKey(bedwars, id);
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return;
+        if (itemMeta == null) {
+            return;
+        }
         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
         item.setItemMeta(itemMeta);
     }
@@ -68,7 +74,9 @@ public class ItemUtil {
     public void addNBTData(String id, String value) {
         NamespacedKey key = new NamespacedKey(bedwars, id);
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return;
+        if (itemMeta == null) {
+            return;
+        }
         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
         item.setItemMeta(itemMeta);
     }
@@ -82,7 +90,9 @@ public class ItemUtil {
     public String readNBTString(String id) {
         NamespacedKey key = new NamespacedKey(bedwars, id);
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return null;
+        if (itemMeta == null) {
+            return null;
+        }
         return itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
     }
 
@@ -95,7 +105,9 @@ public class ItemUtil {
     public Integer readNBTInteger(String id) {
         NamespacedKey key = new NamespacedKey(bedwars, id);
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return null;
+        if (itemMeta == null) {
+            return null;
+        }
         return itemMeta.getPersistentDataContainer().get(key, PersistentDataType.INTEGER);
     }
 

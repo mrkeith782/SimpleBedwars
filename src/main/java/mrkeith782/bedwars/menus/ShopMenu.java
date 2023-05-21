@@ -45,7 +45,9 @@ public class ShopMenu implements Menu {
         Player player = (Player) e.getWhoClicked();
         ItemStack clickedItem = e.getCurrentItem();
 
-        if (clickedItem == null) return;
+        if (clickedItem == null) {
+            return;
+        }
 
         if (clickedItem.isSimilar(getWoolItem())) {
             if (!InventoryUtil.hasSpace(player, new ItemStack(Material.WHITE_WOOL), 16)) {
