@@ -1,14 +1,15 @@
 package mrkeith782.bedwars.util;
 
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.entity.Player;
 
 public class TextUtil {
 
     /**
      * Used to parse strings with easy to type colors into color strings.
-     *
      * @param string String to be parsed
      * @return TextComponent with valid color codes
      */
@@ -41,7 +42,6 @@ public class TextUtil {
 
     /**
      * Used to add hover-over text to existing TextComponents.
-     *
      * @param string TextComponent to hover over
      * @param hoverString TextComponent that appears on hover
      * @return TextComponent with hover
@@ -51,5 +51,12 @@ public class TextUtil {
         return string;
     }
 
-    //TODO: Click component?
+    /**
+     * Displays a string on the player's action bar.
+     * @param player Player to display the string to.
+     * @param string String to display. Does not parse color codes.
+     */
+    public static void displayActionBar(Player player, String string) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(string));
+    }
 }
