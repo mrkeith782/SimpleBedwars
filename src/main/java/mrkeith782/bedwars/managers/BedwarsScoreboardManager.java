@@ -13,9 +13,7 @@ import java.util.Map;
 public class BedwarsScoreboardManager {
     private final Bedwars bedwars = Bedwars.getInstance();
     private final ScoreboardManager scoreboardManager;
-
     private final Map<String, Scoreboard> scoreboards = new HashMap<>();
-
     public BedwarsScoreboardManager() {
         scoreboardManager = bedwars.getServer().getScoreboardManager();
     }
@@ -35,7 +33,7 @@ public class BedwarsScoreboardManager {
         for (String line : lines) {
             Score score = objective.getScore(TextUtil.parseColoredString(line));
             score.setScore(lines.size() - iteration);
-            iteration++;
+            ++iteration;
         }
 
         scoreboards.put(player.getName(), scoreboard);

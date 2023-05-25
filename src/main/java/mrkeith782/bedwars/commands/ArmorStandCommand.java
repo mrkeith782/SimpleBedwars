@@ -27,7 +27,7 @@ public class ArmorStandCommand implements CommandExecutor {
             String coloredDisplayName = TextUtil.parseColoredString(args[1]);
             bedwars.getAsm().spawnNewArmorStand(player.getLocation(), coloredDisplayName, args[0]);
 
-            player.spigot().sendMessage(new TextComponent("Spawned an armor stand with name " + coloredDisplayName + "."));
+            player.sendMessage("Spawned an armor stand with name " + coloredDisplayName + ".");
             return true;
         }
 

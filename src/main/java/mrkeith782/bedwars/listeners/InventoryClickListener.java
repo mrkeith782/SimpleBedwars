@@ -8,13 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class InventoryClickListener implements Listener {
-    private final Bedwars bedwars = Bedwars.getInstance();
-    private final MenuManager mm = bedwars.getMm();
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         //We only care about the click if we're in a Menu, so let's check if we are.
-        for (Menu menu : mm.getMenus()) {
+        for (Menu menu : Bedwars.getInstance().getMm().getMenus()) {
             String menuName = menu.getMenuName();
             if (menuName == null || e.getClickedInventory() == null) {
                 continue;

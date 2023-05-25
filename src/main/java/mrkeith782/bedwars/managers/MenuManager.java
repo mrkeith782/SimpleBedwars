@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
-    private static ItemStack BLANK_ITEM; //We only create it if we need it, and store it here.
+    private ItemStack BLANK_ITEM; //We only create it if we need it, and store it here.
     private final List<Menu> menus = new ArrayList<>();
 
     /**
