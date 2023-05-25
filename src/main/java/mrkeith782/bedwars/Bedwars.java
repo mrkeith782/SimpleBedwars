@@ -1,6 +1,7 @@
 package mrkeith782.bedwars;
 
 import mrkeith782.bedwars.commands.ArmorStandCommand;
+import mrkeith782.bedwars.commands.FuckWithPackets;
 import mrkeith782.bedwars.commands.MenuOpenCommand;
 import mrkeith782.bedwars.commands.ScoreboardOpenCommand;
 import mrkeith782.bedwars.listeners.InventoryClickListener;
@@ -30,6 +31,7 @@ public final class Bedwars extends JavaPlugin {
         getCommand("editarmorstand").setExecutor(new ArmorStandCommand());
         getCommand("openmenu").setExecutor(new MenuOpenCommand());
         getCommand("openscoreboard").setExecutor(new ScoreboardOpenCommand());
+        getCommand("fuckwithpackets").setExecutor(new FuckWithPackets());
 
         mm.registerMenu(new ShopMenu());
         mm.registerMenu(new UpgradeMenu());

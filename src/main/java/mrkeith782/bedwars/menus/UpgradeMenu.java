@@ -8,11 +8,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UpgradeMenu implements Menu{
+public class UpgradeMenu extends Menu {
     private final Bedwars bedwars = Bedwars.getInstance();
     private final MenuManager mm = bedwars.getMm();
-    String menuID = "UPGRADE_MENU";
-    String menuName = "Upgrades";
+
+    public UpgradeMenu() {
+        this.menuID = "UPGRADE_MENU";
+        this.menuName = "Upgrades";
+    }
 
     @Override
     public void createMenu() {
@@ -34,15 +37,5 @@ public class UpgradeMenu implements Menu{
     public void handleClick(InventoryClickEvent e) {
         e.setCancelled(true);
         e.getWhoClicked().sendMessage("Clicked in the UPGRADE_MENU!");
-    }
-
-    @Override
-    public String getMenuName() {
-        return menuName;
-    }
-
-    @Override
-    public String getMenuID() {
-        return menuID;
     }
 }

@@ -18,3 +18,6 @@ commands:
   openscoreboard:
     description: Opens the debug scoreboard.
     usage: /openscoreboard
+  fuckwithpackets:
+    description: Fucks with packets.
+    usage: /fuckwithpackets

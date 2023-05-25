@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
-    private static ItemStack blankItem; //We only create it if we need it, and store it here.
+    private static ItemStack BLANK_ITEM; //We only create it if we need it, and store it here.
     private final List<Menu> menus = new ArrayList<>();
 
     /**
@@ -42,16 +42,6 @@ public class MenuManager {
     public void registerMenu(Menu menu) {
         menu.createMenu();
         menus.add(menu);
-    }
-
-    /**
-     * Registers multiple menus at once
-     * @param menus
-     */
-    public void registerMenus(List<Menu> menus) {
-        for (Menu menu : menus) {
-            registerMenu(menu);
-        }
     }
 
     /**
@@ -97,8 +87,8 @@ public class MenuManager {
      */
     @Nullable
     public ItemStack getBlankItem() {
-        if (blankItem != null) { //Early break so we aren't constantly creating new objects
-            return blankItem;
+        if (BLANK_ITEM != null) { //Early break so we aren't constantly creating new objects
+            return BLANK_ITEM;
         }
 
         ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -109,8 +99,8 @@ public class MenuManager {
         itemMeta.setDisplayName(" ");
         item.setItemMeta(itemMeta);
 
-        blankItem = item;
-        return blankItem;
+        BLANK_ITEM = item;
+        return BLANK_ITEM;
     }
 
     /**

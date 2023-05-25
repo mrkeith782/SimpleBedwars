@@ -14,26 +14,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
-public class ShopMenu implements Menu {
+public class ShopMenu extends Menu {
     private final Bedwars bedwars = Bedwars.getInstance();
     private final MenuManager mm = bedwars.getMm();
-    String menuID = "SHOP_MENU";
-    String menuName = "Shop";
+
+    public ShopMenu() {
+        this.menuID = "SHOP_MENU";
+        this.menuName = "Shop";
+    }
 
     @Override
     public void createMenu() {
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, getMainMenuItem());
-        layout.put(9, mm.getBlankItem());
-        layout.put(10, mm.getBlankItem());
-        layout.put(11, mm.getBlankItem());
-        layout.put(12, mm.getBlankItem());
-        layout.put(13, mm.getBlankItem());
-        layout.put(14, mm.getBlankItem());
-        layout.put(15, mm.getBlankItem());
-        layout.put(16, mm.getBlankItem());
-        layout.put(17, mm.getBlankItem());
+        IntStream.range(9, 18).forEach(slot -> mm.getBlankItem());
         layout.put(18, getWoolItem());
 
         mm.registerMenu(menuName, menuID, 6, layout);
@@ -63,16 +59,6 @@ public class ShopMenu implements Menu {
             player.sendMessage(TextUtil.parseColoredString("%%red%%You don't have the required materials to purchase this!"));
             //todo: play failure sound
         }
-    }
-
-    @Override
-    public String getMenuName() {
-        return menuName;
-    }
-
-    @Override
-    public String getMenuID() {
-        return menuID;
     }
 
     private ItemStack getWoolItem() {
