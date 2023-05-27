@@ -40,9 +40,9 @@ public class ScoreboardOpenCommand implements CommandExecutor {
         BukkitRunnable bedwarsColors = new BukkitRunnable() {
             //Gets where we are in the color display. Since there are multiple stages, this is the most elegant way to do it.
             int loopTime = 0;
-            final Color bedwarsColor = new Color(255, 255, 0);
+            final Color yellow = new Color(255, 255, 0);
 
-            //If we've already created a line before, the runnable will attempt to get it again here.
+            //If we've already created a line before, the runnable will attempt to set / get it here
             final Map<Integer, String> lineCache = new HashMap<>();
 
             @Override
@@ -51,7 +51,7 @@ public class ScoreboardOpenCommand implements CommandExecutor {
                 StringBuilder bw = new StringBuilder("    ");
 
                 if (loopTime >= 0 && loopTime < 10) { //Display yellow text
-                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                    bw.append(ChatColor.of(yellow)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime >= 10 && loopTime < 100) { //Display orange moving through yellow text
                     String cachedLine = lineCache.get(loopTime);
                     if (cachedLine != null) {
@@ -90,11 +90,11 @@ public class ScoreboardOpenCommand implements CommandExecutor {
                         lineCache.put(loopTime, completedLine.toString());
                     }
                 } else if (loopTime >= 100 && loopTime < 120) { //Flash white and orange, and then reset.
-                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                    bw.append(ChatColor.of(yellow)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime >= 120 && loopTime < 140) {
                     bw.append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime >= 140 && loopTime < 180) {
-                    bw.append(ChatColor.of(bedwarsColor)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
+                    bw.append(ChatColor.of(yellow)).append(TextUtil.parseColoredString("%%bold%%BEDWARS"));
                 } else if (loopTime == 180) { //Complete the loop, reset to first stage.
                     loopTime = 0;
                 }
@@ -105,7 +105,7 @@ public class ScoreboardOpenCommand implements CommandExecutor {
             }
         };
 
-        bedwarsColors.runTaskTimerAsynchronously(bedwars, 1L, 1L);
+        bedwarsColors.runTaskTimer(bedwars, 1L, 1L);
         return true;
     }
 }

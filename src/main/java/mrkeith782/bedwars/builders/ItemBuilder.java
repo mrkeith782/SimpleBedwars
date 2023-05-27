@@ -1,6 +1,7 @@
-package mrkeith782.bedwars.util;
+package mrkeith782.bedwars.builders;
 
 import mrkeith782.bedwars.Bedwars;
+import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,11 +11,11 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemUtil {
+public class ItemBuilder {
     private final Bedwars bedwars = Bedwars.getInstance();
     private final ItemStack item;
 
-    public ItemUtil(ItemStack item) {
+    public ItemBuilder(ItemStack item) {
         this.item = item;
     }
 

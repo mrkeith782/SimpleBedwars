@@ -1,25 +1,56 @@
 package mrkeith782.bedwars.menus;
 
+import mrkeith782.bedwars.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 public abstract class Menu {
     String menuID;
     String menuName;
+    Inventory inventory;
 
     /**
-     * Used in order to generate the menu. The menu should then be registered with the MenuManager.
+     * Used in order to generate the menu. This should set the inventory.
      */
     public abstract void createMenu();
 
     /**
      * Used to handle inventory clicks while the player is in this specific menu.
-     * @param e
+     * @param event
      */
-    public abstract void handleClick(InventoryClickEvent e);
+    public abstract void handleClick(InventoryClickEvent event);
     public String getMenuID() {
         return menuID;
     }
     public String getMenuName() {
         return menuName;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    /**
+     * Creates an inventory with the set contents.
+     * @param rows How many rows the inventory has. Cannot be 0.
+     * @param contents Item contents of the menu, mapped to their location.
+     * @return The created inventory, or null if it could not be created.
+     */
+    @Nullable
+    public Inventory createInventory(int rows, Map<Integer, ItemStack> contents) {
+        if (rows == 0 || rows > 6) {
+            return null;
+        }
+        Inventory inventory = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
+        for (int key : contents.keySet()) {
+            ItemStack item = contents.get(key);
+            inventory.setItem(key, item);
+        }
+        return inventory;
     }
 }

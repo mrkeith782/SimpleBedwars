@@ -3,7 +3,7 @@ package mrkeith782.bedwars.menus;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.util.InventoryUtil;
-import mrkeith782.bedwars.util.ItemUtil;
+import mrkeith782.bedwars.builders.ItemBuilder;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +23,7 @@ public class ShopMenu extends Menu {
     public ShopMenu() {
         this.menuID = "SHOP_MENU";
         this.menuName = "Shop";
+        this.createMenu();
     }
 
     @Override
@@ -32,14 +33,14 @@ public class ShopMenu extends Menu {
         IntStream.range(9, 18).forEach(slot -> mm.getBlankItem());
         layout.put(18, getWoolItem());
 
-        mm.registerMenu(menuName, menuID, 6, layout);
+        this.inventory = createInventory(6, layout);
     }
 
     @Override
-    public void handleClick(InventoryClickEvent e) {
-        e.setCancelled(true);
-        Player player = (Player) e.getWhoClicked();
-        ItemStack clickedItem = e.getCurrentItem();
+    public void handleClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+        Player player = (Player) event.getWhoClicked();
+        ItemStack clickedItem = event.getCurrentItem();
 
         if (clickedItem == null) {
             return;
@@ -62,7 +63,7 @@ public class ShopMenu extends Menu {
     }
 
     private ItemStack getWoolItem() {
-        ItemUtil woolItem = new ItemUtil(new ItemStack(Material.WHITE_WOOL));
+        ItemBuilder woolItem = new ItemBuilder(new ItemStack(Material.WHITE_WOOL));
         woolItem.setName("%%white%%White Wool %%gray%%x16");
         woolItem.setStackSize(16);
         List<String> woolLore = new ArrayList<>();
@@ -72,7 +73,7 @@ public class ShopMenu extends Menu {
     }
 
     private ItemStack getMainMenuItem() {
-        ItemUtil mainMenuItem = new ItemUtil(new ItemStack(Material.WHITE_WOOL));
+        ItemBuilder mainMenuItem = new ItemBuilder(new ItemStack(Material.WHITE_WOOL));
         mainMenuItem.setName("%%yellow%%All Items");
         return mainMenuItem.getItem();
     }

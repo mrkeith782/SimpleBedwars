@@ -10,16 +10,16 @@ import java.util.Map;
 
 public class UpgradeMenu extends Menu {
     private final Bedwars bedwars = Bedwars.getInstance();
-    private final MenuManager mm = bedwars.getMm();
 
     public UpgradeMenu() {
         this.menuID = "UPGRADE_MENU";
         this.menuName = "Upgrades";
+        this.createMenu();
     }
 
     @Override
     public void createMenu() {
-        ItemStack blankPane = mm.getBlankItem();
+        ItemStack blankPane = bedwars.getMm().getBlankItem();
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, blankPane);
         layout.put(1, blankPane);
@@ -30,12 +30,12 @@ public class UpgradeMenu extends Menu {
         layout.put(6, blankPane);
         layout.put(7, blankPane);
         layout.put(8, blankPane);
-        mm.registerMenu(menuName, menuID, 1, layout);
+        this.inventory = createInventory(1, layout);
     }
 
     @Override
-    public void handleClick(InventoryClickEvent e) {
-        e.setCancelled(true);
-        e.getWhoClicked().sendMessage("Clicked in the UPGRADE_MENU!");
+    public void handleClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+        event.getWhoClicked().sendMessage("Clicked in the UPGRADE_MENU!");
     }
 }

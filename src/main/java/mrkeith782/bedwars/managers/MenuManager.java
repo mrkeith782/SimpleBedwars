@@ -1,6 +1,7 @@
 package mrkeith782.bedwars.managers;
 
 import mrkeith782.bedwars.menus.Menu;
+import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,28 +21,12 @@ public class MenuManager {
     private final List<Menu> menus = new ArrayList<>();
 
     /**
-     * Registers an inventory that can be used later.
-     * @param name Name of the inventory. Supports color codes.
-     * @param id ID of the inventory to access later.
-     * @param contents Item contents of the menu, mapped to their location.
-     */
-    public void registerMenu(String name, String id, int rows, Map<Integer, ItemStack> contents) {
-        if (rows == 0) return;
-        Inventory inventory = Bukkit.createInventory(null, rows * 9, name);
-        for (int key : contents.keySet()) {
-            ItemStack item = contents.get(key);
-            inventory.setItem(key, item);
-        }
-        inventories.put(id, inventory);
-    }
-
-    /**
      * Registers a menu from a class that implements Menu
      * @param menu
      */
     public void registerMenu(Menu menu) {
-        menu.createMenu();
-        menus.add(menu);
+        menus.add(menu); //TODO: logic if the menu is already registered?
+        inventories.put(menu.getMenuID(), menu.getInventory());
     }
 
     /**
