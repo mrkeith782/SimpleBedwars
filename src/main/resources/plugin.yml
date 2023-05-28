@@ -24,3 +24,6 @@ commands:
   fuckwithpackets:
     description: Fucks with packets.
     usage: /fuckwithpackets
+  generateisland:
+    description: Generates an island.
+    usage: /generateisland

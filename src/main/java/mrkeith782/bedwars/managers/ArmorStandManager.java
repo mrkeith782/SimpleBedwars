@@ -80,9 +80,9 @@ public class ArmorStandManager {
      * @param location Location to spawn at
      * @param name Value to display. Parses colors.
      * @param ID ID of the Display
-     * @param pitch Orientation at which to show this display. 0 faces south, 90 west, 180 north, 270 east.
+     * @param yaw Orientation at which to show this display. 0 faces south, 90 west, 180 north, 270 east.
      */
-    public void spawnNewTextDisplay(Location location, String name, String ID, int pitch) {
+    public void spawnNewTextDisplay(Location location, String name, String ID, int yaw) {
         World world = location.getWorld();
         if (world == null) {
             return;
@@ -91,7 +91,8 @@ public class ArmorStandManager {
         TextDisplay textDisplay = (TextDisplay) world.spawnEntity(location, EntityType.TEXT_DISPLAY);
         textDisplay.setText(TextUtil.parseColoredString(name));
         textDisplay.setCustomNameVisible(true);
-        textDisplay.setRotation(pitch, 0);
+        textDisplay.setAlignment(TextDisplay.TextAlignment.CENTER);
+        textDisplay.setRotation(yaw, 0);
 
         displays.put(ID, textDisplay);
     }
@@ -132,8 +133,8 @@ public class ArmorStandManager {
      * Removes all TextDisplays stored in the ASM.
      */
     public void removeAllTextDisplays() {
-        for(String key : displays.keySet()) {
-            removeTextDisplay(key);
+        for(TextDisplay textDisplay : displays.values()) {
+            textDisplay.remove();
         }
     }
 }
