@@ -6,7 +6,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 
 public class ArmorStandCommand implements CommandExecutor {
     private final Bedwars bedwars = Bedwars.getInstance();
@@ -18,6 +21,11 @@ public class ArmorStandCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        if (command.getName().equalsIgnoreCase("spawntextdisplay")) {
+            bedwars.getAsm().spawnNewTextDisplay(player.getLocation(), "%%yellow%%%%bold%%abc", "temp", 90);
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("placearmorstand")) {
             if (args.length == 0) {
                 return false;
@@ -46,11 +54,6 @@ public class ArmorStandCommand implements CommandExecutor {
                 player.spigot().sendMessage(new TextComponent("Could not find an armor stand with ID " + args[0] + "."));
                 return false;
             }
-        }
-
-        if (command.getName().equalsIgnoreCase("printarmorstands")) {
-            bedwars.getAsm().printAllArmorStands();
-            return true;
         }
 
         return false;

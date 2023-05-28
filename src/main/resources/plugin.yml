@@ -12,6 +12,9 @@ commands:
   printarmorstands:
     description: Prints all currently placed armor stands.
     usage: /printarmorstands
+  spawntextdisplay:
+    description: Spawns a debug textdisplay
+    usage: /spawntextdisplay
   openmenu:
     description: Opens a debug menu.
     usage: /openmenu <menu>

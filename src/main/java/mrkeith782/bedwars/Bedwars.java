@@ -27,8 +27,8 @@ public final class Bedwars extends JavaPlugin {
         sbm = new BedwarsScoreboardManager();
 
         getCommand("placearmorstand").setExecutor(new ArmorStandCommand());
-        getCommand("printarmorstands").setExecutor(new ArmorStandCommand());
         getCommand("editarmorstand").setExecutor(new ArmorStandCommand());
+        getCommand("spawntextdisplay").setExecutor(new ArmorStandCommand());
         getCommand("openmenu").setExecutor(new MenuOpenCommand());
         getCommand("openscoreboard").setExecutor(new ScoreboardOpenCommand());
         getCommand("fuckwithpackets").setExecutor(new FuckWithPackets());
@@ -41,6 +41,7 @@ public final class Bedwars extends JavaPlugin {
     @Override
     public void onDisable() {
         asm.removeAllArmorStands();
+        asm.removeAllTextDisplays();
     }
 
     public static Bedwars getInstance() {

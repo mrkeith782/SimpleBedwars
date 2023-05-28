@@ -30,7 +30,7 @@ public class ShopMenu extends Menu {
     public void createMenu() {
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, getMainMenuItem());
-        IntStream.range(9, 18).forEach(slot -> mm.getBlankItem());
+        IntStream.range(9, 18).forEach(i -> layout.put(i, mm.getBlankItem()));
         layout.put(18, getWoolItem());
 
         this.inventory = createInventory(6, layout);
