@@ -2,6 +2,7 @@ package mrkeith782.bedwars.managers;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
@@ -95,5 +96,20 @@ public class BedwarsScoreboardManager {
     public void removeScoreboard(Player player) {
         scoreboards.remove(player.getName());
         player.setScoreboard(scoreboardManager.getNewScoreboard());
+    }
+
+    /**
+     * Removes all scoreboards. Clears the scoreboards that are currently displayed to players.
+     */
+    public void removeAllScoreboards() {
+        for (String string : scoreboards.keySet()) {
+            Player player = Bukkit.getPlayer(string);
+
+            if (player == null) {
+                scoreboards.remove(string);
+            } else {
+                this.removeScoreboard(player);
+            }
+        }
     }
 }

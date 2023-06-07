@@ -24,16 +24,6 @@ public abstract class Menu {
      * @param event
      */
     public abstract void handleClick(InventoryClickEvent event);
-    public String getMenuID() {
-        return menuID;
-    }
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
 
     /**
      * Creates an inventory with the set contents.
@@ -51,6 +41,17 @@ public abstract class Menu {
             ItemStack item = contents.get(key);
             inventory.setItem(key, item);
         }
+        return inventory;
+    }
+
+    public String getMenuID() {
+        return menuID;
+    }
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public Inventory getInventory() {
         return inventory;
     }
 }

@@ -108,6 +108,15 @@ public class MenuManager {
         inventories.replace(id, inventory);
     }
 
+    /**
+     * Removes all menus that are actively registered with the menumanager.
+     */
+    public void removeAllMenus() {
+        for (Menu menu : this.menus) {
+            this.menus.remove(menu);
+        }
+    }
+
     public List<Menu> getMenus() {
         return menus;
     }

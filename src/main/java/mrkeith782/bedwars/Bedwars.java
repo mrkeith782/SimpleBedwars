@@ -1,6 +1,7 @@
 package mrkeith782.bedwars;
 
 import mrkeith782.bedwars.commands.*;
+import mrkeith782.bedwars.game.BedwarsGame;
 import mrkeith782.bedwars.listeners.InventoryClickListener;
 import mrkeith782.bedwars.listeners.NPCLeftClickListener;
 import mrkeith782.bedwars.managers.ArmorStandManager;
@@ -18,6 +19,7 @@ public final class Bedwars extends JavaPlugin {
     public MenuManager mm;
     public BedwarsScoreboardManager sbm;
     public NPCManager npcm;
+    public BedwarsGame bedwarsGame = null;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,7 @@ public final class Bedwars extends JavaPlugin {
         getCommand("openscoreboard").setExecutor(new ScoreboardOpenCommand());
         getCommand("fuckwithpackets").setExecutor(new FuckWithPackets());
         getCommand("generateisland").setExecutor(new GenerateIslandCommand());
+        getCommand("bedwars").setExecutor(new BedwarsCommands());
 
         mm.registerMenu(new ShopMenu());
         mm.registerMenu(new UpgradeMenu());
@@ -63,5 +66,15 @@ public final class Bedwars extends JavaPlugin {
     }
     public NPCManager getNpcm() {
         return npcm;
+    }
+    public void createNewGame() {
+        this.bedwarsGame = new BedwarsGame();
+    }
+    public void cleanGame() {
+        bedwarsGame.closeGame();
+        this.bedwarsGame = null;
+    }
+    public BedwarsGame getBedwarsGame() {
+        return this.bedwarsGame;
     }
 }

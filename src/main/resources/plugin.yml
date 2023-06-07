@@ -27,3 +27,6 @@ commands:
   generateisland:
     description: Generates an island.
     usage: /generateisland
+  bedwars:
+    description: Base bedwars command.
+    usage: /bedwars
