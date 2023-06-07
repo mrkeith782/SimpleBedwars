@@ -6,6 +6,7 @@ import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.managers.NPCManager;
 import mrkeith782.bedwars.menus.ShopMenu;
 import mrkeith782.bedwars.menus.UpgradeMenu;
+import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class BedwarsGame {
     BedwarsGame bedwarsGame = this;
@@ -54,7 +56,7 @@ public class BedwarsGame {
             return;
         }
 
-        this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 100, 0);
+        this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 120, 0);
         this.gameStatus = GameStatus.PREGAME;
     }
 
@@ -102,7 +104,20 @@ public class BedwarsGame {
     }
 
     private void deleteBedwarsWorld() {
-        Bukkit.unloadWorld("bedwars_world", false);
+        World world = Bukkit.getWorld("bedwars_world");
+        World defaultWorld = Bukkit.getWorld("world"); //TODO: what if the default world isn't world?
+
+        if (world == null) {
+            return;
+        }
+
+        if (defaultWorld != null) {
+            for (Player player : world.getPlayers()) {
+                player.teleport(defaultWorld.getSpawnLocation());
+            }
+        }
+
+        Bukkit.getServer().unloadWorld(world, false);
     }
 
     public void closeGame() {
@@ -128,7 +143,12 @@ public class BedwarsGame {
         bedwarsPlayers.add(bwPlayer);
 
         player.teleport(this.preGameSpawn);
+        messageAllBedwarsPlayers(TextUtil.parseColoredString("%%aqua%%" + player.getName() + " %%yellow%%has joined the game!"));
         return true;
+    }
+
+    public void messageAllBedwarsPlayers(String string) {
+        bedwarsPlayers.forEach(bwPlayer -> Objects.requireNonNull(Bukkit.getPlayer(bwPlayer.getPlayerUUID())).sendMessage(string));
     }
 
     public BedwarsGame getBedwarsGame() {
@@ -149,5 +169,9 @@ public class BedwarsGame {
 
     public NPCManager getNpcManager() {
         return npcManager;
+    }
+
+    public GameStatus getGameStatus() {
+        return this.gameStatus;
     }
 }
