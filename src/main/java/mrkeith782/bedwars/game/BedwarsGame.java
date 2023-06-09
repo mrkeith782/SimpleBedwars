@@ -160,6 +160,7 @@ public class BedwarsGame {
             }
 
             getSmallestTeam().addPlayerToTeam(bedwarsPlayer);
+            //Update scoreboards
         }
 
         //Teleport all players to their team's generator
@@ -173,12 +174,14 @@ public class BedwarsGame {
 
                 player.teleport(bedwarsTeam.getTeamGeneratorLocation());
             }
+
+            //Spawn shop NPCs
+            //Spawn upgrade NPCs
+            //Spawn Holograms
+            //Spawn generators
         }
 
-        //Spawn shop NPCs
-        //Spawn upgrade NPCs
-        //Spawn Holograms
-        //Spawn generators
+        this.gameStatus = GameStatus.STARTED;
     }
 
     public void endGame() {
@@ -212,6 +215,11 @@ public class BedwarsGame {
         deleteBedwarsWorld();
     }
 
+    /**
+     * Adds a player to the current Bedwars game if they're allowed to join.
+     * @param player Player to add to the game
+     * @return True if the player cannot be added, false if not
+     */
     public boolean addBedwarsPlayer(Player player) {
         if (this.gameStatus != GameStatus.PREGAME) {
             return false;
@@ -236,12 +244,16 @@ public class BedwarsGame {
         return true;
     }
 
+    /**
+     * Messages all players that are currently in the game.
+     * @param string Message to send
+     */
     public void messageAllBedwarsPlayers(String string) {
         bedwarsPlayers.forEach(bwPlayer -> Objects.requireNonNull(Bukkit.getPlayer(bwPlayer.getPlayerUUID())).sendMessage(string));
     }
 
     public BedwarsGame getBedwarsGame() {
-        return bedwarsGame;
+        return this.bedwarsGame;
     }
 
     public ArmorStandManager getArmorStandManager() {
@@ -249,15 +261,15 @@ public class BedwarsGame {
     }
 
     public BedwarsScoreboardManager getScoreboardManager() {
-        return scoreboardManager;
+        return this.scoreboardManager;
     }
 
     public MenuManager getMenuManager() {
-        return menuManager;
+        return this.menuManager;
     }
 
     public NPCManager getNpcManager() {
-        return npcManager;
+        return this.npcManager;
     }
 
     public GameStatus getGameStatus() {
