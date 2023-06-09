@@ -70,7 +70,7 @@ public final class Bedwars extends JavaPlugin {
     public void createNewGame() {
         this.bedwarsGame = new BedwarsGame();
     }
-    public void cleanGame() {
+    public void closeGame() {
         bedwarsGame.closeGame();
         this.bedwarsGame = null;
     }

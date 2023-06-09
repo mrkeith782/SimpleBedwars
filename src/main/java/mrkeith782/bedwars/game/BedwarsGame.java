@@ -4,6 +4,8 @@ import mrkeith782.bedwars.managers.ArmorStandManager;
 import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
 import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.managers.NPCManager;
+import mrkeith782.bedwars.npcs.ShopNPC;
+import mrkeith782.bedwars.npcs.UpgradeNPC;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -109,8 +111,8 @@ public class BedwarsGame {
                 new Location(world, -30, 66, -70),
                 new Location(world, -36, 66, -70),
                 new Location(world, -33.5, 66, -76),
-                new Location(world, -28.5, 66, -73),
-                new Location(world, -38.5, 66, -73)
+                new Location(world, -28.5, 66, -73, 180, 0),
+                new Location(world, -38.5, 66, -73, 0, 0)
         );
         BedwarsTeam BLUE_TEAM = new BedwarsTeam(
                 "Blue",
@@ -119,8 +121,8 @@ public class BedwarsGame {
                 new Location(world, 35, 66, -71),
                 new Location(world, 29, 66, -70),
                 new Location(world, 32.5, 66, -76),
-                new Location(world, 37, 66, -73),
-                new Location(world, 25, 66, -73)
+                new Location(world, 37, 66, -73, 180, 0),
+                new Location(world, 25, 66, -73, 0, 0)
         );
         //Cool! I could do the rest of the teams but fuck that :)
         bedwarsTeams.add(RED_TEAM);
@@ -165,8 +167,8 @@ public class BedwarsGame {
             //Update scoreboards
         }
 
-        //Teleport all players to their team's generator
         for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
+            //Teleport all players to their team's generator
             List<BedwarsPlayer> players = bedwarsTeam.getAllTeamPlayers();
             for (BedwarsPlayer bedwarsPlayer : players) {
                 Player player = Bukkit.getPlayer(bedwarsPlayer.getPlayerUUID());
@@ -177,10 +179,54 @@ public class BedwarsGame {
                 player.teleport(bedwarsTeam.getTeamGeneratorLocation());
             }
 
-            //Spawn shop NPCs
-            //Spawn upgrade NPCs
-            //Spawn Holograms
-            //Spawn generators
+            //Spawn shop NPC with associated displays
+            Location shopLoc = bedwarsTeam.getShopLocation();
+            npcManager.spawnAndStoreNPC(
+                    new ShopNPC(180),
+                    bedwarsTeam.getShopLocation()
+            );
+
+            armorStandManager.spawnNewTextDisplay(
+                    shopLoc.clone().add(0, 2.6, 0),
+                    "%%aqua%%SHOP",
+                    bedwarsTeam.teamDisplayName + "_SHOP_NPC_1",
+                    (int) shopLoc.getYaw()
+            );
+
+            armorStandManager.spawnNewTextDisplay(
+                    shopLoc.clone().add(0, 2.4, 0),
+                    "%%yellow%%%%bold%%RIGHT CLICK",
+                    bedwarsTeam.teamDisplayName + "_SHOP_NPC_2",
+                    (int) shopLoc.getYaw()
+            );
+
+            //Spawn upgrade NPC with associated displays
+            Location upgradeLoc = bedwarsTeam.getUpgradesLocation();
+            npcManager.spawnAndStoreNPC(
+                    new UpgradeNPC(0),
+                    upgradeLoc
+            );
+
+            armorStandManager.spawnNewTextDisplay(
+                    upgradeLoc.clone().add(0, 2.7, 0),
+                    "%%aqua%%SOLO",
+                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_1",
+                    (int) upgradeLoc.getYaw()
+            );
+
+            armorStandManager.spawnNewTextDisplay(
+                    upgradeLoc.clone().add(0, 2.5, 0),
+                    "%%aqua%%UPGRADES",
+                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
+                    (int) upgradeLoc.getYaw()
+            );
+
+            armorStandManager.spawnNewTextDisplay(
+                    upgradeLoc.clone().add(0, 2.3, 0),
+                    "%%yellow%%%%bold%%RIGHT CLICK",
+                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
+                    (int) upgradeLoc.getYaw()
+            );
         }
 
         this.gameStatus = GameStatus.STARTED;

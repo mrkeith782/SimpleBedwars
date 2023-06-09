@@ -45,4 +45,24 @@ public class BedwarsTeam {
     public Location getTeamGeneratorLocation() {
         return teamGeneratorLocation;
     }
+
+    public Location getBedLocation() {
+        return bedLocation;
+    }
+
+    public Location getEnderChestLocation() {
+        return enderChestLocation;
+    }
+
+    public Location getChestLocation() {
+        return chestLocation;
+    }
+
+    public Location getShopLocation() {
+        return shopLocation;
+    }
+
+    public Location getUpgradesLocation() {
+        return upgradesLocation;
+    }
 }
