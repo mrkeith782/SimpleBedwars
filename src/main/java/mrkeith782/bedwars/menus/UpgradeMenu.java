@@ -16,6 +16,16 @@ public class UpgradeMenu extends Menu {
         this.createMenu();
     }
 
+    /**
+     * Override for ID
+     * @param id Identifier for NPC
+     */
+    public UpgradeMenu(String id) {
+        this.menuID = id;
+        this.menuName = "Upgrades";
+        this.createMenu();
+    }
+
     @Override
     public void createMenu() {
         ItemStack blankPane = bedwars.getMm().getBlankItem();

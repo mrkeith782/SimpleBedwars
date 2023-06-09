@@ -156,6 +156,8 @@ public class BedwarsGame {
             BedwarsTeam team = this.getSmallestTeam();
             if (team == null) {
                 this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
+                this.gameStatus = GameStatus.FAILED;
+                this.closeGame();
                 return;
             }
 

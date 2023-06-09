@@ -26,6 +26,16 @@ public class ShopMenu extends Menu {
         this.createMenu();
     }
 
+    /**
+     * Override to custom set the ID
+     * @param id Identifier for the npc
+     */
+    public ShopMenu(String id) {
+        this.menuID = id;
+        this.menuName = "Shop";
+        this.createMenu();
+    }
+
     @Override
     public void createMenu() {
         Map<Integer, ItemStack> layout = new HashMap<>();
