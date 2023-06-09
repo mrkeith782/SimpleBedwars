@@ -4,6 +4,8 @@ import mrkeith782.bedwars.managers.ArmorStandManager;
 import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
 import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.managers.NPCManager;
+import mrkeith782.bedwars.menus.ShopMenu;
+import mrkeith782.bedwars.menus.UpgradeMenu;
 import mrkeith782.bedwars.npcs.ShopNPC;
 import mrkeith782.bedwars.npcs.UpgradeNPC;
 import mrkeith782.bedwars.util.TextUtil;
@@ -50,6 +52,7 @@ public class BedwarsGame {
             return;
         }
 
+        //TODO: FastAsyncWorldEdit API usage here so we don't hang the main thread lmao
         this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 120, 0);
 
         initializeTeams();
@@ -111,8 +114,8 @@ public class BedwarsGame {
                 new Location(world, -30, 66, -70),
                 new Location(world, -36, 66, -70),
                 new Location(world, -33.5, 66, -76),
-                new Location(world, -28.5, 66, -73, 180, 0),
-                new Location(world, -38.5, 66, -73, 0, 0)
+                new Location(world, -28.5, 66, -73),
+                new Location(world, -38.5, 66, -73)
         );
         BedwarsTeam BLUE_TEAM = new BedwarsTeam(
                 "Blue",
@@ -121,8 +124,8 @@ public class BedwarsGame {
                 new Location(world, 35, 66, -71),
                 new Location(world, 29, 66, -70),
                 new Location(world, 32.5, 66, -76),
-                new Location(world, 37, 66, -73, 180, 0),
-                new Location(world, 25, 66, -73, 0, 0)
+                new Location(world, 37, 66, -73),
+                new Location(world, 27, 66, -73)
         );
         //Cool! I could do the rest of the teams but fuck that :)
         bedwarsTeams.add(RED_TEAM);
@@ -182,7 +185,7 @@ public class BedwarsGame {
             //Spawn shop NPC with associated displays
             Location shopLoc = bedwarsTeam.getShopLocation();
             npcManager.spawnAndStoreNPC(
-                    new ShopNPC(180),
+                    new ShopNPC(90),
                     bedwarsTeam.getShopLocation()
             );
 
@@ -190,20 +193,20 @@ public class BedwarsGame {
                     shopLoc.clone().add(0, 2.6, 0),
                     "%%aqua%%SHOP",
                     bedwarsTeam.teamDisplayName + "_SHOP_NPC_1",
-                    (int) shopLoc.getYaw()
+                    90
             );
 
             armorStandManager.spawnNewTextDisplay(
                     shopLoc.clone().add(0, 2.4, 0),
                     "%%yellow%%%%bold%%RIGHT CLICK",
                     bedwarsTeam.teamDisplayName + "_SHOP_NPC_2",
-                    (int) shopLoc.getYaw()
+                    90
             );
 
             //Spawn upgrade NPC with associated displays
             Location upgradeLoc = bedwarsTeam.getUpgradesLocation();
             npcManager.spawnAndStoreNPC(
-                    new UpgradeNPC(0),
+                    new UpgradeNPC(270),
                     upgradeLoc
             );
 
@@ -211,21 +214,21 @@ public class BedwarsGame {
                     upgradeLoc.clone().add(0, 2.7, 0),
                     "%%aqua%%SOLO",
                     bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_1",
-                    (int) upgradeLoc.getYaw()
+                    270
             );
 
             armorStandManager.spawnNewTextDisplay(
                     upgradeLoc.clone().add(0, 2.5, 0),
                     "%%aqua%%UPGRADES",
                     bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
-                    (int) upgradeLoc.getYaw()
+                    270
             );
 
             armorStandManager.spawnNewTextDisplay(
                     upgradeLoc.clone().add(0, 2.3, 0),
                     "%%yellow%%%%bold%%RIGHT CLICK",
                     bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
-                    (int) upgradeLoc.getYaw()
+                    270
             );
         }
 

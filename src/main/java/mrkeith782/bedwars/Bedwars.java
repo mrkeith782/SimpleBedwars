@@ -15,16 +15,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
     private static Bedwars instance;
-    public ArmorStandManager asm;
     public MenuManager mm;
     public BedwarsScoreboardManager sbm;
+    public ArmorStandManager asm;
     public NPCManager npcm;
     public BedwarsGame bedwarsGame = null;
 
     @Override
     public void onEnable() {
         instance = this;
-        asm = new ArmorStandManager();
         mm = new MenuManager();
         sbm = new BedwarsScoreboardManager();
         npcm = new NPCManager();
@@ -46,6 +45,11 @@ public final class Bedwars extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (this.bedwarsGame == null) {
+            return;
+        } else {
+            this.closeGame();
+        }
         asm.removeAllArmorStands();
         asm.removeAllTextDisplays();
         npcm.removeAllNPCs();
