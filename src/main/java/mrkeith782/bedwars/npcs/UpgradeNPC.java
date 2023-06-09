@@ -23,7 +23,6 @@ public class UpgradeNPC extends NPC {
         Player player = event.getPlayer();
 
         Bedwars.getInstance().getBedwarsGame().getMenuManager().openMenu("UPGRADE_MENU", player);
-        Bukkit.broadcastMessage("OPENED UPGRADE_MENU");
     }
 
     @Override

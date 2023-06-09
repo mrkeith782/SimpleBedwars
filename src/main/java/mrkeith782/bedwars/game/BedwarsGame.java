@@ -1,5 +1,9 @@
 package mrkeith782.bedwars.game;
 
+import mrkeith782.bedwars.Bedwars;
+import mrkeith782.bedwars.listeners.InventoryClickListener;
+import mrkeith782.bedwars.listeners.NPCLeftClickListener;
+import mrkeith782.bedwars.listeners.TeamChestListener;
 import mrkeith782.bedwars.managers.ArmorStandManager;
 import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
 import mrkeith782.bedwars.managers.MenuManager;
@@ -11,6 +15,7 @@ import mrkeith782.bedwars.npcs.UpgradeNPC;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -35,13 +40,19 @@ public class BedwarsGame {
     Location preGameSpawn;
 
     public BedwarsGame() {
-        this.gameStatus = GameStatus.BUILDING;
-
         //Initialize our managers for the game.
         this.armorStandManager = new ArmorStandManager();
         this.scoreboardManager = new BedwarsScoreboardManager();
         this.npcManager = new NPCManager();
         this.menuManager = new MenuManager();
+    }
+
+    public void build() {
+        this.gameStatus = GameStatus.BUILDING;
+
+        //Initialize our menus for the game
+        this.menuManager.registerMenu(new ShopMenu());
+        this.menuManager.registerMenu(new UpgradeMenu());
 
         //Copy and create our world for the game.
         initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
@@ -55,8 +66,13 @@ public class BedwarsGame {
         //TODO: FastAsyncWorldEdit API usage here so we don't hang the main thread lmao
         this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 120, 0);
 
+        //Init our teams
         initializeTeams();
 
+        //Init our shop menu detections
+        Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), Bedwars.getInstance());
+        Bukkit.getPluginManager().registerEvents(new NPCLeftClickListener(), Bedwars.getInstance());
+        Bukkit.getPluginManager().registerEvents(new TeamChestListener(), Bedwars.getInstance());
         this.gameStatus = GameStatus.PREGAME;
     }
 
@@ -111,7 +127,7 @@ public class BedwarsGame {
                 "Red",
                 Color.RED,
                 new Location(world, -33, 66, -64),
-                new Location(world, -30, 66, -70),
+                new Location(world, -31, 66, -71),
                 new Location(world, -36, 66, -70),
                 new Location(world, -33.5, 66, -76),
                 new Location(world, -28.5, 66, -73),
@@ -150,6 +166,22 @@ public class BedwarsGame {
         }
 
         Bukkit.getServer().unloadWorld(world, false);
+        deleteDirectory(new File(Bukkit.getWorldContainer(), "bedwars_world"));
+    }
+
+    /**
+     * Used to delete the physical files of the BedwarsWorld. Stolen from https://www.baeldung.com/java-delete-directory
+     * @param directoryToBeDeleted Take a fucking guess
+     * @return True if could be deleted
+     */
+    boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
     /**
@@ -159,6 +191,7 @@ public class BedwarsGame {
         //Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
             BedwarsTeam team = this.getSmallestTeam();
+            //Double check to make sure we actually init'd our teams
             if (team == null) {
                 this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
                 this.gameStatus = GameStatus.FAILED;
@@ -166,8 +199,20 @@ public class BedwarsGame {
                 return;
             }
 
-            getSmallestTeam().addPlayerToTeam(bedwarsPlayer);
+            //Assign team to player
+            BedwarsTeam bedwarsTeam = getSmallestTeam();
+            bedwarsTeam.addPlayerToTeam(bedwarsPlayer);
+            bedwarsPlayer.setTeam(bedwarsTeam);
+
             //Update scoreboards
+        }
+
+        World world = Bukkit.getWorld("bedwars_world");
+        if (world == null) {
+            this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to get world. Game start aborted ):"));
+            this.gameStatus = GameStatus.FAILED;
+            this.closeGame();
+            return;
         }
 
         for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
@@ -230,13 +275,13 @@ public class BedwarsGame {
                     bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
                     270
             );
+
+            //Place chests and echests
+            bedwarsTeam.getChestLocation().getBlock().setType(Material.CHEST);
+            bedwarsTeam.getEnderChestLocation().getBlock().setType(Material.ENDER_CHEST);
         }
 
         this.gameStatus = GameStatus.STARTED;
-    }
-
-    public void endGame() {
-
     }
 
     /**
@@ -250,7 +295,7 @@ public class BedwarsGame {
     }
 
     /**
-     * old method need to delete
+     * Elegantly remove the player from the game, and close the game
      */
     public void closeGame() {
         armorStandManager.removeAllArmorStands();
@@ -263,6 +308,7 @@ public class BedwarsGame {
         npcManager.removeAllNPCs();
         this.npcManager = null;
 
+        HandlerList.unregisterAll(Bedwars.getInstance());
         deleteBedwarsWorld();
     }
 
@@ -325,5 +371,24 @@ public class BedwarsGame {
 
     public GameStatus getGameStatus() {
         return this.gameStatus;
+    }
+
+    public boolean contains(Player player) {
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    public BedwarsTeam getTeamByPlayer(Player player) {
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+                return bedwarsPlayer.getTeam();
+            }
+        }
+        return null;
     }
 }

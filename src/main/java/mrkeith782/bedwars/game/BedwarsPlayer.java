@@ -7,6 +7,7 @@ import java.util.UUID;
 public class BedwarsPlayer {
     UUID playerUUID;
     PlayerStatus status;
+    BedwarsTeam team;
     int deaths;
     int kills;
 
@@ -27,5 +28,13 @@ public class BedwarsPlayer {
 
     public PlayerStatus getStatus() {
         return status;
+    }
+
+    public BedwarsTeam getTeam() {
+        return team;
+    }
+
+    public void setTeam(BedwarsTeam team) {
+        this.team = team;
     }
 }

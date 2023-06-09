@@ -22,9 +22,6 @@ public final class Bedwars extends JavaPlugin {
         instance = this;
 
         getCommand("bedwars").setExecutor(new BedwarsCommands());
-
-        Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
-        Bukkit.getPluginManager().registerEvents(new NPCLeftClickListener(), this);
     }
 
     @Override
@@ -39,6 +36,7 @@ public final class Bedwars extends JavaPlugin {
     }
     public void createNewGame() {
         this.bedwarsGame = new BedwarsGame();
+        this.bedwarsGame.build();
     }
     public void closeGame() {
         bedwarsGame.closeGame();
