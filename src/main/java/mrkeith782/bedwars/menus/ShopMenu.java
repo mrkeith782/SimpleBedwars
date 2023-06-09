@@ -2,7 +2,6 @@ package mrkeith782.bedwars.menus;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.builders.ItemBuilder;
-import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.util.InventoryUtil;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Material;

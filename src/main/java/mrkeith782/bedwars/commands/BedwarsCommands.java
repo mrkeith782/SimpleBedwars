@@ -2,15 +2,12 @@ package mrkeith782.bedwars.commands;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.BedwarsGame;
-import mrkeith782.bedwars.game.BedwarsPlayer;
 import mrkeith782.bedwars.game.GameStatus;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.List;
 
 public class BedwarsCommands implements CommandExecutor {
     @Override

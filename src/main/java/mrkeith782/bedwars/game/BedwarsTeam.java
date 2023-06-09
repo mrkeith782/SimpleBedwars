@@ -5,7 +5,6 @@ import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class BedwarsTeam {
     String teamDisplayName;

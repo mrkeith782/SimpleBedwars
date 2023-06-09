@@ -1,16 +1,7 @@
 package mrkeith782.bedwars;
 
-import mrkeith782.bedwars.commands.*;
+import mrkeith782.bedwars.commands.BedwarsCommands;
 import mrkeith782.bedwars.game.BedwarsGame;
-import mrkeith782.bedwars.listeners.InventoryClickListener;
-import mrkeith782.bedwars.listeners.NPCLeftClickListener;
-import mrkeith782.bedwars.managers.ArmorStandManager;
-import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
-import mrkeith782.bedwars.managers.MenuManager;
-import mrkeith782.bedwars.managers.NPCManager;
-import mrkeith782.bedwars.menus.ShopMenu;
-import mrkeith782.bedwars.menus.UpgradeMenu;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
