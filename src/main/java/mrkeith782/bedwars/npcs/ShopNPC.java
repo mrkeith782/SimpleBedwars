@@ -1,17 +1,13 @@
 package mrkeith782.bedwars.npcs;
 
 import mrkeith782.bedwars.Bedwars;
-import net.minecraft.world.entity.npc.Villager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-
-import javax.annotation.Nullable;
 
 public class ShopNPC extends NPC {
 

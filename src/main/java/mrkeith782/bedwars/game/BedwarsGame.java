@@ -4,22 +4,17 @@ import mrkeith782.bedwars.managers.ArmorStandManager;
 import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
 import mrkeith782.bedwars.managers.MenuManager;
 import mrkeith782.bedwars.managers.NPCManager;
-import mrkeith782.bedwars.menus.ShopMenu;
-import mrkeith782.bedwars.menus.UpgradeMenu;
 import mrkeith782.bedwars.util.TextUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class BedwarsGame {
     BedwarsGame bedwarsGame = this;
@@ -42,10 +37,7 @@ public class BedwarsGame {
         this.armorStandManager = new ArmorStandManager();
         this.scoreboardManager = new BedwarsScoreboardManager();
         this.npcManager = new NPCManager();
-
         this.menuManager = new MenuManager();
-        menuManager.registerMenu(new ShopMenu());
-        menuManager.registerMenu(new UpgradeMenu());
 
         //Copy and create our world for the game.
         initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
@@ -57,11 +49,14 @@ public class BedwarsGame {
         }
 
         this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 120, 0);
+
+        initializeTeams();
+
         this.gameStatus = GameStatus.PREGAME;
     }
 
     /**
-     * Literally stole this code from <a href="https://www.spigotmc.org/threads/world-copy.37932/">here</a>
+     * Literally stole this code from https://www.spigotmc.org/threads/world-copy.37932/
      * @param source Location to copy from
      * @param target Location to copy to
      */
@@ -77,10 +72,12 @@ public class BedwarsGame {
                     }
 
                     String[] files = source.list();
-                    for (String file : files) { //recursively goes through the directory
-                        File srcFile = new File(source, file);
-                        File destFile = new File(target, file);
-                        initializeWorld(srcFile, destFile);
+                    if (files != null) {
+                        for (String file : files) { //recursively goes through the directory
+                            File srcFile = new File(source, file);
+                            File destFile = new File(target, file);
+                            initializeWorld(srcFile, destFile);
+                        }
                     }
                 } else {
                     InputStream in = Files.newInputStream(source.toPath());
@@ -99,10 +96,40 @@ public class BedwarsGame {
         }
     }
 
+    /**
+     * Currently, creates only two teams as a PoC.
+     */
     private void initializeTeams() {
-        return;
+        //This is a bunch of hard coded values which isn't exactly nice. It'd be better if we read this in from a config
+        World world = Bukkit.getWorld("bedwars_world");
+        BedwarsTeam RED_TEAM = new BedwarsTeam(
+                "Red",
+                Color.RED,
+                new Location(world, -33, 66, -64),
+                new Location(world, -30, 66, -70),
+                new Location(world, -36, 66, -70),
+                new Location(world, -33.5, 66, -76),
+                new Location(world, -28.5, 66, -73),
+                new Location(world, -38.5, 66, -73)
+        );
+        BedwarsTeam BLUE_TEAM = new BedwarsTeam(
+                "Blue",
+                Color.BLUE,
+                new Location(world, 33, 66, -65),
+                new Location(world, 35, 66, -71),
+                new Location(world, 29, 66, -70),
+                new Location(world, 32.5, 66, -76),
+                new Location(world, 37, 66, -73),
+                new Location(world, 25, 66, -73)
+        );
+        //Cool! I could do the rest of the teams but fuck that :)
+        bedwarsTeams.add(RED_TEAM);
+        bedwarsTeams.add(BLUE_TEAM);
     }
 
+    /**
+     * Unloads the bedwars world and deletes it.
+     */
     private void deleteBedwarsWorld() {
         World world = Bukkit.getWorld("bedwars_world");
         World defaultWorld = Bukkit.getWorld("world"); //TODO: what if the default world isn't world?
@@ -120,6 +147,57 @@ public class BedwarsGame {
         Bukkit.getServer().unloadWorld(world, false);
     }
 
+    /**
+     * Starts the game and the game loop.
+     */
+    public void startGame() {
+        //Assign players to teams
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            BedwarsTeam team = this.getSmallestTeam();
+            if (team == null) {
+                this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
+                return;
+            }
+
+            getSmallestTeam().addPlayerToTeam(bedwarsPlayer);
+        }
+
+        //Teleport all players to their team's generator
+        for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
+            List<BedwarsPlayer> players = bedwarsTeam.getAllTeamPlayers();
+            for (BedwarsPlayer bedwarsPlayer : players) {
+                Player player = Bukkit.getPlayer(bedwarsPlayer.getPlayerUUID());
+                if (player == null) {
+                    continue;
+                }
+
+                player.teleport(bedwarsTeam.getTeamGeneratorLocation());
+            }
+        }
+
+        //Spawn shop NPCs
+        //Spawn upgrade NPCs
+        //Spawn Holograms
+        //Spawn generators
+    }
+
+    public void endGame() {
+
+    }
+
+    /**
+     * Gets the first currently registered team with the least amount of players.
+     */
+    @Nullable
+    private BedwarsTeam getSmallestTeam() {
+        return bedwarsTeams.stream()
+            .min(Comparator.comparingInt(team -> team.getAllTeamPlayers().size()))
+            .orElse(null);
+    }
+
+    /**
+     * old method need to delete
+     */
     public void closeGame() {
         armorStandManager.removeAllArmorStands();
         armorStandManager.removeAllTextDisplays();
@@ -144,6 +222,17 @@ public class BedwarsGame {
 
         player.teleport(this.preGameSpawn);
         messageAllBedwarsPlayers(TextUtil.parseColoredString("%%aqua%%" + player.getName() + " %%yellow%%has joined the game!"));
+
+        //Creates a scoreboard for the pre-game lobby
+        List<String> spectatingScoreboard = new ArrayList<>();
+        spectatingScoreboard.add(TextUtil.parseColoredString("%%yellow%%Pregame"));
+        spectatingScoreboard.add(" ");
+        spectatingScoreboard.add("%%yellow%%Waiting for players...");
+        spectatingScoreboard.add(" ");
+        spectatingScoreboard.add(" ");
+        this.scoreboardManager.createNewScoreboard(player, spectatingScoreboard);
+        this.scoreboardManager.updateScoreboardTitle(player, "%%yellow%%%%bold%%BEDWARS");
+        this.scoreboardManager.refreshScoreboard(player);
         return true;
     }
 

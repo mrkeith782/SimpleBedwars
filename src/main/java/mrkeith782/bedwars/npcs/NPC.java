@@ -1,7 +1,6 @@
 package mrkeith782.bedwars.npcs;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 

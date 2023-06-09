@@ -1,10 +1,8 @@
 package mrkeith782.bedwars.commands;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.game.BedwarsGame;
 import mrkeith782.bedwars.game.GameStatus;
 import mrkeith782.bedwars.util.TextUtil;
-import org.bukkit.block.data.type.Bed;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -59,6 +57,15 @@ public class BedwarsCommands implements CommandExecutor {
 
             //TODO: Get failure reason
             player.sendMessage(TextUtil.parseColoredString("%%red%%Failed sending you to the Bedwars game. Please try again later!"));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("start")) {
+            if (Bedwars.getInstance().getBedwarsGame().getGameStatus() != GameStatus.PREGAME) {
+                player.sendMessage(TextUtil.parseColoredString("%%yellow%%It appears as if there is not a game that can be started. Please use %%green%%/bedwars create%%yellow%%."));
+            }
+            player.sendMessage(TextUtil.parseColoredString("%%yellow%%Attempting to start the game..."));
+            Bedwars.getInstance().getBedwarsGame().startGame();
             return true;
         }
 

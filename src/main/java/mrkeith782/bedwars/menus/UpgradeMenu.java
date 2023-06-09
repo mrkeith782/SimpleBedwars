@@ -1,7 +1,6 @@
 package mrkeith782.bedwars.menus;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.managers.MenuManager;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

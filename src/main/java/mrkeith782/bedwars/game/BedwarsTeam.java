@@ -1,24 +1,26 @@
 package mrkeith782.bedwars.game;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class BedwarsTeam {
-    String teamColor;
+    String teamDisplayName;
+    Color teamDisplayColor;
     Location bedLocation;
     Location chestLocation;
     Location enderChestLocation;
     Location teamGeneratorLocation;
     Location shopLocation;
     Location upgradesLocation;
-    List<UUID> teamPlayers;
+    List<BedwarsPlayer> teamPlayers;
 
-    public BedwarsTeam(String color, Location bedLoc, Location chestLoc, Location eChestLoc, Location teamGenLoc, Location shopLoc, Location upgradeLoc) {
-        this.teamColor = color;
+    public BedwarsTeam(String name, Color color, Location bedLoc, Location chestLoc, Location eChestLoc, Location teamGenLoc, Location shopLoc, Location upgradeLoc) {
+        this.teamDisplayName = name;
+        this.teamDisplayColor = color;
         this.bedLocation = bedLoc;
         this.chestLocation = chestLoc;
         this.enderChestLocation = eChestLoc;
@@ -29,6 +31,18 @@ public class BedwarsTeam {
     }
 
     public void addPlayerToTeam(BedwarsPlayer player) {
-        teamPlayers.add(player.getPlayerUUID());
+        teamPlayers.add(player);
+    }
+
+    public void removePlayerFromTeam(BedwarsPlayer player) {
+        teamPlayers.remove(player);
+    }
+
+    public List<BedwarsPlayer> getAllTeamPlayers() {
+        return teamPlayers;
+    }
+
+    public Location getTeamGeneratorLocation() {
+        return teamGeneratorLocation;
     }
 }
