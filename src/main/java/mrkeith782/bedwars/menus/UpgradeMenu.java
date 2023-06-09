@@ -18,7 +18,7 @@ public class UpgradeMenu extends Menu {
 
     @Override
     public void createMenu() {
-        ItemStack blankPane = bedwars.getMm().getBlankItem();
+        ItemStack blankPane = bedwars.getBedwarsGame().getMenuManager().getBlankItem();
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, blankPane);
         layout.put(1, blankPane);

@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 public class NPCLeftClickListener implements Listener {
     @EventHandler
     public void onNPCClick(PlayerInteractEntityEvent event) {
+        //We're only worried about clicks in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;

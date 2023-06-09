@@ -22,7 +22,7 @@ public class ShopNPC extends NPC {
         event.setCancelled(true);
         Player player = event.getPlayer();
 
-        Bedwars.getInstance().getMm().openMenu("SHOP_MENU", player);
+        Bedwars.getInstance().getBedwarsGame().getMenuManager().openMenu("SHOP_MENU", player);
         Bukkit.broadcastMessage("OPENED SHOP_MENU");
     }
 

@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class InventoryClickListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        //We're only worried about clicks in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;
