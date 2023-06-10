@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -36,5 +37,9 @@ public class BedwarsPlayer {
 
     public void setTeam(BedwarsTeam team) {
         this.team = team;
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.getPlayerUUID());
     }
 }

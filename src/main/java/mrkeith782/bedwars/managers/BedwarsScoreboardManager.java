@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import javax.annotation.Nullable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ public class BedwarsScoreboardManager {
         Objective objective = scoreboard.registerNewObjective("Identifier", Criteria.DUMMY, TextUtil.parseColoredString(" "));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
+        //Place the lines top to bottom on the scoreboard
         int iteration = 0;
         for (String line : lines) {
             Score score = objective.getScore(TextUtil.parseColoredString(line));
@@ -111,5 +114,15 @@ public class BedwarsScoreboardManager {
                 this.removeScoreboard(player);
             }
         }
+    }
+
+    /**
+     * Gets the current date in a nice format
+     * @return String with date
+     */
+    public static String getPrettyDate() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
     }
 }

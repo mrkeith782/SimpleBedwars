@@ -16,6 +16,11 @@ import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -36,6 +41,7 @@ public class BedwarsGame {
 
     final List<BedwarsPlayer> bedwarsPlayers = new ArrayList<>();
     final List<BedwarsTeam> bedwarsTeams = new ArrayList<>();
+    BukkitRunnable gameLoop = null;
 
     Location preGameSpawn;
 
@@ -74,6 +80,87 @@ public class BedwarsGame {
         Bukkit.getPluginManager().registerEvents(new NPCLeftClickListener(), Bedwars.getInstance());
         Bukkit.getPluginManager().registerEvents(new TeamChestListener(), Bedwars.getInstance());
         this.gameStatus = GameStatus.PREGAME;
+    }
+
+    public BukkitRunnable createGameLoop() {
+        return new BukkitRunnable() {
+            int CURRENT_TIME = 0;
+
+            @Override
+            public void run() {
+                // Jesus
+                if (CURRENT_TIME == 0) {
+                    removeScoreboardTime("Diamond II in ", 0);
+                }
+                if (CURRENT_TIME < 300) {
+                    removeScoreboardTime("Diamond II in ", 300 - CURRENT_TIME);
+                    addNewScoreboardTime("Diamond II in ", 300 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 300) {
+                    removeScoreboardTime("Diamond II in ", 0);
+                    addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
+                    gameStatus = GameStatus.PHASE_1;
+                } else if (CURRENT_TIME < 600) {
+                    removeScoreboardTime("Emerald II in ", 600 - CURRENT_TIME);
+                    addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 600) {
+                    removeScoreboardTime("Emerald II in ", 0);
+                    addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
+                    gameStatus = GameStatus.PHASE_2;
+                } else if (CURRENT_TIME < 900) {
+                    removeScoreboardTime("Diamond III in ", 900 - CURRENT_TIME);
+                    addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 900) {
+                    removeScoreboardTime("Diamond III in ", 0);
+                    addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                    gameStatus = GameStatus.PHASE_3;
+                } else if (CURRENT_TIME < 1200) {
+                    removeScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME);
+                    addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                }
+
+                CURRENT_TIME++;
+            }
+
+            private void removeScoreboardTime(String prepend, int value) {
+                for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+                    Scoreboard scoreboard = scoreboardManager.getScoreboard(bedwarsPlayer.getPlayer());
+                    if (scoreboard == null) {
+                        continue;
+                    }
+                    Objective objective = scoreboard.getObjective("Identifier");
+                    if (objective == null) {
+                        continue;
+                    }
+
+                    scoreboard.resetScores(TextUtil.parseColoredString(prepend + "%%green%%" + formatPrettyTime(value)));
+                }
+            }
+
+            private void addNewScoreboardTime(String prepend, int value) {
+                for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+                    Scoreboard scoreboard = scoreboardManager.getScoreboard(bedwarsPlayer.getPlayer());
+                    if (scoreboard == null) {
+                        continue;
+                    }
+                    Objective objective = scoreboard.getObjective("Identifier");
+                    if (objective == null) {
+                        continue;
+                    }
+
+                    Score score = objective.getScore(TextUtil.parseColoredString(prepend + "%%green%%" + formatPrettyTime(value)));
+                    score.setScore(10);
+                }
+            }
+        };
+    }
+
+    /**
+     * Returns a nicely formatted string for time
+     * @param sec Seconds
+     * @return Formatted string
+     */
+    private String formatPrettyTime(int sec) {
+        return (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + sec % 60;
     }
 
     /**
@@ -205,6 +292,26 @@ public class BedwarsGame {
             bedwarsPlayer.setTeam(bedwarsTeam);
 
             //Update scoreboards
+            Player player = bedwarsPlayer.getPlayer();
+
+            scoreboardManager.removeAllScoreboards();
+            List<String> spectatingScoreboard = new ArrayList<>();
+            spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
+            spectatingScoreboard.add(" ");
+            spectatingScoreboard.add("Diamond II in %%green%%5:00");
+            spectatingScoreboard.add("   ");
+            spectatingScoreboard.add(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
+            spectatingScoreboard.add(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+            spectatingScoreboard.add("    ");
+            spectatingScoreboard.add(TextUtil.parseColoredString("Kills: %%green%%0"));
+            spectatingScoreboard.add(TextUtil.parseColoredString("Final Kills: %%green%%0"));
+            spectatingScoreboard.add(TextUtil.parseColoredString("Beds Broken: %%green%%0"));
+            spectatingScoreboard.add("     ");
+            spectatingScoreboard.add("%%yellow%%mrkeith.yeet");
+
+            this.scoreboardManager.createNewScoreboard(player, spectatingScoreboard);
+            this.scoreboardManager.updateScoreboardTitle(player, "%%yellow%%%%bold%%BEDWARS");
+            this.scoreboardManager.refreshScoreboard(player);
         }
 
         World world = Bukkit.getWorld("bedwars_world");
@@ -281,6 +388,8 @@ public class BedwarsGame {
             bedwarsTeam.getEnderChestLocation().getBlock().setType(Material.ENDER_CHEST);
         }
 
+        this.gameLoop = createGameLoop();
+        gameLoop.runTaskTimer(Bedwars.getInstance(), 0L, 20L);
         this.gameStatus = GameStatus.STARTED;
     }
 
@@ -330,11 +439,12 @@ public class BedwarsGame {
 
         //Creates a scoreboard for the pre-game lobby
         List<String> spectatingScoreboard = new ArrayList<>();
+        spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
         spectatingScoreboard.add(TextUtil.parseColoredString("%%yellow%%Pregame"));
         spectatingScoreboard.add(" ");
         spectatingScoreboard.add("%%yellow%%Waiting for players...");
-        spectatingScoreboard.add(" ");
-        spectatingScoreboard.add(" ");
+        spectatingScoreboard.add("  ");
+        spectatingScoreboard.add("   ");
         this.scoreboardManager.createNewScoreboard(player, spectatingScoreboard);
         this.scoreboardManager.updateScoreboardTitle(player, "%%yellow%%%%bold%%BEDWARS");
         this.scoreboardManager.refreshScoreboard(player);
