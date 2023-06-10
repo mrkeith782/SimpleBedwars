@@ -1,9 +1,13 @@
 package mrkeith782.bedwars.managers;
 
 import mrkeith782.bedwars.Bedwars;
+import mrkeith782.bedwars.game.GameStatus;
+import mrkeith782.bedwars.util.TextUtil;
+import org.apache.logging.log4j.core.appender.ScriptAppenderSelector;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EntityEquipment;
@@ -12,13 +16,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GeneratorManager {
-    Map<String, Location> generatorLocations;
-    List<Entity> generatorArmorStands = new ArrayList<>();
+    final Map<String, Location> generatorLocations;
+    final List<Entity> generatorArmorStands;
     BukkitTask generatorLoop;
+
+    public GeneratorManager() {
+        this.generatorArmorStands = new ArrayList<>();
+        this.generatorLocations = new HashMap<>();
+    }
 
     public void addNewGenerator(String id, Location location) {
         generatorLocations.put(id, location);
@@ -42,27 +52,109 @@ public class GeneratorManager {
                 continue;
             }
 
+            ArmorStandManager armorStandManager = Bedwars.getInstance().getBedwarsGame().getArmorStandManager();
+
             if (string.toLowerCase().contains("diamond")) {
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 3, 0), "%%yellow%%Tier %%red%%I", string + "_TIER");
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.7, 0), "%%aqua%%Diamond %%yellow%%Generator", string + "_NAME");
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.4, 0), "%%yellow%%Next material in %%green%%0:30", string + "_TIME");
                 eq.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
             } else if (string.toLowerCase().contains("emerald")) {
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 3, 0), "%%yellow%%Tier %%red%%I", string + "_TIER");
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.7, 0), "%%green%%Emerald %%yellow%%Generator", string + "_NAME");
+                armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.4, 0), "%%yellow%%Next material in %%green%%0:30", string + "_TIME");
                 eq.setHelmet(new ItemStack(Material.EMERALD_BLOCK));
             }
             as.setVisible(false);
+            as.setGravity(false);
+            as.setCollidable(false);
 
             generatorArmorStands.add(as);
+        }
+    }
+
+    public void checkAndDropItems(int time) {
+        GameStatus gameStatus = Bedwars.getInstance().getBedwarsGame().getGameStatus();
+        ArmorStandManager armorStandManager = Bedwars.getInstance().getBedwarsGame().getArmorStandManager();
+        int modifiedTime = 1800 - time;
+
+        for (String string : generatorLocations.keySet()) {
+            if (string.toLowerCase().contains("diamond")) {
+                //Let's figure out if we should drop a diamond, and edit the armor stand for that
+                int diamondTime;
+                switch (gameStatus) {
+                    case PHASE_1:
+                    case PHASE_2:
+                        diamondTime = 25;
+                        break;
+                    case PHASE_3:
+                    case PHASE_4:
+                    case PHASE_5:
+                        diamondTime = 20;
+                        break;
+                    default:
+                        diamondTime = 30;
+                }
+                armorStandManager.editArmorStandDisplay(string + "_TIME", "%%yellow%%Next material in %%green%%" + TextUtil.formatPrettyTime(modifiedTime % diamondTime));
+
+                if (modifiedTime % diamondTime == 0) {
+                    World world = generatorLocations.get(string).getWorld();
+                    if (world == null) {
+                        continue;
+                    }
+                    world.dropItem(generatorLocations.get(string), new ItemStack(Material.DIAMOND));
+                }
+            } else if (string.toLowerCase().contains("emerald")) {
+                int emeraldTime;
+                switch (gameStatus) {
+                    case PHASE_1:
+                    case PHASE_2:
+                        emeraldTime = 35;
+                        break;
+                    case PHASE_3:
+                    case PHASE_4:
+                    case PHASE_5:
+                        emeraldTime = 30;
+                        break;
+                    default:
+                        emeraldTime = 45;
+                }
+                armorStandManager.editArmorStandDisplay(string + "_TIME", "%%yellow%%Next material in %%green%%" + TextUtil.formatPrettyTime(modifiedTime % emeraldTime));
+
+                if (modifiedTime % emeraldTime == 0) {
+                    World world = generatorLocations.get(string).getWorld();
+                    if (world == null) {
+                        continue;
+                    }
+                    world.dropItem(generatorLocations.get(string), new ItemStack(Material.EMERALD));
+                }
+            } else { //This will be the default island's generator.
+                World world = generatorLocations.get(string).getWorld();
+                if (world == null) {
+                    continue;
+                }
+                world.dropItem(generatorLocations.get(string), new ItemStack(Material.IRON_INGOT));
+                if (modifiedTime % 7 == 0) {
+                    world.dropItem(generatorLocations.get(string), new ItemStack(Material.GOLD_INGOT));
+                }
+            }
         }
     }
 
     public void startRotation() {
         this.generatorLoop = new BukkitRunnable() {
             int yaw = 0;
-            int pitch = 0;
+
             @Override
             public void run() {
                 for (Entity entity : generatorArmorStands) {
-                    entity.setRotation(0, 0);
+                    ArmorStand as = (ArmorStand) entity;
+                    Location location = as.getLocation();
+                    location.setYaw(yaw);
+
+                    as.teleport(location);
+
                     yaw++;
-                    pitch++;
                 }
             }
         }.runTaskTimer(Bedwars.getInstance(), 0L, 1L);
@@ -76,6 +168,5 @@ public class GeneratorManager {
         for (Entity entity : generatorArmorStands) {
             entity.remove();
         }
-        generatorLocations = null;
     }
 }

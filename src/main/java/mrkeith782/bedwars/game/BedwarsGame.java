@@ -28,14 +28,14 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class BedwarsGame {
-    BedwarsGame bedwarsGame = this;
-    GameStatus gameStatus;
+    final BedwarsGame bedwarsGame = this;
+    GameStatus gameStatus = GameStatus.BUILDING;
 
-    public ArmorStandManager armorStandManager;
-    public BedwarsScoreboardManager scoreboardManager;
-    public MenuManager menuManager;
-    public NPCManager npcManager;
-    public GeneratorManager generatorManager;
+    final ArmorStandManager armorStandManager;
+    final BedwarsScoreboardManager scoreboardManager;
+    final MenuManager menuManager;
+    final NPCManager npcManager;
+    final GeneratorManager generatorManager;
 
     final List<BedwarsPlayer> bedwarsPlayers = new ArrayList<>();
     final List<BedwarsTeam> bedwarsTeams = new ArrayList<>();
@@ -147,6 +147,9 @@ public class BedwarsGame {
                 }
 
                 CURRENT_TIME++;
+
+                //Let's see if we can drop items, and do so here
+                generatorManager.checkAndDropItems(CURRENT_TIME);
             }
 
             private void removeScoreboardTime(String prepend, int value) {
@@ -160,7 +163,7 @@ public class BedwarsGame {
                         continue;
                     }
 
-                    scoreboard.resetScores(TextUtil.parseColoredString(prepend + "%%green%%" + formatPrettyTime(value)));
+                    scoreboard.resetScores(TextUtil.parseColoredString(prepend + "%%green%%" + TextUtil.formatPrettyTime(value)));
                 }
             }
 
@@ -175,20 +178,11 @@ public class BedwarsGame {
                         continue;
                     }
 
-                    Score score = objective.getScore(TextUtil.parseColoredString(prepend + "%%green%%" + formatPrettyTime(value)));
+                    Score score = objective.getScore(TextUtil.parseColoredString(prepend + "%%green%%" + TextUtil.formatPrettyTime(value)));
                     score.setScore(10);
                 }
             }
         };
-    }
-
-    /**
-     * Returns a nicely formatted string for time
-     * @param sec Seconds
-     * @return Formatted string
-     */
-    private String formatPrettyTime(int sec) {
-        return (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + sec % 60;
     }
 
     /**
@@ -420,16 +414,18 @@ public class BedwarsGame {
         }
 
         //Diamond / emerald generator locations
-        generatorManager.addNewGenerator("DIAMOND_1", new Location(world, 0, 63, -52));
-        generatorManager.addNewGenerator("DIAMOND_2", new Location(world, 52, 63, 0));
-        generatorManager.addNewGenerator("DIAMOND_3", new Location(world, 0, 63, 52));
-        generatorManager.addNewGenerator("DIAMOND_4", new Location(world, -52, 63, 0));
-        generatorManager.addNewGenerator("EMERALD_1", new Location(world, 12, 77, 12));
-        generatorManager.addNewGenerator("EMERALD_2", new Location(world, 12, 77, -12));
-        generatorManager.addNewGenerator("EMERALD_3", new Location(world, -12, 77, -12));
-        generatorManager.addNewGenerator("EMERALD_4", new Location(world, -12, 77, 12));
+        generatorManager.addNewGenerator("DIAMOND_1", new Location(world, 0.5, 65, -51.5));
+        generatorManager.addNewGenerator("DIAMOND_2", new Location(world, 52.5, 65, 0.5));
+        generatorManager.addNewGenerator("DIAMOND_3", new Location(world, 0.5, 65, 52.5));
+        generatorManager.addNewGenerator("DIAMOND_4", new Location(world, -51.5, 65, 0.5));
+        generatorManager.addNewGenerator("EMERALD_1", new Location(world, 12.5, 79, 12.5));
+        generatorManager.addNewGenerator("EMERALD_2", new Location(world, 12.5, 79, -11.5));
+        generatorManager.addNewGenerator("EMERALD_3", new Location(world, -11.5, 79, -11.5));
+        generatorManager.addNewGenerator("EMERALD_4", new Location(world, -11.5, 79, 12.5));
 
+        generatorManager.placeGenerators();
         generatorManager.startRotation();
+
         this.gameLoop = createGameLoop().runTaskTimer(Bedwars.getInstance(), 0L, 20L);
         this.gameStatus = GameStatus.STARTED;
     }
@@ -450,13 +446,11 @@ public class BedwarsGame {
     public void closeGame() {
         armorStandManager.removeAllArmorStands();
         armorStandManager.removeAllTextDisplays();
-        this.armorStandManager = null;
 
         scoreboardManager.removeAllScoreboards();
         menuManager.removeAllMenus();
 
         npcManager.removeAllNPCs();
-        this.npcManager = null;
 
         generatorManager.stopRotation();
         generatorManager.removeAllGenerators();

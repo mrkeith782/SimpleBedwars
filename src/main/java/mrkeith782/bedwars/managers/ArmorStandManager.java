@@ -45,7 +45,7 @@ public class ArmorStandManager {
             return false;
         }
 
-        as.setCustomName(name);
+        as.setCustomName(TextUtil.parseColoredString(name));
         return true;
     }
 

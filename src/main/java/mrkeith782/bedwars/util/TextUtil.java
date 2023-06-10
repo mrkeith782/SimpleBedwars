@@ -59,4 +59,13 @@ public class TextUtil {
     public static void displayActionBar(Player player, String string) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(string));
     }
+
+    /**
+     * Returns a nicely formatted string for time
+     * @param sec Seconds
+     * @return Formatted string
+     */
+    public static String formatPrettyTime(int sec) {
+        return (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + sec % 60;
+    }
 }
