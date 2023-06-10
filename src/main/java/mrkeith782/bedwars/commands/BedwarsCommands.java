@@ -4,10 +4,16 @@ import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.BedwarsGame;
 import mrkeith782.bedwars.game.GameStatus;
 import mrkeith782.bedwars.util.TextUtil;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 
 public class BedwarsCommands implements CommandExecutor {
     @Override
@@ -97,6 +103,14 @@ public class BedwarsCommands implements CommandExecutor {
             bedwars.closeGame();
             player.sendMessage(TextUtil.parseColoredString("%%yellow%%Game ended! You should be good to create another."));
             return true;
+        }
+
+        if (args[0].equalsIgnoreCase("generator")) {
+            Location location = player.getLocation();
+            ArmorStand as = location.getWorld().spawn(location, ArmorStand.class);
+            EntityEquipment eq = as.getEquipment();
+            eq.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
+            as.setVisible(false);
         }
 
         return false;

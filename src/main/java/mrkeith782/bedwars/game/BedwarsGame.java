@@ -4,10 +4,7 @@ import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.listeners.InventoryClickListener;
 import mrkeith782.bedwars.listeners.NPCLeftClickListener;
 import mrkeith782.bedwars.listeners.TeamChestListener;
-import mrkeith782.bedwars.managers.ArmorStandManager;
-import mrkeith782.bedwars.managers.BedwarsScoreboardManager;
-import mrkeith782.bedwars.managers.MenuManager;
-import mrkeith782.bedwars.managers.NPCManager;
+import mrkeith782.bedwars.managers.*;
 import mrkeith782.bedwars.menus.ShopMenu;
 import mrkeith782.bedwars.menus.UpgradeMenu;
 import mrkeith782.bedwars.npcs.ShopNPC;
@@ -17,10 +14,10 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -38,10 +35,11 @@ public class BedwarsGame {
     public BedwarsScoreboardManager scoreboardManager;
     public MenuManager menuManager;
     public NPCManager npcManager;
+    public GeneratorManager generatorManager;
 
     final List<BedwarsPlayer> bedwarsPlayers = new ArrayList<>();
     final List<BedwarsTeam> bedwarsTeams = new ArrayList<>();
-    BukkitRunnable gameLoop = null;
+    BukkitTask gameLoop = null;
 
     Location preGameSpawn;
 
@@ -51,8 +49,12 @@ public class BedwarsGame {
         this.scoreboardManager = new BedwarsScoreboardManager();
         this.npcManager = new NPCManager();
         this.menuManager = new MenuManager();
+        this.generatorManager = new GeneratorManager();
     }
 
+    /**
+     * Called after creation, and before players are allowed in the game.
+     */
     public void build() {
         this.gameStatus = GameStatus.BUILDING;
 
@@ -82,6 +84,10 @@ public class BedwarsGame {
         this.gameStatus = GameStatus.PREGAME;
     }
 
+    /**
+     * Defines the game loop that is stored in memory.
+     * @return Game loop runnable
+     */
     public BukkitRunnable createGameLoop() {
         return new BukkitRunnable() {
             int CURRENT_TIME = 0;
@@ -98,6 +104,7 @@ public class BedwarsGame {
                 } else if (CURRENT_TIME == 300) {
                     removeScoreboardTime("Diamond II in ", 0);
                     addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 2!"));
                     gameStatus = GameStatus.PHASE_1;
                 } else if (CURRENT_TIME < 600) {
                     removeScoreboardTime("Emerald II in ", 600 - CURRENT_TIME);
@@ -105,6 +112,7 @@ public class BedwarsGame {
                 } else if (CURRENT_TIME == 600) {
                     removeScoreboardTime("Emerald II in ", 0);
                     addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 2!"));
                     gameStatus = GameStatus.PHASE_2;
                 } else if (CURRENT_TIME < 900) {
                     removeScoreboardTime("Diamond III in ", 900 - CURRENT_TIME);
@@ -112,10 +120,30 @@ public class BedwarsGame {
                 } else if (CURRENT_TIME == 900) {
                     removeScoreboardTime("Diamond III in ", 0);
                     addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 3!"));
                     gameStatus = GameStatus.PHASE_3;
                 } else if (CURRENT_TIME < 1200) {
                     removeScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME);
                     addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 1200) {
+                    removeScoreboardTime("Emerald III in ", 0);
+                    addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 3!"));
+                    gameStatus = GameStatus.PHASE_4;
+                } else if (CURRENT_TIME < 1500) {
+                    removeScoreboardTime("Beds break in ", 1500 - CURRENT_TIME);
+                    addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 1500) {
+                    removeScoreboardTime("Beds break in ", 0);
+                    addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Beds broken!"));
+                    gameStatus = GameStatus.PHASE_5;
+                } else if (CURRENT_TIME < 1800) {
+                    removeScoreboardTime("Game ends in ", 1800 - CURRENT_TIME);
+                    addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
+                } else if (CURRENT_TIME == 1800) {
+                    gameStatus = GameStatus.ENDING;
+                    messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Game ended fuckos!"));
                 }
 
                 CURRENT_TIME++;
@@ -386,10 +414,23 @@ public class BedwarsGame {
             //Place chests and echests
             bedwarsTeam.getChestLocation().getBlock().setType(Material.CHEST);
             bedwarsTeam.getEnderChestLocation().getBlock().setType(Material.ENDER_CHEST);
+
+            //Generator location for the team
+            generatorManager.addNewGenerator(bedwarsTeam.teamDisplayName, bedwarsTeam.getTeamGeneratorLocation());
         }
 
-        this.gameLoop = createGameLoop();
-        gameLoop.runTaskTimer(Bedwars.getInstance(), 0L, 20L);
+        //Diamond / emerald generator locations
+        generatorManager.addNewGenerator("DIAMOND_1", new Location(world, 0, 63, -52));
+        generatorManager.addNewGenerator("DIAMOND_2", new Location(world, 52, 63, 0));
+        generatorManager.addNewGenerator("DIAMOND_3", new Location(world, 0, 63, 52));
+        generatorManager.addNewGenerator("DIAMOND_4", new Location(world, -52, 63, 0));
+        generatorManager.addNewGenerator("EMERALD_1", new Location(world, 12, 77, 12));
+        generatorManager.addNewGenerator("EMERALD_2", new Location(world, 12, 77, -12));
+        generatorManager.addNewGenerator("EMERALD_3", new Location(world, -12, 77, -12));
+        generatorManager.addNewGenerator("EMERALD_4", new Location(world, -12, 77, 12));
+
+        generatorManager.startRotation();
+        this.gameLoop = createGameLoop().runTaskTimer(Bedwars.getInstance(), 0L, 20L);
         this.gameStatus = GameStatus.STARTED;
     }
 
@@ -404,7 +445,7 @@ public class BedwarsGame {
     }
 
     /**
-     * Elegantly remove the player from the game, and close the game
+     * Elegantly remove all the players from the game, then clean up all placed generators, holograms, and npcs.
      */
     public void closeGame() {
         armorStandManager.removeAllArmorStands();
@@ -416,6 +457,9 @@ public class BedwarsGame {
 
         npcManager.removeAllNPCs();
         this.npcManager = null;
+
+        generatorManager.stopRotation();
+        generatorManager.removeAllGenerators();
 
         HandlerList.unregisterAll(Bedwars.getInstance());
         deleteBedwarsWorld();
