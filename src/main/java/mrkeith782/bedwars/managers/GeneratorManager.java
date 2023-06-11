@@ -10,15 +10,14 @@ import org.bukkit.World;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GeneratorManager {
     final Map<String, Location> generatorLocations;
@@ -79,7 +78,7 @@ public class GeneratorManager {
         int modifiedTime = 1800 - time;
 
         for (String string : generatorLocations.keySet()) {
-            if (string.toLowerCase().contains("diamond")) {
+            if (string.toLowerCase().contains("diamond")) { //This is an absolute shit way to do it, TODO: make a Generator class
                 //Let's figure out if we should drop a diamond, and edit the armor stand for that
                 int diamondTime;
                 switch (gameStatus) {
@@ -133,6 +132,24 @@ public class GeneratorManager {
                 if (world == null) {
                     continue;
                 }
+
+                //Let's get how many iron + gold we have near the generator, and stop generating if so
+                Collection<Entity> entities = world.getNearbyEntities(generatorLocations.get(string), 3, 3, 3);
+                int count = 0;
+                for (Entity entity : entities) {
+                    if (entity instanceof Item) {
+                        Item item = (Item) entity;
+                        if (item.getItemStack().getType() == Material.IRON_INGOT || item.getItemStack().getType() == Material.GOLD_INGOT) {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count >= 40) {
+                    continue;
+                }
+
+                //Drop an extra iron / gold if there's not too many entities near the generator
                 world.dropItem(generatorLocations.get(string), new ItemStack(Material.IRON_INGOT));
                 if (modifiedTime % 7 == 0) {
                     world.dropItem(generatorLocations.get(string), new ItemStack(Material.GOLD_INGOT));
