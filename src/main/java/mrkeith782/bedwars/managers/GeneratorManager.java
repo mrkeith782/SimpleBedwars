@@ -140,7 +140,7 @@ public class GeneratorManager {
                     if (entity instanceof Item) {
                         Item item = (Item) entity;
                         if (item.getItemStack().getType() == Material.IRON_INGOT || item.getItemStack().getType() == Material.GOLD_INGOT) {
-                            count++;
+                            count += item.getItemStack().getAmount();
                         }
                     }
                 }

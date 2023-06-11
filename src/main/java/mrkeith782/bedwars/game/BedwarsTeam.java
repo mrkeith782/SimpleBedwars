@@ -64,4 +64,8 @@ public class BedwarsTeam {
     public Location getUpgradesLocation() {
         return upgradesLocation;
     }
+
+    public Color getTeamDisplayColor() {
+        return teamDisplayColor;
+    }
 }

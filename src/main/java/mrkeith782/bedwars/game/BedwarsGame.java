@@ -3,6 +3,7 @@ package mrkeith782.bedwars.game;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.listeners.InventoryClickListener;
 import mrkeith782.bedwars.listeners.NPCLeftClickListener;
+import mrkeith782.bedwars.listeners.PlayerDeathListener;
 import mrkeith782.bedwars.listeners.TeamChestListener;
 import mrkeith782.bedwars.managers.*;
 import mrkeith782.bedwars.menus.ShopMenu;
@@ -77,10 +78,10 @@ public class BedwarsGame {
         //Init our teams
         initializeTeams();
 
-        //Init our shop menu detections
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), Bedwars.getInstance());
         Bukkit.getPluginManager().registerEvents(new NPCLeftClickListener(), Bedwars.getInstance());
         Bukkit.getPluginManager().registerEvents(new TeamChestListener(), Bedwars.getInstance());
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), Bedwars.getInstance());
         this.gameStatus = GameStatus.PREGAME;
     }
 
@@ -354,6 +355,7 @@ public class BedwarsGame {
                 }
 
                 player.teleport(bedwarsTeam.getTeamGeneratorLocation());
+                world.setSpawnLocation(0, 128, 0);
             }
 
             //Spawn shop NPC with associated displays
