@@ -57,17 +57,20 @@ public class PlayerDeathListener implements Listener {
         }
 
         player.setGameMode(GameMode.SPECTATOR);
+        event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
 
         if (!(bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN)) {
+            // If the player is still alive, respawn them
             player.sendMessage(TextUtil.parseColoredString("%%yellow%%You will respawn in 5 seconds..."));
             bedwarsPlayer.setStatus(PlayerStatus.DEAD);
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(Bedwars.getInstance(), () -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
+                player.teleport(bedwarsTeam.getTeamGeneratorLocation());
                 bedwarsPlayer.setStatus(PlayerStatus.ALIVE);
             }, 100L);
         } else {
+            // If the player's bed is broken, keep them dead
             player.sendMessage(TextUtil.parseColoredString("%%yellow%%You will not respawn because your Team's bed has been broken."));
             bedwarsPlayer.setStatus(PlayerStatus.FINAL_DEAD);
         }
