@@ -16,9 +16,10 @@ public class ArmorStandManager {
 
     /**
      * Spawns and stores the ID of an Armor Stand.
+     *
      * @param location Location to spawn the armor stand at.
-     * @param name Value to display on the armor stand. Parses color codes.
-     * @param ID ID of the armor stand
+     * @param name     Value to display on the armor stand. Parses color codes.
+     * @param ID       ID of the armor stand
      */
     public void spawnNewArmorStand(Location location, String name, String ID) {
         if (location.getWorld() == null) {
@@ -35,8 +36,10 @@ public class ArmorStandManager {
 
     /**
      * Edit an armor stand's display by ID
-     * @param ID ID to edit
+     *
+     * @param ID   ID to edit
      * @param name New value to display
+     *
      * @return True if the armor stand could be found, false if not.
      */
     public boolean editArmorStandDisplay(String ID, String name) {
@@ -51,7 +54,9 @@ public class ArmorStandManager {
 
     /**
      * Remove and despawn an armor stand that is currently stored
+     *
      * @param ID ID of the armor stand to remove
+     *
      * @return True if it could be removed, false if not found.
      */
     public boolean removeArmorStand(String ID) {
@@ -76,10 +81,11 @@ public class ArmorStandManager {
 
     /**
      * Spawns and stores the ID of a TextDisplay.
+     *
      * @param location Location to spawn at
-     * @param name Value to display. Parses colors.
-     * @param ID ID of the Display
-     * @param yaw Orientation at which to show this display. 0 faces south, 90 west, 180 north, 270 east.
+     * @param name     Value to display. Parses colors.
+     * @param ID       ID of the Display
+     * @param yaw      Orientation at which to show this display. 0 faces south, 90 west, 180 north, 270 east.
      */
     public void spawnNewTextDisplay(Location location, String name, String ID, int yaw) {
         World world = location.getWorld();
@@ -98,8 +104,10 @@ public class ArmorStandManager {
 
     /**
      * Edits a TextDisplay's text by ID.
-     * @param ID ID of the display to edit
+     *
+     * @param ID   ID of the display to edit
      * @param name New text to display
+     *
      * @return True if the display could be found, false if not
      */
     public boolean editTextDisplay(String ID, String name) {
@@ -114,7 +122,9 @@ public class ArmorStandManager {
 
     /**
      * Removes a TextDisplay by ID.
+     *
      * @param ID ID of TextDisplay to remove.
+     *
      * @return True if it could be removed, false if not.
      */
     public boolean removeTextDisplay(String ID) {
@@ -132,7 +142,7 @@ public class ArmorStandManager {
      * Removes all TextDisplays stored in the ASM.
      */
     public void removeAllTextDisplays() {
-        for(TextDisplay textDisplay : displays.values()) {
+        for (TextDisplay textDisplay : displays.values()) {
             textDisplay.remove();
         }
     }

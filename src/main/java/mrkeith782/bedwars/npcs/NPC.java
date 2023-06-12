@@ -8,7 +8,7 @@ public abstract class NPC {
     String npcID;
     String npcName;
     Entity entity;
-    //Determines which direction the NPC is looking at.
+    // Determines which direction the NPC is looking at.
     int yaw;
 
     public abstract void handleClick(PlayerInteractEntityEvent event);

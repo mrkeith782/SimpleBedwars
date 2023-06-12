@@ -22,7 +22,7 @@ public class FuckWithPackets implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) { //all of my commands atm are for players so i'm happy with this
+        if (!(sender instanceof Player)) { // all of my commands atm are for players so i'm happy with this
             return false;
         }
 
@@ -42,6 +42,7 @@ public class FuckWithPackets implements CommandExecutor {
 
         BukkitRunnable temp = new BukkitRunnable() {
             final Location entityLoc = new Location(player.getWorld(), -10, 63, 10);
+
             @Override
             public void run() {
                 Location playerLoc = player.getLocation();
@@ -49,15 +50,15 @@ public class FuckWithPackets implements CommandExecutor {
                 Vector locDiff = playerLoc.toVector().subtract(entityLoc.toVector()).normalize();
 
                 ClientboundMoveEntityPacket.Rot packet1 = new ClientboundMoveEntityPacket.Rot(
-                    newEntity.getId(),
-                    (byte) 0,
-                    (byte) ((Math.asin(-locDiff.getY()) * (256.0F / 360.0F)) * 75),
-                    false
+                        newEntity.getId(),
+                        (byte) 0,
+                        (byte) ((Math.asin(-locDiff.getY()) * (256.0F / 360.0F)) * 75),
+                        false
                 );
 
                 ClientboundRotateHeadPacket packet2 = new ClientboundRotateHeadPacket(
-                    newEntity,
-                    (byte) (-(Math.atan2(locDiff.getX(), locDiff.getZ()) * (256.0F / 360.0F)) * 60)
+                        newEntity,
+                        (byte) (-(Math.atan2(locDiff.getX(), locDiff.getZ()) * (256.0F / 360.0F)) * 60)
                 );
 
                 cp.getHandle().connection.send(packet1);

@@ -17,14 +17,16 @@ public class BedwarsScoreboardManager {
     private final Bedwars bedwars = Bedwars.getInstance();
     private final ScoreboardManager scoreboardManager;
     private final Map<String, Scoreboard> scoreboards = new HashMap<>();
+
     public BedwarsScoreboardManager() {
         scoreboardManager = bedwars.getServer().getScoreboardManager();
     }
 
     /**
      * Generates a new scoreboard that can be displayed to the player.
+     *
      * @param player Player to display to.
-     * @param lines Lines, in order, that will be displayed to the player.
+     * @param lines  Lines, in order, that will be displayed to the player.
      */
     public void createNewScoreboard(Player player, List<String> lines) {
         Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
@@ -32,7 +34,7 @@ public class BedwarsScoreboardManager {
         Objective objective = scoreboard.registerNewObjective("Identifier", Criteria.DUMMY, TextUtil.parseColoredString(" "));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        //Place the lines top to bottom on the scoreboard
+        // Place the lines top to bottom on the scoreboard
         int iteration = 0;
         for (String line : lines) {
             Score score = objective.getScore(TextUtil.parseColoredString(line));
@@ -45,6 +47,7 @@ public class BedwarsScoreboardManager {
 
     /**
      * Refreshes the player's current scoreboard from memory.
+     *
      * @param player Player to refresh.
      */
     public void refreshScoreboard(Player player) {
@@ -57,6 +60,7 @@ public class BedwarsScoreboardManager {
 
     /**
      * Updates the Title of the scoreboard.
+     *
      * @param player Player to update.
      * @param string String to update to.
      */
@@ -74,7 +78,9 @@ public class BedwarsScoreboardManager {
 
     /**
      * Gets the scoreboard that is currently cached for the player.
+     *
      * @param player Player to get the scoreboard from.
+     *
      * @return Scoreboard for the player, null if one is not present.
      */
     @Nullable
@@ -84,7 +90,8 @@ public class BedwarsScoreboardManager {
 
     /**
      * Updates the scoreboard for a specific player. The scoreboard needs to be refreshed to be displayed again.
-     * @param player Player to set scoreboard for.
+     *
+     * @param player     Player to set scoreboard for.
      * @param scoreboard Scoreboard to set.
      */
     public void updateScoreboard(Player player, Scoreboard scoreboard) {
@@ -94,6 +101,7 @@ public class BedwarsScoreboardManager {
 
     /**
      * Removes the scoreboard for the current player. Clears the scoreboard currently displayed to the player.
+     *
      * @param player Player to remove scoreboard for.
      */
     public void removeScoreboard(Player player) {
@@ -118,6 +126,7 @@ public class BedwarsScoreboardManager {
 
     /**
      * Gets the current date in a nice format
+     *
      * @return String with date
      */
     public static String getPrettyDate() {

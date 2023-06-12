@@ -15,21 +15,24 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
-    private ItemStack BLANK_ITEM; //We only create it if we need it, and store it here.
+    private ItemStack BLANK_ITEM; // We only create it if we need it, and store it here.
     private final List<Menu> menus = new ArrayList<>();
 
     /**
      * Registers a menu from a class that implements Menu
+     *
      * @param menu
      */
     public void registerMenu(Menu menu) {
-        menus.add(menu); //TODO: logic if the menu is already registered?
+        menus.add(menu); // TODO: logic if the menu is already registered?
         inventories.put(menu.getMenuID(), menu.getInventory());
     }
 
     /**
      * Returns a stored inventory in the MenuManager
+     *
      * @param id ID of the stored menu
+     *
      * @return Requested menu. Can be null.
      */
     @Nullable
@@ -39,9 +42,11 @@ public class MenuManager {
 
     /**
      * Modifies a stored menu.
-     * @param id ID of the menu to edit.
+     *
+     * @param id   ID of the menu to edit.
      * @param slot Slot number to place the new ItemStack in.
      * @param item Item to put into the Slot number.
+     *
      * @return True if we're able to modify the menu, false if not
      */
     public boolean modifyMenu(String id, int slot, ItemStack item) {
@@ -54,6 +59,7 @@ public class MenuManager {
 
     /**
      * Opens a menu for the player
+     *
      * @param id     ID of the menu
      * @param player
      */
@@ -66,11 +72,12 @@ public class MenuManager {
 
     /**
      * Creates a blank ItemStack
+     *
      * @return Blank BLACK_STAINED_GLASS_PANE.
      */
     @Nullable
     public ItemStack getBlankItem() {
-        if (BLANK_ITEM != null) { //Early break so we aren't constantly creating new objects
+        if (BLANK_ITEM != null) { // Early break so we aren't constantly creating new objects
             return BLANK_ITEM;
         }
 
@@ -88,6 +95,7 @@ public class MenuManager {
 
     /**
      * Fills the empty slots of the menu with blank panes.
+     *
      * @param id ID of the menu
      */
     public void fillWithBlanks(String id) {

@@ -10,7 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +22,7 @@ public class BedwarsCommands implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (args.length == 0) { //Base command.
+        if (args.length == 0) { // Base command.
             sender.sendMessage("Commands:");
             sender.sendMessage(TextUtil.parseColoredString("%%green%%/bedwars create %%yellow%%: %%green%%Creates a bedwars game. %%red%%Lag!!"));
             sender.sendMessage(TextUtil.parseColoredString("%%green%%/bedwars join %%yellow%%: %%green%%Join a bedwars game if one is currently availible to join."));

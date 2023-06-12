@@ -10,7 +10,9 @@ public class TextUtil {
 
     /**
      * Used to parse strings with easy to type colors into color strings.
+     *
      * @param string String to be parsed
+     *
      * @return TextComponent with valid color codes
      */
     public static String parseColoredString(String string) {
@@ -42,8 +44,10 @@ public class TextUtil {
 
     /**
      * Used to add hover-over text to existing TextComponents.
-     * @param string TextComponent to hover over
+     *
+     * @param string      TextComponent to hover over
      * @param hoverString TextComponent that appears on hover
+     *
      * @return TextComponent with hover
      */
     public static TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
@@ -53,6 +57,7 @@ public class TextUtil {
 
     /**
      * Displays a string on the player's action bar.
+     *
      * @param player Player to display the string to.
      * @param string String to display. Does not parse color codes.
      */
@@ -62,7 +67,9 @@ public class TextUtil {
 
     /**
      * Returns a nicely formatted string for time
+     *
      * @param sec Seconds
+     *
      * @return Formatted string
      */
     public static String formatPrettyTime(int sec) {

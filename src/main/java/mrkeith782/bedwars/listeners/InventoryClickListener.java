@@ -10,13 +10,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public class InventoryClickListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        //We're only worried about clicks in the game
+        // We're only worried about clicks in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;
         }
 
-        //We only care about the click if we're in a Menu, so let's check if we are.
+        // We only care about the click if we're in a Menu, so let's check if we are.
         for (Menu menu : game.getMenuManager().getMenus()) {
             String menuName = menu.getMenuName();
             if (menuName == null || event.getClickedInventory() == null) {

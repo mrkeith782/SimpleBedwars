@@ -14,7 +14,7 @@ public class TeamChestListener implements Listener {
 
     @EventHandler
     public void onTeamChestListener(PlayerInteractEvent event) {
-        //We're only worried about clicks in the game
+        // We're only worried about clicks in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;

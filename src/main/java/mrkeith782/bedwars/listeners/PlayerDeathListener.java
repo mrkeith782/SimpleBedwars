@@ -5,15 +5,11 @@ import mrkeith782.bedwars.game.BedwarsGame;
 import mrkeith782.bedwars.game.BedwarsTeam;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 public class PlayerDeathListener implements Listener {
 
@@ -22,7 +18,7 @@ public class PlayerDeathListener implements Listener {
         Player victim = event.getEntity();
         Player killer = event.getEntity().getKiller();
 
-        //Check if we have a game, and if the player is in a team in the game
+        // Check if we have a game, and if the player is in a team in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null || !game.contains(victim)) {
             return;
@@ -33,7 +29,7 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        if (killer == null) { //This means there was not a killer involved with the player's death
+        if (killer == null) { // This means there was not a killer involved with the player's death
             game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%gray%%") + event.getDeathMessage());
         }
 
@@ -56,7 +52,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
-        //TODO: death timer, player respawns in 5 sec
-        //TODO: final death
+        // TODO: death timer, player respawns in 5 sec
+        // TODO: final death
     }
 }

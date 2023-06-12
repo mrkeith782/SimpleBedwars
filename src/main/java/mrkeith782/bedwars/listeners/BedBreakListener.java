@@ -12,7 +12,7 @@ public class BedBreakListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        //Make sure we actually have a game running
+        // Make sure we actually have a game running
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;

@@ -25,14 +25,17 @@ public final class Bedwars extends JavaPlugin {
     public static Bedwars getInstance() {
         return instance;
     }
+
     public void createNewGame() {
         this.bedwarsGame = new BedwarsGame();
         this.bedwarsGame.build();
     }
+
     public void closeGame() {
         bedwarsGame.closeGame();
         this.bedwarsGame = null;
     }
+
     public BedwarsGame getBedwarsGame() {
         return this.bedwarsGame;
     }

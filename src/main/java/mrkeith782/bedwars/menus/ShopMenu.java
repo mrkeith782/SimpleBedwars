@@ -47,16 +47,16 @@ public class ShopMenu extends Menu {
         if (clickedItem.isSimilar(getWoolItem())) {
             if (!InventoryUtil.hasSpace(player, new ItemStack(Material.WHITE_WOOL), 16)) {
                 player.sendMessage(TextUtil.parseColoredString("%%red%%You don't have the required space to hold this!"));
-                //todo: play failure sound
+                // todo: play failure sound
                 return;
             }
             if (InventoryUtil.removeIfExists(player, Material.IRON_INGOT, 4)) {
                 InventoryUtil.giveItem(player, Material.WHITE_WOOL, 16);
-                //todo: play success sound
+                // todo: play success sound
                 return;
             }
             player.sendMessage(TextUtil.parseColoredString("%%red%%You don't have the required materials to purchase this!"));
-            //todo: play failure sound
+            // todo: play failure sound
         }
     }
 

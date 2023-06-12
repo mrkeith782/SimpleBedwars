@@ -11,12 +11,12 @@ public class TeamDamageListener implements Listener {
 
     @EventHandler
     public void onTeamDamageListener(EntityDamageByEntityEvent event) {
-        //We're only cancelling team damage, both need to be players for this to occur
+        // We're only cancelling team damage, both need to be players for this to occur
         if (!(event.getEntity() instanceof Player) || !(event.getEntity() instanceof Player)) {
             return;
         }
 
-        //Make sure we're in a game
+        // Make sure we're in a game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null) {
             return;

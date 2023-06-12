@@ -45,7 +45,7 @@ public class BedwarsGame {
     Location preGameSpawn;
 
     public BedwarsGame() {
-        //Initialize our managers for the game.
+        // Initialize our managers for the game.
         this.armorStandManager = new ArmorStandManager();
         this.scoreboardManager = new BedwarsScoreboardManager();
         this.npcManager = new NPCManager();
@@ -59,11 +59,11 @@ public class BedwarsGame {
     public void build() {
         this.gameStatus = GameStatus.BUILDING;
 
-        //Initialize our menus for the game
+        // Initialize our menus for the game
         this.menuManager.registerMenu(new ShopMenu());
         this.menuManager.registerMenu(new UpgradeMenu());
 
-        //Copy and create our world for the game.
+        // Copy and create our world for the game.
         initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
 
         new WorldCreator("bedwars_world").createWorld();
@@ -72,10 +72,10 @@ public class BedwarsGame {
             return;
         }
 
-        //TODO: FastAsyncWorldEdit API usage here so we don't hang the main thread lmao
+        // TODO: FastAsyncWorldEdit API usage here so we don't hang the main thread lmao
         this.preGameSpawn = new Location(Bukkit.getWorld("bedwars_world"), 0, 120, 0);
 
-        //Init our teams
+        // Init our teams
         initializeTeams();
 
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), Bedwars.getInstance());
@@ -87,6 +87,7 @@ public class BedwarsGame {
 
     /**
      * Defines the game loop that is stored in memory.
+     *
      * @return Game loop runnable
      */
     public BukkitRunnable createGameLoop() {
@@ -149,7 +150,7 @@ public class BedwarsGame {
 
                 CURRENT_TIME++;
 
-                //Let's see if we can drop items, and do so here
+                // Let's see if we can drop items, and do so here
                 generatorManager.checkAndDropItems(CURRENT_TIME);
             }
 
@@ -188,6 +189,7 @@ public class BedwarsGame {
 
     /**
      * Literally stole this code from https://www.spigotmc.org/threads/world-copy.37932/
+     *
      * @param source Location to copy from
      * @param target Location to copy to
      */
@@ -204,7 +206,7 @@ public class BedwarsGame {
 
                     String[] files = source.list();
                     if (files != null) {
-                        for (String file : files) { //recursively goes through the directory
+                        for (String file : files) { // recursively goes through the directory
                             File srcFile = new File(source, file);
                             File destFile = new File(target, file);
                             initializeWorld(srcFile, destFile);
@@ -231,7 +233,7 @@ public class BedwarsGame {
      * Currently, creates only two teams as a PoC.
      */
     private void initializeTeams() {
-        //This is a bunch of hard coded values which isn't exactly nice. It'd be better if we read this in from a config
+        // This is a bunch of hard coded values which isn't exactly nice. It'd be better if we read this in from a config
         World world = Bukkit.getWorld("bedwars_world");
         BedwarsTeam RED_TEAM = new BedwarsTeam(
                 "Red",
@@ -253,7 +255,7 @@ public class BedwarsGame {
                 new Location(world, 37, 66, -73),
                 new Location(world, 27, 66, -73)
         );
-        //Cool! I could do the rest of the teams but fuck that :)
+        // Cool! I could do the rest of the teams but fuck that :)
         bedwarsTeams.add(RED_TEAM);
         bedwarsTeams.add(BLUE_TEAM);
     }
@@ -263,7 +265,7 @@ public class BedwarsGame {
      */
     private void deleteBedwarsWorld() {
         World world = Bukkit.getWorld("bedwars_world");
-        World defaultWorld = Bukkit.getWorld("world"); //TODO: what if the default world isn't world?
+        World defaultWorld = Bukkit.getWorld("world"); // TODO: what if the default world isn't world?
 
         if (world == null) {
             return;
@@ -281,7 +283,9 @@ public class BedwarsGame {
 
     /**
      * Used to delete the physical files of the BedwarsWorld. Stolen from https://www.baeldung.com/java-delete-directory
+     *
      * @param directoryToBeDeleted Take a fucking guess
+     *
      * @return True if could be deleted
      */
     boolean deleteDirectory(File directoryToBeDeleted) {
@@ -298,10 +302,10 @@ public class BedwarsGame {
      * Starts the game and the game loop.
      */
     public void startGame() {
-        //Assign players to teams
+        // Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
             BedwarsTeam team = this.getSmallestTeam();
-            //Double check to make sure we actually init'd our teams
+            // Double check to make sure we actually init'd our teams
             if (team == null) {
                 this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
                 this.gameStatus = GameStatus.FAILED;
@@ -309,12 +313,12 @@ public class BedwarsGame {
                 return;
             }
 
-            //Assign team to player
+            // Assign team to player
             BedwarsTeam bedwarsTeam = getSmallestTeam();
             bedwarsTeam.addPlayerToTeam(bedwarsPlayer);
             bedwarsPlayer.setTeam(bedwarsTeam);
 
-            //Update scoreboards
+            // Update scoreboards
             Player player = bedwarsPlayer.getPlayer();
 
             scoreboardManager.removeAllScoreboards();
@@ -346,7 +350,7 @@ public class BedwarsGame {
         }
 
         for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
-            //Teleport all players to their team's generator
+            // Teleport all players to their team's generator
             List<BedwarsPlayer> players = bedwarsTeam.getAllTeamPlayers();
             for (BedwarsPlayer bedwarsPlayer : players) {
                 Player player = Bukkit.getPlayer(bedwarsPlayer.getPlayerUUID());
@@ -358,7 +362,7 @@ public class BedwarsGame {
                 world.setSpawnLocation(0, 128, 0);
             }
 
-            //Spawn shop NPC with associated displays
+            // Spawn shop NPC with associated displays
             Location shopLoc = bedwarsTeam.getShopLocation();
             npcManager.spawnAndStoreNPC(
                     new ShopNPC(90),
@@ -379,7 +383,7 @@ public class BedwarsGame {
                     90
             );
 
-            //Spawn upgrade NPC with associated displays
+            // Spawn upgrade NPC with associated displays
             Location upgradeLoc = bedwarsTeam.getUpgradesLocation();
             npcManager.spawnAndStoreNPC(
                     new UpgradeNPC(270),
@@ -407,15 +411,15 @@ public class BedwarsGame {
                     270
             );
 
-            //Place chests and echests
+            // Place chests and echests
             bedwarsTeam.getChestLocation().getBlock().setType(Material.CHEST);
             bedwarsTeam.getEnderChestLocation().getBlock().setType(Material.ENDER_CHEST);
 
-            //Generator location for the team
+            // Generator location for the team
             generatorManager.addNewGenerator(bedwarsTeam.teamDisplayName, bedwarsTeam.getTeamGeneratorLocation());
         }
 
-        //Diamond / emerald generator locations
+        // Diamond / emerald generator locations
         generatorManager.addNewGenerator("DIAMOND_1", new Location(world, 0.5, 65, -51.5));
         generatorManager.addNewGenerator("DIAMOND_2", new Location(world, 52.5, 65, 0.5));
         generatorManager.addNewGenerator("DIAMOND_3", new Location(world, 0.5, 65, 52.5));
@@ -438,8 +442,8 @@ public class BedwarsGame {
     @Nullable
     private BedwarsTeam getSmallestTeam() {
         return bedwarsTeams.stream()
-            .min(Comparator.comparingInt(team -> team.getAllTeamPlayers().size()))
-            .orElse(null);
+                .min(Comparator.comparingInt(team -> team.getAllTeamPlayers().size()))
+                .orElse(null);
     }
 
     /**
@@ -463,7 +467,9 @@ public class BedwarsGame {
 
     /**
      * Adds a player to the current Bedwars game if they're allowed to join.
+     *
      * @param player Player to add to the game
+     *
      * @return True if the player cannot be added, false if not
      */
     public boolean addBedwarsPlayer(Player player) {
@@ -477,7 +483,7 @@ public class BedwarsGame {
         player.teleport(this.preGameSpawn);
         messageAllBedwarsPlayers(TextUtil.parseColoredString("%%aqua%%" + player.getName() + " %%yellow%%has joined the game!"));
 
-        //Creates a scoreboard for the pre-game lobby
+        // Creates a scoreboard for the pre-game lobby
         List<String> spectatingScoreboard = new ArrayList<>();
         spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
         spectatingScoreboard.add(TextUtil.parseColoredString("%%yellow%%Pregame"));
@@ -493,6 +499,7 @@ public class BedwarsGame {
 
     /**
      * Messages all players that are currently in the game.
+     *
      * @param string Message to send
      */
     public void messageAllBedwarsPlayers(String string) {

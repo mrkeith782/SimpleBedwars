@@ -21,14 +21,17 @@ public abstract class Menu {
 
     /**
      * Used to handle inventory clicks while the player is in this specific menu.
+     *
      * @param event
      */
     public abstract void handleClick(InventoryClickEvent event);
 
     /**
      * Creates an inventory with the set contents.
-     * @param rows How many rows the inventory has. Cannot be 0.
+     *
+     * @param rows     How many rows the inventory has. Cannot be 0.
      * @param contents Item contents of the menu, mapped to their location.
+     *
      * @return The created inventory, or null if it could not be created.
      */
     @Nullable
@@ -47,6 +50,7 @@ public abstract class Menu {
     public String getMenuID() {
         return menuID;
     }
+
     public String getMenuName() {
         return menuName;
     }

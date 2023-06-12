@@ -21,6 +21,7 @@ public class ItemBuilder {
 
     /**
      * Set the name of an ItemStack with color code handling
+     *
      * @param string Name of object with supporting color codes
      */
     public void setName(String string) {
@@ -35,6 +36,7 @@ public class ItemBuilder {
 
     /**
      * Set the lore of an ItemStack with color code handling
+     *
      * @param lore Lore of object, printed in List order.
      */
     public void setLore(List<String> lore) {
@@ -44,7 +46,7 @@ public class ItemBuilder {
         }
 
         List<String> coloredLore = new ArrayList<>();
-        for(String string : lore) {
+        for (String string : lore) {
             coloredLore.add(TextUtil.parseColoredString(string));
         }
 
@@ -54,7 +56,8 @@ public class ItemBuilder {
 
     /**
      * Adds integer NBT data for the item.
-     * @param id An ID to represent the data.
+     *
+     * @param id    An ID to represent the data.
      * @param value A value that contains data.
      */
     public void addNBTData(String id, int value) {
@@ -69,7 +72,8 @@ public class ItemBuilder {
 
     /**
      * Adds string NBT data for the item.
-     * @param id An ID to represent the data.
+     *
+     * @param id    An ID to represent the data.
      * @param value A string that contains data.
      */
     public void addNBTData(String id, String value) {
@@ -84,7 +88,9 @@ public class ItemBuilder {
 
     /**
      * Reads an NBT string from the current ItemStack
+     *
      * @param id ID of the NBT value
+     *
      * @return NBT String
      */
     @Nullable
@@ -99,7 +105,9 @@ public class ItemBuilder {
 
     /**
      * Reads an NBT integer from the current ItemStack
+     *
      * @param id ID of the NBT value
+     *
      * @return NBT String
      */
     @Nullable
@@ -113,7 +121,7 @@ public class ItemBuilder {
     }
 
     public void setStackSize(int count) {
-        item.setAmount(count); //I know this is a weird wrapper but seeing as I'm using it a lot, meh
+        item.setAmount(count); // I know this is a weird wrapper but seeing as I'm using it a lot, meh
     }
 
     public ItemStack getItem() {
