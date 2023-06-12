@@ -499,8 +499,23 @@ public class BedwarsGame {
         bedwarsPlayers.forEach(bwPlayer -> Objects.requireNonNull(Bukkit.getPlayer(bwPlayer.getPlayerUUID())).sendMessage(string));
     }
 
-    public BedwarsGame getBedwarsGame() {
-        return this.bedwarsGame;
+    public boolean contains(Player player) {
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    public BedwarsTeam getTeamByPlayer(Player player) {
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+                return bedwarsPlayer.getTeam();
+            }
+        }
+        return null;
     }
 
     public ArmorStandManager getArmorStandManager() {
@@ -521,24 +536,5 @@ public class BedwarsGame {
 
     public GameStatus getGameStatus() {
         return this.gameStatus;
-    }
-
-    public boolean contains(Player player) {
-        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Nullable
-    public BedwarsTeam getTeamByPlayer(Player player) {
-        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
-                return bedwarsPlayer.getTeam();
-            }
-        }
-        return null;
     }
 }

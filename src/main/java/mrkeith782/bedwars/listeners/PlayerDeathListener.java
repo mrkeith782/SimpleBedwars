@@ -22,6 +22,7 @@ public class PlayerDeathListener implements Listener {
         Player victim = event.getEntity();
         Player killer = event.getEntity().getKiller();
 
+        //Check if we have a game, and if the player is in a team in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null || !game.contains(victim)) {
             return;
@@ -55,5 +56,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
+        //TODO: death timer, player respawns in 5 sec
+        //TODO: final death
     }
 }
