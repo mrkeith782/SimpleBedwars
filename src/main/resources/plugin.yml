@@ -3,30 +3,6 @@ version: '${project.version}'
 main: mrkeith782.bedwars.Bedwars
 api-version: 1.19
 commands:
-  placearmorstand:
-    description: Spawns a armor stand.
-    usage: /placearmorstand <id> <string>
-  editarmorstand:
-    description: Edits an armor stand.
-    usage: /editarmorstand <id> <string>
-  printarmorstands:
-    description: Prints all currently placed armor stands.
-    usage: /printarmorstands
-  spawntextdisplay:
-    description: Spawns a debug textdisplay
-    usage: /spawntextdisplay
-  openmenu:
-    description: Opens a debug menu.
-    usage: /openmenu <menu>
-  openscoreboard:
-    description: Opens the debug scoreboard.
-    usage: /openscoreboard
-  fuckwithpackets:
-    description: Fucks with packets.
-    usage: /fuckwithpackets
-  generateisland:
-    description: Generates an island.
-    usage: /generateisland
   bedwars:
     description: Base bedwars command.
     usage: /bedwars
