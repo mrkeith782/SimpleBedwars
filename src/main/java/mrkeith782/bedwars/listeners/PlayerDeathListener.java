@@ -1,10 +1,10 @@
 package mrkeith782.bedwars.listeners;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.game.BedwarsGame;
-import mrkeith782.bedwars.game.BedwarsTeam;
+import mrkeith782.bedwars.game.*;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,8 +51,26 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
-        // TODO: death timer, player respawns in 5 sec
-        // TODO: final death
+        BedwarsPlayer bedwarsPlayer = game.getBedwarsPlayer(player);
+        if (bedwarsPlayer == null) {
+            return;
+        }
+
+        player.setGameMode(GameMode.SPECTATOR);
+
+        if (!(bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN)) {
+            player.sendMessage(TextUtil.parseColoredString("%%yellow%%You will respawn in 5 seconds..."));
+            bedwarsPlayer.setStatus(PlayerStatus.DEAD);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Bedwars.getInstance(), () -> {
+                player.setGameMode(GameMode.SURVIVAL);
+                event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
+                bedwarsPlayer.setStatus(PlayerStatus.ALIVE);
+            }, 100L);
+        } else {
+            player.sendMessage(TextUtil.parseColoredString("%%yellow%%You will not respawn because your Team's bed has been broken."));
+            bedwarsPlayer.setStatus(PlayerStatus.FINAL_DEAD);
+        }
+
     }
 }

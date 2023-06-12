@@ -15,6 +15,7 @@ public class BedwarsTeam {
     Location teamGeneratorLocation;
     Location shopLocation;
     Location upgradesLocation;
+    TeamStatus teamStatus;
     List<BedwarsPlayer> teamPlayers;
 
     public BedwarsTeam(String name, Color color, Location bedLoc, Location chestLoc, Location eChestLoc, Location teamGenLoc, Location shopLoc, Location upgradeLoc) {
@@ -27,6 +28,7 @@ public class BedwarsTeam {
         this.shopLocation = shopLoc;
         this.upgradesLocation = upgradeLoc;
         teamPlayers = new ArrayList<>();
+        teamStatus = TeamStatus.ALIVE;
     }
 
     public void addPlayerToTeam(BedwarsPlayer player) {
@@ -67,5 +69,17 @@ public class BedwarsTeam {
 
     public Color getTeamDisplayColor() {
         return teamDisplayColor;
+    }
+
+    public String getTeamDisplayName() {
+        return teamDisplayName;
+    }
+
+    public void setTeamStatus(TeamStatus teamStatus) {
+        this.teamStatus = teamStatus;
+    }
+
+    public TeamStatus getTeamStatus() {
+        return teamStatus;
     }
 }

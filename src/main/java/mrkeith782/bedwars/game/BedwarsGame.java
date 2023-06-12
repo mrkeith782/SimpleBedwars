@@ -1,10 +1,7 @@
 package mrkeith782.bedwars.game;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.listeners.InventoryClickListener;
-import mrkeith782.bedwars.listeners.NPCLeftClickListener;
-import mrkeith782.bedwars.listeners.PlayerDeathListener;
-import mrkeith782.bedwars.listeners.TeamChestListener;
+import mrkeith782.bedwars.listeners.*;
 import mrkeith782.bedwars.managers.*;
 import mrkeith782.bedwars.menus.ShopMenu;
 import mrkeith782.bedwars.menus.UpgradeMenu;
@@ -12,6 +9,7 @@ import mrkeith782.bedwars.npcs.ShopNPC;
 import mrkeith782.bedwars.npcs.UpgradeNPC;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.*;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -82,6 +80,8 @@ public class BedwarsGame {
         Bukkit.getPluginManager().registerEvents(new NPCLeftClickListener(), Bedwars.getInstance());
         Bukkit.getPluginManager().registerEvents(new TeamChestListener(), Bedwars.getInstance());
         Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), Bedwars.getInstance());
+        Bukkit.getPluginManager().registerEvents(new TeamDamageListener(), Bedwars.getInstance());
+        Bukkit.getPluginManager().registerEvents(new BedBreakListener(), Bedwars.getInstance());
         this.gameStatus = GameStatus.PREGAME;
     }
 
@@ -248,7 +248,7 @@ public class BedwarsGame {
         BedwarsTeam BLUE_TEAM = new BedwarsTeam(
                 "Blue",
                 Color.BLUE,
-                new Location(world, 33, 66, -65),
+                new Location(world, 33, 66, -64),
                 new Location(world, 35, 66, -71),
                 new Location(world, 29, 66, -70),
                 new Location(world, 32.5, 66, -76),
@@ -543,5 +543,19 @@ public class BedwarsGame {
 
     public GameStatus getGameStatus() {
         return this.gameStatus;
+    }
+
+    public List<BedwarsTeam> getBedwarsTeams() {
+        return this.bedwarsTeams;
+    }
+
+    @Nullable
+    public BedwarsPlayer getBedwarsPlayer(Player player) {
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+                return bedwarsPlayer;
+            }
+        }
+        return null;
     }
 }
