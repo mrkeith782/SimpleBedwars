@@ -113,15 +113,19 @@ public class BedwarsScoreboardManager {
      * Removes all scoreboards. Clears the scoreboards that are currently displayed to players.
      */
     public void removeAllScoreboards() {
+        if (scoreboards.size() == 0) {
+            return;
+        }
+
         for (String string : scoreboards.keySet()) {
             Player player = Bukkit.getPlayer(string);
 
-            if (player == null) {
-                scoreboards.remove(string);
-            } else {
-                this.removeScoreboard(player);
+            if (player != null) {
+                player.setScoreboard(scoreboardManager.getNewScoreboard());
             }
         }
+
+        scoreboards.clear();
     }
 
     /**

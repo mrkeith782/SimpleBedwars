@@ -302,9 +302,13 @@ public class BedwarsGame {
      * Starts the game and the game loop.
      */
     public void startGame() {
+        // Remove the pregame scoreboard for all the players
+        scoreboardManager.removeAllScoreboards();
+
         // Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
             BedwarsTeam team = this.getSmallestTeam();
+
             // Double check to make sure we actually init'd our teams
             if (team == null) {
                 this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
@@ -321,7 +325,6 @@ public class BedwarsGame {
             // Update scoreboards
             Player player = bedwarsPlayer.getPlayer();
 
-            scoreboardManager.removeAllScoreboards();
             List<String> spectatingScoreboard = new ArrayList<>();
             spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
             spectatingScoreboard.add(" ");
