@@ -109,33 +109,6 @@ public class NPCManager {
                         craftPlayer.getHandle().connection.send(packet1);
                         craftPlayer.getHandle().connection.send(packet2);
                     }
-
-                    // If the player moves far enough away from the entity, let's reset the direction the entity is looking in
-                    List<Entity> furtherAwayEntities = entity.getNearbyEntities(5, 5, 5);
-                    furtherAwayEntities.removeAll(nearbyEntities);
-                    for (Entity nearbyEntity : furtherAwayEntities) {
-                        if (!(nearbyEntity instanceof Player)) {
-                            continue;
-                        }
-
-                        CraftPlayer craftPlayer = (CraftPlayer) nearbyEntity;
-
-                        ClientboundMoveEntityPacket.Rot packet1 = new ClientboundMoveEntityPacket.Rot(
-                                nmsEntity.getId(),
-                                (byte) 0,
-                                (byte) 0,
-                                false
-                        );
-
-                        ClientboundRotateHeadPacket packet2 = new ClientboundRotateHeadPacket(
-                                nmsEntity,
-                                (byte) 0
-                        );
-
-                        craftPlayer.getHandle().connection.send(packet1);
-                        craftPlayer.getHandle().connection.send(packet2);
-                    }
-
                 }
             }
         }.runTaskTimer(Bedwars.getInstance(), 0, 2L);
