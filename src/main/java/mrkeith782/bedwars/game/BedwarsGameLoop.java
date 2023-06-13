@@ -33,55 +33,64 @@ public class BedwarsGameLoop {
                 if (CURRENT_TIME == 0) {
                     removeScoreboardTime("Diamond II in ", 0);
                 }
-                if (CURRENT_TIME < 300) {
+                else if (CURRENT_TIME < 300) {
                     removeScoreboardTime("Diamond II in ", 300 - CURRENT_TIME);
                     addNewScoreboardTime("Diamond II in ", 300 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 300) {
+                }
+                else if (CURRENT_TIME == 300) {
                     removeScoreboardTime("Diamond II in ", 0);
                     addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 2!"));
                     game.gameStatus = GameStatus.PHASE_1;
-                } else if (CURRENT_TIME < 600) {
+                }
+                else if (CURRENT_TIME < 600) {
                     removeScoreboardTime("Emerald II in ", 600 - CURRENT_TIME);
                     addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 600) {
+                }
+                else if (CURRENT_TIME == 600) {
                     removeScoreboardTime("Emerald II in ", 0);
                     addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 2!"));
                     game.gameStatus = GameStatus.PHASE_2;
-                } else if (CURRENT_TIME < 900) {
+                }
+                else if (CURRENT_TIME < 900) {
                     removeScoreboardTime("Diamond III in ", 900 - CURRENT_TIME);
                     addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 900) {
+                }
+                else if (CURRENT_TIME == 900) {
                     removeScoreboardTime("Diamond III in ", 0);
                     addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 3!"));
                     game.gameStatus = GameStatus.PHASE_3;
-                } else if (CURRENT_TIME < 1200) {
+                }
+                else if (CURRENT_TIME < 1200) {
                     removeScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME);
                     addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 1200) {
+                }
+                else if (CURRENT_TIME == 1200) {
                     removeScoreboardTime("Emerald III in ", 0);
                     addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 3!"));
                     game.gameStatus = GameStatus.PHASE_4;
-                } else if (CURRENT_TIME < 1500) {
+                }
+                else if (CURRENT_TIME < 1500) {
                     removeScoreboardTime("Beds break in ", 1500 - CURRENT_TIME);
                     addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 1500) {
+                }
+                else if (CURRENT_TIME == 1500) {
                     removeScoreboardTime("Beds break in ", 0);
                     addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Beds broken!"));
                     game.gameStatus = GameStatus.PHASE_5;
-                } else if (CURRENT_TIME < 1800) {
+                }
+                else if (CURRENT_TIME < 1800) {
                     removeScoreboardTime("Game ends in ", 1800 - CURRENT_TIME);
                     addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
-                } else if (CURRENT_TIME == 1800) {
+                }
+                else if (CURRENT_TIME == 1800) {
                     game.gameStatus = GameStatus.ENDING;
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Game ended fuckos!"));
                 }
-
-                CURRENT_TIME++;
 
                 // Let's see if we can drop items, and do so here
                 game.generatorManager.checkAndDropItems(CURRENT_TIME);
@@ -96,6 +105,8 @@ public class BedwarsGameLoop {
                         updateScoreboardValues(bedwarsPlayer);
                     }
                 }
+
+                CURRENT_TIME++;
             }
         };
     }
