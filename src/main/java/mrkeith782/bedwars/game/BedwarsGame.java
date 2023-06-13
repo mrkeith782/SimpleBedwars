@@ -265,16 +265,9 @@ public class BedwarsGame {
      */
     private void deleteBedwarsWorld() {
         World world = Bukkit.getWorld("bedwars_world");
-        World defaultWorld = Bukkit.getWorld("world"); // TODO: what if the default world isn't world?
 
         if (world == null) {
             return;
-        }
-
-        if (defaultWorld != null) {
-            for (Player player : world.getPlayers()) {
-                player.teleport(defaultWorld.getSpawnLocation());
-            }
         }
 
         Bukkit.getServer().unloadWorld(world, false);
@@ -455,6 +448,17 @@ public class BedwarsGame {
      * Elegantly remove all the players from the game, then clean up all placed generators, holograms, and npcs.
      */
     public void closeGame() {
+        // Remove the players that are currently in the world, and teleport them to the spawn
+        World bedwarsWorld = Bukkit.getWorld("bedwars_world");
+        World world = Bukkit.getWorld("world");
+        if (bedwarsWorld != null && world != null) {
+            for (Player player : bedwarsWorld.getPlayers()) {
+                player.teleport(world.getSpawnLocation());
+                player.setGameMode(GameMode.SURVIVAL);
+                player.getInventory().clear();
+            }
+        }
+
         armorStandManager.removeAllArmorStands();
         armorStandManager.removeAllTextDisplays();
 
