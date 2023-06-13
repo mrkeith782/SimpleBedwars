@@ -432,6 +432,8 @@ public class BedwarsGame {
         generatorManager.placeGenerators();
         generatorManager.startRotation();
 
+        npcManager.buildNpcLookTask();
+
         this.gameLoop = createGameLoop().runTaskTimer(Bedwars.getInstance(), 0L, 20L);
         this.gameStatus = GameStatus.STARTED;
     }
@@ -457,6 +459,7 @@ public class BedwarsGame {
         menuManager.removeAllMenus();
 
         npcManager.removeAllNPCs();
+        npcManager.stopNpcLookTask();
 
         generatorManager.stopRotation();
         generatorManager.removeAllGenerators();
