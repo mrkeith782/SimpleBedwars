@@ -14,6 +14,11 @@ public class NPCManager {
     Map<String, Entity> npcs = new HashMap<>();
     List<NPC> npcClassList = new ArrayList<>();
 
+    /**
+     * Store an NPC in the NPCManager, and spawn it
+     * @param npc NPC to store
+     * @param location Location to spawn the NPC
+     */
     public void spawnAndStoreNPC(NPC npc, Location location) {
         World world = location.getWorld();
         if (world == null) {
@@ -25,15 +30,18 @@ public class NPCManager {
         npcClassList.add(npc);
     }
 
-    public List<NPC> getNpcList() {
-        return npcClassList;
-    }
-
+    /**
+     * Remove all NPCs that are currently registered with the NPC Manager
+     */
     public void removeAllNPCs() {
         for (Entity entity : npcs.values()) {
             entity.remove();
         }
         npcs.clear();
         npcClassList.clear();
+    }
+
+    public List<NPC> getNpcList() {
+        return npcClassList;
     }
 }

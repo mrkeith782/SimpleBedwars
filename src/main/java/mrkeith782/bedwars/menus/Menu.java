@@ -22,14 +22,14 @@ public abstract class Menu {
     /**
      * Used to handle inventory clicks while the player is in this specific menu.
      *
-     * @param event
+     * @param event InventoryClickEvent
      */
     public abstract void handleClick(InventoryClickEvent event);
 
     /**
      * Creates an inventory with the set contents.
      *
-     * @param rows     How many rows the inventory has. Cannot be 0.
+     * @param rows How many rows the inventory has. Cannot be 0.
      * @param contents Item contents of the menu, mapped to their location.
      *
      * @return The created inventory, or null if it could not be created.
@@ -39,11 +39,13 @@ public abstract class Menu {
         if (rows == 0 || rows > 6) {
             return null;
         }
+
         Inventory inventory = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
         for (int key : contents.keySet()) {
             ItemStack item = contents.get(key);
             inventory.setItem(key, item);
         }
+
         return inventory;
     }
 

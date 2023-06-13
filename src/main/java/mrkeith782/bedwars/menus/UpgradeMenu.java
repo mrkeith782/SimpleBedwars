@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpgradeMenu extends Menu {
-    private final Bedwars bedwars = Bedwars.getInstance();
 
     public UpgradeMenu() {
         this.menuID = "UPGRADE_MENU";
@@ -18,7 +17,7 @@ public class UpgradeMenu extends Menu {
 
     @Override
     public void createMenu() {
-        ItemStack blankPane = bedwars.getBedwarsGame().getMenuManager().getBlankItem();
+        ItemStack blankPane = Bedwars.getInstance().getBedwarsGame().getMenuManager().getBlankItem();
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, blankPane);
         layout.put(1, blankPane);

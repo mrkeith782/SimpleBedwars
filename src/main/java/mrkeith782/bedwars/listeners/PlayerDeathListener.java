@@ -29,7 +29,8 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        if (killer == null) { // This means there was not a killer involved with the player's death
+        // This means there was not a killer involved with the player's death
+        if (killer == null) {
             game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%gray%%") + event.getDeathMessage());
         }
 

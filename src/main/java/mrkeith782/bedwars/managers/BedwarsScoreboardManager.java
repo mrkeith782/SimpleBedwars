@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 public class BedwarsScoreboardManager {
-    private final Bedwars bedwars = Bedwars.getInstance();
     private final ScoreboardManager scoreboardManager;
+
+    // Should I be initializing here?
     private final Map<String, Scoreboard> scoreboards = new HashMap<>();
 
     public BedwarsScoreboardManager() {
-        scoreboardManager = bedwars.getServer().getScoreboardManager();
+        scoreboardManager = Bedwars.getInstance().getServer().getScoreboardManager();
+
+        //scoreboards = new HashMap<>(); Or should it be here?
     }
 
     /**
@@ -31,10 +34,11 @@ public class BedwarsScoreboardManager {
     public void createNewScoreboard(Player player, List<String> lines) {
         Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
 
+        // Why is the identifier `identifier`? I don't know!
         Objective objective = scoreboard.registerNewObjective("Identifier", Criteria.DUMMY, TextUtil.parseColoredString(" "));
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        // Place the lines top to bottom on the scoreboard
+        // Place the lines top to bottom on the scoreboard, so we match the order lines is in
         int iteration = 0;
         for (String line : lines) {
             Score score = objective.getScore(TextUtil.parseColoredString(line));
@@ -125,7 +129,7 @@ public class BedwarsScoreboardManager {
     }
 
     /**
-     * Gets the current date in a nice format
+     * Gets the current date in the 'MM/dd/yyyy' format
      *
      * @return String with date
      */

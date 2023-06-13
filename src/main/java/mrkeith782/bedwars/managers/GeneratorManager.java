@@ -17,24 +17,15 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class GeneratorManager {
-    final Map<String, Location> generatorLocations;
-    final List<Entity> generatorArmorStands;
-    BukkitTask generatorLoop;
+    private final Map<String, Location> generatorLocations = new HashMap<>();
+    private final List<Entity> generatorArmorStands = new ArrayList<>();
+    private BukkitTask generatorLoop;
 
-    public GeneratorManager() {
-        this.generatorArmorStands = new ArrayList<>();
-        this.generatorLocations = new HashMap<>();
-    }
-
-    public void addNewGenerator(String id, Location location) {
-        generatorLocations.put(id, location);
-    }
-
-    public Map<String, Location> getGeneratorLocations() {
-        return generatorLocations;
-    }
-
+    /**
+     * Place all the generators that are currently registered within the GM.
+     */
     public void placeGenerators() {
+        // Let's get all the generator locations we have stored, and start placing them
         for (String string : generatorLocations.keySet()) {
             Location location = generatorLocations.get(string);
             World world = location.getWorld();
@@ -50,6 +41,7 @@ public class GeneratorManager {
 
             ArmorStandManager armorStandManager = Bedwars.getInstance().getBedwarsGame().getArmorStandManager();
 
+            // This is a shitty way to do it, I should create a generator class but this is ez
             if (string.toLowerCase().contains("diamond")) {
                 armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 3, 0), "%%yellow%%Tier %%red%%I", string + "_TIER");
                 armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.7, 0), "%%aqua%%Diamond %%yellow%%Generator", string + "_NAME");
@@ -61,6 +53,7 @@ public class GeneratorManager {
                 armorStandManager.spawnNewArmorStand(as.getLocation().clone().add(0, 2.4, 0), "%%yellow%%Next material in %%green%%0:30", string + "_TIME");
                 eq.setHelmet(new ItemStack(Material.EMERALD_BLOCK));
             }
+
             as.setVisible(false);
             as.setGravity(false);
             as.setCollidable(false);
@@ -69,14 +62,19 @@ public class GeneratorManager {
         }
     }
 
+    /**
+     * Check if items should be dropped at each registered generator, and update displays as such
+     * @param time Current game time
+     */
     public void checkAndDropItems(int time) {
         GameStatus gameStatus = Bedwars.getInstance().getBedwarsGame().getGameStatus();
         ArmorStandManager armorStandManager = Bedwars.getInstance().getBedwarsGame().getArmorStandManager();
         int modifiedTime = 1800 - time;
 
+        // Let's loop through each of our generators, and see if they're ready to drop an item
         for (String string : generatorLocations.keySet()) {
             if (string.toLowerCase().contains("diamond")) { // This is an absolute shit way to do it, TODO: make a Generator class
-                // Let's figure out if we should drop a diamond, and edit the armor stand for that
+                // Let's figure out if we should drop a diamond, and edit the armor stand to display when it'll be coming
                 int diamondTime;
                 switch (gameStatus) {
                     case PHASE_1:
@@ -93,6 +91,7 @@ public class GeneratorManager {
                 }
                 armorStandManager.editArmorStandDisplay(string + "_TIME", "%%yellow%%Next material in %%green%%" + TextUtil.formatPrettyTime(modifiedTime % diamondTime));
 
+                // Let's get the interval to drop a material, and drop it if we've reached that interval
                 if (modifiedTime % diamondTime == 0) {
                     World world = generatorLocations.get(string).getWorld();
                     if (world == null) {
@@ -130,7 +129,7 @@ public class GeneratorManager {
                     continue;
                 }
 
-                // Let's get how many iron + gold we have near the generator, and stop generating if so
+                // Let's get how many iron + gold we have near the generator, and stop generating if there are too many materials around
                 Collection<Entity> entities = world.getNearbyEntities(generatorLocations.get(string), 3, 3, 3);
                 int count = 0;
                 for (Entity entity : entities) {
@@ -155,6 +154,9 @@ public class GeneratorManager {
         }
     }
 
+    /**
+     * Make the armor stand block that appears at each generator spin! Can be cancelled with #stopRotation
+     */
     public void startRotation() {
         this.generatorLoop = new BukkitRunnable() {
             int yaw = 0;
@@ -174,13 +176,27 @@ public class GeneratorManager {
         }.runTaskTimer(Bedwars.getInstance(), 0L, 1L);
     }
 
+    /**
+     * End the task that makes the generators rotate
+     */
     public void stopRotation() {
         this.generatorLoop.cancel();
     }
 
+    /**
+     * Removes all generators and related armor stands currently registered with the GM
+     */
     public void removeAllGenerators() {
         for (Entity entity : generatorArmorStands) {
             entity.remove();
         }
+    }
+
+    public void addNewGenerator(String id, Location location) {
+        generatorLocations.put(id, location);
+    }
+
+    public Map<String, Location> getGeneratorLocations() {
+        return generatorLocations;
     }
 }

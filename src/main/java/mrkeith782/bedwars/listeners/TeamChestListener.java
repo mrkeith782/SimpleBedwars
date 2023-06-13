@@ -30,6 +30,7 @@ public class TeamChestListener implements Listener {
             return;
         }
 
+        // If the chest doesn't belong to the player, don't let 'em open it
         if (event.getClickedBlock().getBlockData().getMaterial() == Material.CHEST && !event.getClickedBlock().getLocation().equals(bedwarsTeam.getChestLocation())) {
             event.getPlayer().sendMessage(TextUtil.parseColoredString("%%red%%You cannot open that chest until that team is dead!"));
             event.setCancelled(true);

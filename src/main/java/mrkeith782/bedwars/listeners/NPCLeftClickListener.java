@@ -23,7 +23,7 @@ public class NPCLeftClickListener implements Listener {
         //Make sure player is in game, and alive
         Player player = event.getPlayer();
         BedwarsPlayer bedwarsPlayer = game.getBedwarsPlayer(player);
-        if (bedwarsPlayer == null || player.getGameMode() != GameMode.SURVIVAL) {
+        if (bedwarsPlayer == null || bedwarsPlayer.getStatus() != PlayerStatus.ALIVE) {
             return;
         }
 

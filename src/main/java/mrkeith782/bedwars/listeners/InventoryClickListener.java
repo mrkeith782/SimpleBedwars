@@ -16,7 +16,7 @@ public class InventoryClickListener implements Listener {
             return;
         }
 
-        // We only care about the click if we're in a Menu, so let's check if we are.
+        // We only care about the click if we're in a Menu, so let's check which one we're in, and pass the event accordingly
         for (Menu menu : game.getMenuManager().getMenus()) {
             String menuName = menu.getMenuName();
             if (menuName == null || event.getClickedInventory() == null) {

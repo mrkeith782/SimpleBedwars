@@ -25,7 +25,7 @@ public class InventoryUtil {
             } else if (item.getAmount() >= amount) { // player has enough or more than enough in this slot
                 item.setAmount(item.getAmount() - amount);
                 break;
-            } else { // player has 1<x<ironCost iron in this inventory slot
+            } else { // player has 1<x<cost amount of items in this inventory slot
                 amount -= item.getAmount();
                 item.setAmount(0);
             }

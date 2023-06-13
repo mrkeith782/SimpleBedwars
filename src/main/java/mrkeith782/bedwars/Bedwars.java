@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
     private static Bedwars instance;
-    public BedwarsGame bedwarsGame = null;
+    public BedwarsGame bedwarsGame;
 
     @Override
     public void onEnable() {
@@ -17,8 +17,8 @@ public final class Bedwars extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (this.bedwarsGame != null) {
-            this.closeGame();
+        if (bedwarsGame != null) {
+            closeGame();
         }
     }
 
@@ -27,16 +27,16 @@ public final class Bedwars extends JavaPlugin {
     }
 
     public void createNewGame() {
-        this.bedwarsGame = new BedwarsGame();
-        this.bedwarsGame.build();
+        bedwarsGame = new BedwarsGame();
+        bedwarsGame.build();
     }
 
     public void closeGame() {
         bedwarsGame.closeGame();
-        this.bedwarsGame = null;
+        bedwarsGame = null;
     }
 
     public BedwarsGame getBedwarsGame() {
-        return this.bedwarsGame;
+        return bedwarsGame;
     }
 }

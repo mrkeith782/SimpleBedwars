@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class ShopMenu extends Menu {
-    private final Bedwars bedwars = Bedwars.getInstance();
 
     public ShopMenu() {
         this.menuID = "SHOP_MENU";
@@ -28,7 +27,7 @@ public class ShopMenu extends Menu {
     public void createMenu() {
         Map<Integer, ItemStack> layout = new HashMap<>();
         layout.put(0, getMainMenuItem());
-        IntStream.range(9, 18).forEach(i -> layout.put(i, bedwars.getBedwarsGame().getMenuManager().getBlankItem()));
+        IntStream.range(9, 18).forEach(i -> layout.put(i, Bedwars.getInstance().getBedwarsGame().getMenuManager().getBlankItem()));
         layout.put(18, getWoolItem());
 
         this.inventory = createInventory(6, layout);

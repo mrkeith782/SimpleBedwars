@@ -15,13 +15,13 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
-    private ItemStack BLANK_ITEM; // We only create it if we need it, and store it here.
     private final List<Menu> menus = new ArrayList<>();
+    private ItemStack BLANK_ITEM;
 
     /**
      * Registers a menu from a class that implements Menu
      *
-     * @param menu
+     * @param menu Specific menu to register in the MM
      */
     public void registerMenu(Menu menu) {
         menus.add(menu); // TODO: logic if the menu is already registered?
@@ -51,7 +51,10 @@ public class MenuManager {
      */
     public boolean modifyMenu(String id, int slot, ItemStack item) {
         Inventory inventory = getMenuByID(id);
-        if (inventory == null) return false;
+        if (inventory == null) {
+            return false;
+        }
+
         inventory.setItem(slot, item);
         inventories.replace(id, inventory);
         return true;
@@ -61,12 +64,15 @@ public class MenuManager {
      * Opens a menu for the player
      *
      * @param id     ID of the menu
-     * @param player
+     * @param player Player to display the menu to
      */
     public void openMenu(String id, Player player) {
         player.closeInventory();
         Inventory inventory = getMenuByID(id);
-        if (inventory == null) return;
+        if (inventory == null) {
+            return;
+        }
+
         player.openInventory(inventory);
     }
 
