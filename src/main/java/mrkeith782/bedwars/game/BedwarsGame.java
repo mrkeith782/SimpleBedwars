@@ -152,6 +152,12 @@ public class BedwarsGame {
 
                 // Let's see if we can drop items, and do so here
                 generatorManager.checkAndDropItems(CURRENT_TIME);
+
+                for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+                    if (bedwarsPlayer.needsUpdate) {
+                        updateScoreboardValues(bedwarsPlayer);
+                    }
+                }
             }
 
             private void removeScoreboardTime(String prepend, int value) {
@@ -183,6 +189,32 @@ public class BedwarsGame {
                     Score score = objective.getScore(TextUtil.parseColoredString(prepend + "%%green%%" + TextUtil.formatPrettyTime(value)));
                     score.setScore(10);
                 }
+            }
+
+            private void updateScoreboardValues(BedwarsPlayer bedwarsPlayer) {
+                Scoreboard scoreboard = scoreboardManager.getScoreboard(bedwarsPlayer.getPlayer());
+                if (scoreboard == null) {
+                    return;
+                }
+                Objective objective = scoreboard.getObjective("Identifier");
+                if (objective == null) {
+                    return;
+                }
+
+                // We're making the naive assumption that the player's stats have only increased by one
+                scoreboard.resetScores(TextUtil.parseColoredString("Kills: %%green%%" + (bedwarsPlayer.getKills() - 1)));
+                Score score = objective.getScore(TextUtil.parseColoredString("Kills: %%green%%" + (bedwarsPlayer.getKills())));
+                score.setScore(5);
+
+                scoreboard.resetScores(TextUtil.parseColoredString("Final Kills: %%green%%" + (bedwarsPlayer.getFinalKills() - 1)));
+                score = objective.getScore(TextUtil.parseColoredString("Final Kills: %%green%%" + (bedwarsPlayer.getFinalKills())));
+                score.setScore(4);
+
+                scoreboard.resetScores(TextUtil.parseColoredString("Beds Broken: %%green%%" + (bedwarsPlayer.getBedsBroken() - 1)));
+                score = objective.getScore(TextUtil.parseColoredString("Beds Broken: %%green%%" + (bedwarsPlayer.getBedsBroken())));
+                score.setScore(3);
+
+                bedwarsPlayer.setNeedsUpdate(false);
             }
         };
     }

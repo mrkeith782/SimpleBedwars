@@ -69,7 +69,7 @@ public class NPCManager {
             Level level;
             @Override
             public void run() {
-
+                // Let's go through all of our entities in the NPC Manager
                 for (Entity entity : npcs.keySet()) {
                     if (level == null) {
                         CraftWorld world = (CraftWorld) entity.getWorld();
@@ -81,12 +81,14 @@ public class NPCManager {
                         continue;
                     }
 
+                    // Let's see if we have a player nearby, and then have our NPC look at the player
                     List<Entity> nearbyEntities = entity.getNearbyEntities(3, 3, 3);
                     for (Entity nearbyEntity : nearbyEntities) {
                         if (!(nearbyEntity instanceof Player)) {
                             continue;
                         }
 
+                        // Get difference between NPC's location and the player's
                         CraftPlayer craftPlayer = (CraftPlayer) nearbyEntity;
 
                         Location playerLoc = craftPlayer.getLocation();
@@ -94,6 +96,7 @@ public class NPCManager {
 
                         Vector locDiff = playerLoc.toVector().subtract(entityLoc.toVector()).normalize();
 
+                        // Have the NPC pitch change to face the player
                         ClientboundMoveEntityPacket.Rot packet1 = new ClientboundMoveEntityPacket.Rot(
                                 nmsEntity.getId(),
                                 (byte) 0,
@@ -101,6 +104,7 @@ public class NPCManager {
                                 false
                         );
 
+                        // Have the NPC yaw change to face the player
                         ClientboundRotateHeadPacket packet2 = new ClientboundRotateHeadPacket(
                                 nmsEntity,
                                 (byte) (-(Math.atan2(locDiff.getX(), locDiff.getZ()) * (256.0F / 360.0F)) * 60)

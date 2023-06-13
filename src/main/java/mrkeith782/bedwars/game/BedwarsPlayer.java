@@ -9,14 +9,34 @@ public class BedwarsPlayer {
     UUID playerUUID;
     PlayerStatus status;
     BedwarsTeam team;
-    int deaths;
     int kills;
+    int bedsBroken;
+    int finalKills;
+    boolean needsUpdate = false;
 
     public BedwarsPlayer(Player player) {
         this.playerUUID = player.getUniqueId();
         this.status = PlayerStatus.PREGAME;
-        this.deaths = 0;
         this.kills = 0;
+    }
+
+    public void incKills() {
+        this.kills++;
+        this.needsUpdate = true;
+    }
+
+    public void incFinalKills() {
+        this.finalKills++;
+        this.needsUpdate = true;
+    }
+
+    public void incBedsBroken() {
+        this.bedsBroken++;
+        this.needsUpdate = true;
+    }
+
+    public void setNeedsUpdate(boolean update) {
+        this.needsUpdate = update;
     }
 
     public UUID getPlayerUUID() {
@@ -41,5 +61,15 @@ public class BedwarsPlayer {
 
     public Player getPlayer() {
         return Bukkit.getPlayer(this.getPlayerUUID());
+    }
+    public int getKills() {
+        return this.kills;
+    }
+
+    public int getFinalKills() {
+        return this.finalKills;
+    }
+    public int getBedsBroken() {
+        return this.bedsBroken;
     }
 }
