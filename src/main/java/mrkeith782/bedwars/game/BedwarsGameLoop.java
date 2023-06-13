@@ -20,17 +20,16 @@ public class BedwarsGameLoop {
      * scoreboards, game progress, and if the win condition has been met for the game yet.
      */
     public BedwarsGameLoop() {
-        this.game = Bedwars.getInstance().getBedwarsGame();
-        if (game == null) {
-            return;
-        }
 
         this.gameLoop = new BukkitRunnable() {
             int CURRENT_TIME = 0;
 
             @Override
             public void run() {
-                // Jesus
+                if (game == null) {
+                    game = Bedwars.getInstance().getBedwarsGame();
+                }
+
                 if (CURRENT_TIME == 0) {
                     removeScoreboardTime("Diamond II in ", 0);
                 }
@@ -87,7 +86,12 @@ public class BedwarsGameLoop {
                 // Let's see if we can drop items, and do so here
                 game.generatorManager.checkAndDropItems(CURRENT_TIME);
 
-                for (BedwarsPlayer bedwarsPlayer : game.getBedwarsPlayers()) {
+                List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
+                if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+                    return;
+                }
+
+                for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
                     if (bedwarsPlayer.needsUpdate) {
                         updateScoreboardValues(bedwarsPlayer);
                     }
