@@ -26,6 +26,7 @@ public class BedwarsGameLoop {
 
             @Override
             public void run() {
+                // Called here because the game isn't init'd yet until after this is constructed
                 if (game == null) {
                     game = Bedwars.getInstance().getBedwarsGame();
                 }

@@ -236,6 +236,7 @@ public class BedwarsGame {
             this.scoreboardManager.refreshScoreboard(player);
         }
 
+        // Make sure that we actually have a world to send players to
         World world = Bukkit.getWorld("bedwars_world");
         if (world == null) {
             this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to get world. Game start aborted ):"));
@@ -426,6 +427,11 @@ public class BedwarsGame {
         return false;
     }
 
+    /**
+     * Get the bedwars team the player is currently on
+     * @param player Player to get team for
+     * @return Team the player is on, null if none / pre-game
+     */
     @Nullable
     public BedwarsTeam getTeamByPlayer(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
