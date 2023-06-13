@@ -32,6 +32,24 @@ public class PlayerDeathListener implements Listener {
         // This means there was not a killer involved with the player's death
         if (killer == null) {
             game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%gray%%") + event.getDeathMessage());
+        } else {
+            BedwarsPlayer bedwarsKiller = game.getBedwarsPlayer(killer);
+            BedwarsPlayer bedwarsVictim = game.getBedwarsPlayer(victim);
+            if (bedwarsKiller == null || bedwarsVictim == null) {
+                return;
+            }
+
+            BedwarsTeam victimTeam = bedwarsVictim.getTeam();
+            if (victimTeam == null) {
+                return;
+            }
+
+            // The victim gets stats for killing the player
+            if (victimTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
+                bedwarsKiller.incFinalKills();
+            } else {
+                bedwarsKiller.incKills();
+            }
         }
 
         event.setDeathMessage(null);

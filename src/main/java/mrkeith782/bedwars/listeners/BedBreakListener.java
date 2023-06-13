@@ -2,6 +2,7 @@ package mrkeith782.bedwars.listeners;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.BedwarsGame;
+import mrkeith782.bedwars.game.BedwarsPlayer;
 import mrkeith782.bedwars.game.BedwarsTeam;
 import mrkeith782.bedwars.game.TeamStatus;
 import mrkeith782.bedwars.util.TextUtil;
@@ -25,6 +26,14 @@ public class BedBreakListener implements Listener {
         if (event.getBlock().getType() == Material.RED_BED) {
             event.setDropItems(false);
 
+
+            BedwarsPlayer bedwarsPlayer = game.getBedwarsPlayer(event.getPlayer());
+
+            if (bedwarsPlayer != null) {
+                bedwarsPlayer.incBedsBroken();
+            }
+
+            //TODO: This is inherently fragile because the bed takes up two blocks worth of space
             //TODO: This is fragile because the bed takes up two blocks worth of space
             for (BedwarsTeam team : game.getBedwarsTeams()) {
                 if (team.getBedLocation().equals(event.getBlock().getLocation())) {

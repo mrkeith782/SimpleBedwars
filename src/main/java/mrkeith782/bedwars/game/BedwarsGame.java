@@ -152,6 +152,12 @@ public class BedwarsGame {
 
                 // Let's see if we can drop items, and do so here
                 generatorManager.checkAndDropItems(CURRENT_TIME);
+
+                for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+                    if (bedwarsPlayer.needsUpdate) {
+                        updateScoreboardValues(bedwarsPlayer);
+                    }
+                }
             }
 
             private void removeScoreboardTime(String prepend, int value) {
@@ -183,6 +189,32 @@ public class BedwarsGame {
                     Score score = objective.getScore(TextUtil.parseColoredString(prepend + "%%green%%" + TextUtil.formatPrettyTime(value)));
                     score.setScore(10);
                 }
+            }
+
+            private void updateScoreboardValues(BedwarsPlayer bedwarsPlayer) {
+                Scoreboard scoreboard = scoreboardManager.getScoreboard(bedwarsPlayer.getPlayer());
+                if (scoreboard == null) {
+                    return;
+                }
+                Objective objective = scoreboard.getObjective("Identifier");
+                if (objective == null) {
+                    return;
+                }
+
+                // We're making the naive assumption that the player's stats have only increased by one
+                scoreboard.resetScores(TextUtil.parseColoredString("Kills: %%green%%" + (bedwarsPlayer.getKills() - 1)));
+                Score score = objective.getScore(TextUtil.parseColoredString("Kills: %%green%%" + (bedwarsPlayer.getKills())));
+                score.setScore(5);
+
+                scoreboard.resetScores(TextUtil.parseColoredString("Final Kills: %%green%%" + (bedwarsPlayer.getFinalKills() - 1)));
+                score = objective.getScore(TextUtil.parseColoredString("Final Kills: %%green%%" + (bedwarsPlayer.getFinalKills())));
+                score.setScore(4);
+
+                scoreboard.resetScores(TextUtil.parseColoredString("Beds Broken: %%green%%" + (bedwarsPlayer.getBedsBroken() - 1)));
+                score = objective.getScore(TextUtil.parseColoredString("Beds Broken: %%green%%" + (bedwarsPlayer.getBedsBroken())));
+                score.setScore(3);
+
+                bedwarsPlayer.setNeedsUpdate(false);
             }
         };
     }
@@ -265,16 +297,9 @@ public class BedwarsGame {
      */
     private void deleteBedwarsWorld() {
         World world = Bukkit.getWorld("bedwars_world");
-        World defaultWorld = Bukkit.getWorld("world"); // TODO: what if the default world isn't world?
 
         if (world == null) {
             return;
-        }
-
-        if (defaultWorld != null) {
-            for (Player player : world.getPlayers()) {
-                player.teleport(defaultWorld.getSpawnLocation());
-            }
         }
 
         Bukkit.getServer().unloadWorld(world, false);
@@ -302,9 +327,13 @@ public class BedwarsGame {
      * Starts the game and the game loop.
      */
     public void startGame() {
+        // Remove the pregame scoreboard for all the players
+        scoreboardManager.removeAllScoreboards();
+
         // Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
             BedwarsTeam team = this.getSmallestTeam();
+
             // Double check to make sure we actually init'd our teams
             if (team == null) {
                 this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to initialize teams. Game start aborted ):"));
@@ -321,7 +350,6 @@ public class BedwarsGame {
             // Update scoreboards
             Player player = bedwarsPlayer.getPlayer();
 
-            scoreboardManager.removeAllScoreboards();
             List<String> spectatingScoreboard = new ArrayList<>();
             spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
             spectatingScoreboard.add(" ");
@@ -432,6 +460,8 @@ public class BedwarsGame {
         generatorManager.placeGenerators();
         generatorManager.startRotation();
 
+        npcManager.buildNpcLookTask();
+
         this.gameLoop = createGameLoop().runTaskTimer(Bedwars.getInstance(), 0L, 20L);
         this.gameStatus = GameStatus.STARTED;
     }
@@ -450,6 +480,17 @@ public class BedwarsGame {
      * Elegantly remove all the players from the game, then clean up all placed generators, holograms, and npcs.
      */
     public void closeGame() {
+        // Remove the players that are currently in the world, and teleport them to the spawn
+        World bedwarsWorld = Bukkit.getWorld("bedwars_world");
+        World world = Bukkit.getWorld("world");
+        if (bedwarsWorld != null && world != null) {
+            for (Player player : bedwarsWorld.getPlayers()) {
+                player.teleport(world.getSpawnLocation());
+                player.setGameMode(GameMode.SURVIVAL);
+                player.getInventory().clear();
+            }
+        }
+
         armorStandManager.removeAllArmorStands();
         armorStandManager.removeAllTextDisplays();
 
@@ -457,6 +498,7 @@ public class BedwarsGame {
         menuManager.removeAllMenus();
 
         npcManager.removeAllNPCs();
+        npcManager.stopNpcLookTask();
 
         generatorManager.stopRotation();
         generatorManager.removeAllGenerators();
