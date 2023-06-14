@@ -11,23 +11,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import java.util.List;
-
 public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeathListener(PlayerDeathEvent event) {
         Player victim = event.getEntity();
-        Player killer = event.getEntity().getKiller();
+        Player killer = event.getEntity().getKiller(); // can be null
 
         // Check if we have a game, and if the player is in a team in the game
         BedwarsGame game = Bedwars.getInstance().getBedwarsGame();
         if (game == null || !game.contains(victim)) {
             return;
         }
-
-        BedwarsTeam team = game.getTeamByPlayer(victim);
-        if (team == null) {
+        BedwarsPlayer bedwarsVictim = game.getBedwarsPlayer(victim);
+        if (bedwarsVictim == null) {
+            return;
+        }
+        BedwarsTeam victimTeam = bedwarsVictim.getTeam();
+        if (victimTeam == null) {
             return;
         }
 
@@ -36,23 +37,21 @@ public class PlayerDeathListener implements Listener {
             game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%gray%%") + event.getDeathMessage());
         } else {
             BedwarsPlayer bedwarsKiller = game.getBedwarsPlayer(killer);
-            BedwarsPlayer bedwarsVictim = game.getBedwarsPlayer(victim);
-            if (bedwarsKiller == null || bedwarsVictim == null) {
-                return;
-            }
-
-            BedwarsTeam victimTeam = bedwarsVictim.getTeam();
-            if (victimTeam == null) {
+            if (bedwarsKiller == null) {
                 return;
             }
 
             // The victim gets stats for killing the player
             if (victimTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
-                victimTeam.setNeedsUpdate(true);
                 bedwarsKiller.incFinalKills();
             } else {
                 bedwarsKiller.incKills();
             }
+        }
+
+        // Make sure we set the flag to check if this is the last player alive
+        if (victimTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
+            victimTeam.setNeedsUpdate(true);
         }
 
         event.setDeathMessage(null);

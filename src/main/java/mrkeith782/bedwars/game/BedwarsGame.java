@@ -9,14 +9,8 @@ import mrkeith782.bedwars.npcs.ShopNPC;
 import mrkeith782.bedwars.npcs.UpgradeNPC;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.*;
-import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -27,7 +21,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class BedwarsGame {
-    GameStatus gameStatus;
+    public GameStatus gameStatus;
 
     final ArmorStandManager armorStandManager;
     final BedwarsScoreboardManager scoreboardManager;

@@ -1,6 +1,5 @@
 package mrkeith782.bedwars.managers;
 
-import jline.internal.Log;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

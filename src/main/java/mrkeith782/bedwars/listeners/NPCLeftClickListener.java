@@ -5,7 +5,6 @@ import mrkeith782.bedwars.game.BedwarsGame;
 import mrkeith782.bedwars.game.BedwarsPlayer;
 import mrkeith782.bedwars.game.PlayerStatus;
 import mrkeith782.bedwars.npcs.NPC;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

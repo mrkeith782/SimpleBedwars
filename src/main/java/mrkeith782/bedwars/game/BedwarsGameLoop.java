@@ -2,13 +2,13 @@ package mrkeith782.bedwars.game;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.util.TextUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BedwarsGameLoop {
@@ -17,10 +17,9 @@ public class BedwarsGameLoop {
 
     /**
      * Creates the Bedwars Game Loop. The game loop is what keeps track of generator progress,
-     * scoreboards, game progress, and if the win condition has been met for the game yet.
+     * scoreboards, game progress, and if the win condition has been met.
      */
     public BedwarsGameLoop() {
-
         this.gameLoop = new BukkitRunnable() {
             int CURRENT_TIME = 0;
 
@@ -110,6 +109,18 @@ public class BedwarsGameLoop {
                     }
                 }
 
+                // Let's check if we have a team that meets the win condition, and if we do, end the game.
+                BedwarsTeam bedwarsTeam = checkWinCondition();
+                if (bedwarsTeam != null) {
+                    game.gameStatus = GameStatus.ENDING;
+                    game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Game is over! %%yellow%%" + bedwarsTeam.getTeamDisplayName() + " team won!"));
+
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Bedwars.getInstance(), () -> {
+                        Bedwars.getInstance().closeGame();
+                    }, 100L);
+                    stopGameLoop();
+                }
+
                 CURRENT_TIME++;
             }
         };
@@ -130,11 +141,13 @@ public class BedwarsGameLoop {
                 continue;
             }
 
+            // Let's see if updating this value causes the team to be out of players
             if (checkValidPlayers(bedwarsTeam) == 0) {
                 bedwarsTeam.setTeamStatus(TeamStatus.DEAD);
             }
 
-            // Change the team's state in the scoreboard, hopefully successfully
+            // Change the team's state in the scoreboard, hopefully successfully.
+            // It's really weird that I hard coded this, would be better to absolutely fucking not do this
             if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Red")) {
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
                     int playersLeft = bedwarsTeam.getAllTeamPlayers().size();
@@ -167,7 +180,7 @@ public class BedwarsGameLoop {
             }
         }
 
-        // We've updated everyone's scoreboard, so let's flag this so we don't have to go through this logic again
+        // We've updated everyone's scoreboard, let's update flag so we don't have to go through this logic again
         bedwarsTeam.setNeedsUpdate(false);
     }
 
@@ -255,6 +268,31 @@ public class BedwarsGameLoop {
         return (int) bedwarsTeam.getAllTeamPlayers().stream()
                 .filter(player -> player.getStatus() != PlayerStatus.FINAL_DEAD)
                 .count();
+    }
+
+    /**
+     * Loop through all our teams to see if only one remains.
+     * @return The BedwarsTeam that has won, null if none have won yet
+     */
+    @Nullable
+    private BedwarsTeam checkWinCondition() {
+        int teamsAlive = 0;
+        BedwarsTeam currTeam = null;
+
+        // Loop through all our teams, collecting teams that are alive.
+        for (BedwarsTeam bedwarsTeam : game.getBedwarsTeams()) {
+            if (bedwarsTeam.getTeamStatus() != TeamStatus.DEAD) {
+                teamsAlive++;
+                currTeam = bedwarsTeam;
+            }
+        }
+
+        // If only one team is alive, store the team and return it.
+        if (teamsAlive == 1) {
+            return currTeam;
+        } else {
+            return null;
+        }
     }
 
     /**
