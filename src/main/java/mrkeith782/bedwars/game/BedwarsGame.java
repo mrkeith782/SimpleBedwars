@@ -218,14 +218,14 @@ public class BedwarsGame {
             spectatingScoreboard.add(TextUtil.parseColoredString("%%gray%%" + BedwarsScoreboardManager.getPrettyDate()));
             spectatingScoreboard.add(" ");
             spectatingScoreboard.add("Diamond II in %%green%%5:00");
-            spectatingScoreboard.add("   ");
+            spectatingScoreboard.add("  ");
             spectatingScoreboard.add(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
             spectatingScoreboard.add(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
-            spectatingScoreboard.add("    ");
+            spectatingScoreboard.add("   ");
             spectatingScoreboard.add(TextUtil.parseColoredString("Kills: %%green%%0"));
             spectatingScoreboard.add(TextUtil.parseColoredString("Final Kills: %%green%%0"));
             spectatingScoreboard.add(TextUtil.parseColoredString("Beds Broken: %%green%%0"));
-            spectatingScoreboard.add("     ");
+            spectatingScoreboard.add("    ");
             spectatingScoreboard.add("%%yellow%%mrkeith.yeet");
 
             this.scoreboardManager.createNewScoreboard(player, spectatingScoreboard);
@@ -238,7 +238,7 @@ public class BedwarsGame {
         if (world == null) {
             this.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Failed to get world. Game start aborted ):"));
             this.gameStatus = GameStatus.FAILED;
-            this.closeGame();
+            Bedwars.getInstance().closeGame();
             return;
         }
 
