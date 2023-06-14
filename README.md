@@ -7,11 +7,11 @@ Meant to be just a simple Bedwars plugin, this just simply allows you to play cl
 - /bedwars create
   - Copies the saved Bedwars world and creates a Bedwars game to be played.
 - /bedwars join 
-  - Allows any player to join the currently running Bedwars game.
+  - Allows any player to join the currently running Bedwars game, if there is one active.
 - /bedwars start
-  - Starts the Bedwars game.
+  - Starts the Bedwars game, if there is one active.
 - /bedwars forceend
-  - Ends and closes the currently running game.
+  - Ends and closes the currently active game.
 
 ## Requirements
 This plugin runs on Spigot 1.19.4.
