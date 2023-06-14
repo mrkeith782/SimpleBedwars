@@ -1,5 +1,6 @@
-package mrkeith782.bedwars.game;
+package mrkeith782.bedwars.game.team;
 
+import mrkeith782.bedwars.game.player.BedwarsPlayer;
 import org.bukkit.Color;
 import org.bukkit.Location;
 

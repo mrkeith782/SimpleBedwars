@@ -2,7 +2,7 @@ package mrkeith782.bedwars.listeners;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.BedwarsGame;
-import mrkeith782.bedwars.game.BedwarsTeam;
+import mrkeith782.bedwars.game.team.BedwarsTeam;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

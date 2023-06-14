@@ -1,6 +1,8 @@
 package mrkeith782.bedwars.game;
 
 import mrkeith782.bedwars.Bedwars;
+import mrkeith782.bedwars.game.player.BedwarsPlayer;
+import mrkeith782.bedwars.game.team.BedwarsTeam;
 import mrkeith782.bedwars.listeners.*;
 import mrkeith782.bedwars.managers.*;
 import mrkeith782.bedwars.menus.ShopMenu;
@@ -57,6 +59,7 @@ public class BedwarsGame {
         this.menuManager.registerMenu(new UpgradeMenu());
 
         // Copy and create our world for the game.
+        Bukkit.broadcastMessage("Working dir " + System.getProperty("user.dir"));
         initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
 
         new WorldCreator("bedwars_world").createWorld();
@@ -262,14 +265,14 @@ public class BedwarsGame {
             armorStandManager.spawnNewTextDisplay(
                     shopLoc.clone().add(0, 2.6, 0),
                     "%%aqua%%SHOP",
-                    bedwarsTeam.teamDisplayName + "_SHOP_NPC_1",
+                    bedwarsTeam.getTeamDisplayName() + "_SHOP_NPC_1",
                     90
             );
 
             armorStandManager.spawnNewTextDisplay(
                     shopLoc.clone().add(0, 2.4, 0),
                     "%%yellow%%%%bold%%RIGHT CLICK",
-                    bedwarsTeam.teamDisplayName + "_SHOP_NPC_2",
+                    bedwarsTeam.getTeamDisplayName() + "_SHOP_NPC_2",
                     90
             );
 
@@ -283,21 +286,21 @@ public class BedwarsGame {
             armorStandManager.spawnNewTextDisplay(
                     upgradeLoc.clone().add(0, 2.7, 0),
                     "%%aqua%%SOLO",
-                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_1",
+                    bedwarsTeam.getTeamDisplayName() + "_UPGRADE_NPC_1",
                     270
             );
 
             armorStandManager.spawnNewTextDisplay(
                     upgradeLoc.clone().add(0, 2.5, 0),
                     "%%aqua%%UPGRADES",
-                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
+                    bedwarsTeam.getTeamDisplayName() + "_UPGRADE_NPC_2",
                     270
             );
 
             armorStandManager.spawnNewTextDisplay(
                     upgradeLoc.clone().add(0, 2.3, 0),
                     "%%yellow%%%%bold%%RIGHT CLICK",
-                    bedwarsTeam.teamDisplayName + "_UPGRADE_NPC_2",
+                    bedwarsTeam.getTeamDisplayName() + "_UPGRADE_NPC_2",
                     270
             );
 
@@ -306,7 +309,7 @@ public class BedwarsGame {
             bedwarsTeam.getEnderChestLocation().getBlock().setType(Material.ENDER_CHEST);
 
             // Generator location for the team
-            generatorManager.addNewGenerator(bedwarsTeam.teamDisplayName, bedwarsTeam.getTeamGeneratorLocation());
+            generatorManager.addNewGenerator(bedwarsTeam.getTeamDisplayName(), bedwarsTeam.getTeamGeneratorLocation());
         }
 
         // Diamond / emerald generator locations

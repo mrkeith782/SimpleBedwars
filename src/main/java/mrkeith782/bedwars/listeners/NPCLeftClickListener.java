@@ -2,8 +2,8 @@ package mrkeith782.bedwars.listeners;
 
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.BedwarsGame;
-import mrkeith782.bedwars.game.BedwarsPlayer;
-import mrkeith782.bedwars.game.PlayerStatus;
+import mrkeith782.bedwars.game.player.BedwarsPlayer;
+import mrkeith782.bedwars.game.player.PlayerStatus;
 import mrkeith782.bedwars.npcs.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

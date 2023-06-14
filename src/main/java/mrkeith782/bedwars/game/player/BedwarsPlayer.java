@@ -1,5 +1,6 @@
-package mrkeith782.bedwars.game;
+package mrkeith782.bedwars.game.player;
 
+import mrkeith782.bedwars.game.team.BedwarsTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

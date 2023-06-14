@@ -1,4 +1,4 @@
-package mrkeith782.bedwars.game;
+package mrkeith782.bedwars.game.team;
 
 public enum TeamStatus {
     ALIVE,

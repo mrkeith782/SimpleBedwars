@@ -1,7 +1,11 @@
 package mrkeith782.bedwars.listeners;
 
 import mrkeith782.bedwars.Bedwars;
-import mrkeith782.bedwars.game.*;
+import mrkeith782.bedwars.game.BedwarsGame;
+import mrkeith782.bedwars.game.player.BedwarsPlayer;
+import mrkeith782.bedwars.game.player.PlayerStatus;
+import mrkeith782.bedwars.game.team.BedwarsTeam;
+import mrkeith782.bedwars.game.team.TeamStatus;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
