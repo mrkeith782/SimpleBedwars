@@ -104,14 +104,6 @@ public class BedwarsCommands implements CommandExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("generator")) {
-            Location location = player.getLocation();
-            ArmorStand as = location.getWorld().spawn(location, ArmorStand.class);
-            EntityEquipment eq = as.getEquipment();
-            eq.setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
-            as.setVisible(false);
-        }
-
         return false;
     }
 }
