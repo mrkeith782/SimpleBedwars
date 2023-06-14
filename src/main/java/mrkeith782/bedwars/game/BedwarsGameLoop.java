@@ -154,7 +154,7 @@ public class BedwarsGameLoop {
             // It's really weird that I hard coded this, would be better to absolutely fucking not do this
             if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Red")) {
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
-                    int playersLeft = bedwarsTeam.getAllTeamPlayers().size();
+                    int playersLeft = bedwarsTeam.getTeamPlayers().size();
                     scoreboard.resetScores(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + (playersLeft + 1))));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + playersLeft));
@@ -169,7 +169,7 @@ public class BedwarsGameLoop {
             } else if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Blue")) {
                 scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
-                    int playersLeft = bedwarsTeam.getAllTeamPlayers().size();
+                    int playersLeft = bedwarsTeam.getTeamPlayers().size();
                     scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + (playersLeft + 1))));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + playersLeft));
@@ -269,7 +269,7 @@ public class BedwarsGameLoop {
     }
 
     private int checkValidPlayers(BedwarsTeam bedwarsTeam) {
-        return (int) bedwarsTeam.getAllTeamPlayers().stream()
+        return (int) bedwarsTeam.getTeamPlayers().stream()
                 .filter(player -> player.getStatus() != PlayerStatus.FINAL_DEAD)
                 .count();
     }

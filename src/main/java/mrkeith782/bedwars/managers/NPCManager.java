@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.managers;
 
+import lombok.Getter;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.npcs.NPC;
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class NPCManager {
     //I do the map this way because there are lots of duplicate String IDs, but not Entities!
     final Map<Entity, String> npcs = new HashMap<>();
+    @Getter
     final List<NPC> npcClassList = new ArrayList<>();
     BukkitTask npcLook;
 
@@ -120,9 +122,5 @@ public class NPCManager {
      */
     public void stopNpcLookTask() {
         this.npcLook.cancel();
-    }
-
-    public List<NPC> getNpcList() {
-        return npcClassList;
     }
 }

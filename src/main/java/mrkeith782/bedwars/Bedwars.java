@@ -1,11 +1,14 @@
 package mrkeith782.bedwars;
 
+import lombok.Getter;
 import mrkeith782.bedwars.commands.BedwarsCommands;
 import mrkeith782.bedwars.game.BedwarsGame;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
+    @Getter
     private static Bedwars instance;
+    @Getter
     public BedwarsGame bedwarsGame;
 
     @Override
@@ -22,10 +25,6 @@ public final class Bedwars extends JavaPlugin {
         }
     }
 
-    public static Bedwars getInstance() {
-        return instance;
-    }
-
     public void createNewGame() {
         bedwarsGame = new BedwarsGame();
         bedwarsGame.build();
@@ -34,9 +33,5 @@ public final class Bedwars extends JavaPlugin {
     public void closeGame() {
         bedwarsGame.closeGame();
         bedwarsGame = null;
-    }
-
-    public BedwarsGame getBedwarsGame() {
-        return bedwarsGame;
     }
 }

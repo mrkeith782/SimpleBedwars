@@ -1,5 +1,7 @@
 package mrkeith782.bedwars.game;
 
+import lombok.Getter;
+import lombok.Setter;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.player.BedwarsPlayer;
 import mrkeith782.bedwars.game.team.BedwarsTeam;
@@ -23,15 +25,22 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class BedwarsGame {
+    @Getter
+    @Setter
     public GameStatus gameStatus;
-
+    @Getter
     final ArmorStandManager armorStandManager;
+    @Getter
     final BedwarsScoreboardManager scoreboardManager;
+    @Getter
     final MenuManager menuManager;
+    @Getter
     final NPCManager npcManager;
+    @Getter
     final GeneratorManager generatorManager;
-
+    @Getter
     final List<BedwarsPlayer> bedwarsPlayers = new ArrayList<>();
+    @Getter
     final List<BedwarsTeam> bedwarsTeams = new ArrayList<>();
     BedwarsGameLoop gameLoop;
 
@@ -60,9 +69,10 @@ public class BedwarsGame {
 
         // Copy and create our world for the game.
         Bukkit.broadcastMessage("Working dir " + System.getProperty("user.dir"));
-        initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
+        initializeWorld(new File(System.getProperty("user.dir") + "\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
 
-        new WorldCreator("bedwars_world").createWorld();
+        Bukkit.getServer().createWorld(new WorldCreator("bedwars_world").generatorSettings("2;0;12"));
+
         if (Bukkit.getWorld("bedwars_world") == null) {
             this.gameStatus = GameStatus.FAILED;
             return;
@@ -244,9 +254,9 @@ public class BedwarsGame {
 
         for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
             // Teleport all players to their team's generator
-            List<BedwarsPlayer> players = bedwarsTeam.getAllTeamPlayers();
+            List<BedwarsPlayer> players = bedwarsTeam.getTeamPlayers();
             for (BedwarsPlayer bedwarsPlayer : players) {
-                Player player = Bukkit.getPlayer(bedwarsPlayer.getPlayerUUID());
+                Player player = bedwarsPlayer.getPlayer();
                 if (player == null) {
                     continue;
                 }
@@ -337,7 +347,7 @@ public class BedwarsGame {
     @Nullable
     private BedwarsTeam getSmallestTeam() {
         return bedwarsTeams.stream()
-                .min(Comparator.comparingInt(team -> team.getAllTeamPlayers().size()))
+                .min(Comparator.comparingInt(team -> team.getTeamPlayers().size()))
                 .orElse(null);
     }
 
@@ -412,12 +422,12 @@ public class BedwarsGame {
      * @param string Message to send
      */
     public void messageAllBedwarsPlayers(String string) {
-        bedwarsPlayers.forEach(bwPlayer -> Objects.requireNonNull(Bukkit.getPlayer(bwPlayer.getPlayerUUID())).sendMessage(string));
+        bedwarsPlayers.forEach(bedwarsPlayer -> Objects.requireNonNull(bedwarsPlayer.getPlayer()).sendMessage(string));
     }
 
     public boolean contains(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return true;
             }
         }
@@ -432,49 +442,20 @@ public class BedwarsGame {
     @Nullable
     public BedwarsTeam getTeamByPlayer(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return bedwarsPlayer.getTeam();
             }
         }
         return null;
     }
 
-    public ArmorStandManager getArmorStandManager() {
-        return this.armorStandManager;
-    }
-
-    public BedwarsScoreboardManager getScoreboardManager() {
-        return this.scoreboardManager;
-    }
-
-    public MenuManager getMenuManager() {
-        return this.menuManager;
-    }
-
-    public NPCManager getNpcManager() {
-        return this.npcManager;
-    }
-
-    public GameStatus getGameStatus() {
-        return this.gameStatus;
-    }
-
-    public List<BedwarsTeam> getBedwarsTeams() {
-        return this.bedwarsTeams;
-    }
-
     @Nullable
     public BedwarsPlayer getBedwarsPlayer(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return bedwarsPlayer;
             }
         }
         return null;
-    }
-
-    @Nullable
-    public List<BedwarsPlayer> getBedwarsPlayers() {
-        return this.bedwarsPlayers;
     }
 }

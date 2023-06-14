@@ -10,6 +10,5 @@ public enum GameStatus {
     PHASE_4,
     PHASE_5,
     ENDING,
-    CLEANING,
     FAILED
 }

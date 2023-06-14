@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.managers;
 
+import lombok.Getter;
 import mrkeith782.bedwars.menus.Menu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
+    @Getter
     private final List<Menu> menus = new ArrayList<>();
     private ItemStack BLANK_ITEM;
 
@@ -127,9 +129,5 @@ public class MenuManager {
         for (Menu menu : this.menus) {
             this.menus.remove(menu);
         }
-    }
-
-    public List<Menu> getMenus() {
-        return menus;
     }
 }
