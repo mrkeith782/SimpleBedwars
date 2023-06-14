@@ -50,9 +50,6 @@ public class NPCManager {
     /**
      * Remove all NPCs and Entities that are currently registered with the NPC Manager.
      */
-    /**
-     * Remove all NPCs that are currently registered with the NPC Manager
-     */
     public void removeAllNPCs() {
         for (Entity entity : npcs.keySet()) {
             entity.remove();
