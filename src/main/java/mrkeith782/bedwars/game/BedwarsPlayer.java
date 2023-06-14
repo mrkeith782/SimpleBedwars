@@ -39,6 +39,10 @@ public class BedwarsPlayer {
         this.needsUpdate = update;
     }
 
+    public boolean getNeedsUpdate() {
+        return needsUpdate;
+    }
+
     public UUID getPlayerUUID() {
         return playerUUID;
     }

@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import java.util.List;
+
 public class PlayerDeathListener implements Listener {
 
     @EventHandler
@@ -46,6 +48,7 @@ public class PlayerDeathListener implements Listener {
 
             // The victim gets stats for killing the player
             if (victimTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
+                victimTeam.setNeedsUpdate(true);
                 bedwarsKiller.incFinalKills();
             } else {
                 bedwarsKiller.incKills();

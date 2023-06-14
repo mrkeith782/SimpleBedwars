@@ -31,10 +31,7 @@ public class BedwarsGameLoop {
                     game = Bedwars.getInstance().getBedwarsGame();
                 }
 
-                if (CURRENT_TIME == 0) {
-                    removeScoreboardTime("Diamond II in ", 0);
-                }
-                else if (CURRENT_TIME < 300) {
+                if (CURRENT_TIME < 300) {
                     removeScoreboardTime("Diamond II in ", 300 - CURRENT_TIME);
                     addNewScoreboardTime("Diamond II in ", 300 - CURRENT_TIME - 1);
                 }
@@ -102,14 +99,76 @@ public class BedwarsGameLoop {
                 }
 
                 for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-                    if (bedwarsPlayer.needsUpdate) {
+                    if (bedwarsPlayer.getNeedsUpdate()) {
                         updateScoreboardValues(bedwarsPlayer);
+                    }
+                }
+
+                for (BedwarsTeam bedwarsTeam : game.getBedwarsTeams()) {
+                    if (bedwarsTeam.getNeedsUpdate()) {
+                        updateTeamScoreboardValues(bedwarsTeam);
                     }
                 }
 
                 CURRENT_TIME++;
             }
         };
+    }
+
+    private void updateTeamScoreboardValues(BedwarsTeam bedwarsTeam) {
+        List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
+        if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+            return;
+        }
+        for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
+            Scoreboard scoreboard = Bedwars.getInstance().getBedwarsGame().getScoreboardManager().getScoreboard(bedwarsPlayer.getPlayer());
+            if (scoreboard == null) {
+                continue;
+            }
+            Objective objective = scoreboard.getObjective("Identifier");
+            if (objective == null) {
+                continue;
+            }
+
+            if (checkValidPlayers(bedwarsTeam) == 0) {
+                bedwarsTeam.setTeamStatus(TeamStatus.DEAD);
+            }
+
+            // Change the team's state in the scoreboard, hopefully successfully
+            if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Red")) {
+                if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
+                    int playersLeft = bedwarsTeam.getAllTeamPlayers().size();
+                    scoreboard.resetScores(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
+                    scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + (playersLeft + 1))));
+                    Score score = objective.getScore(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + playersLeft));
+                    score.setScore(8);
+                }
+                if (bedwarsTeam.getTeamStatus() == TeamStatus.DEAD) {
+                    scoreboard.resetScores(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
+                    scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%1")));
+                    Score score = objective.getScore(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%red%%✗"));
+                    score.setScore(8);
+                }
+            } else if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Blue")) {
+                scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
+                    int playersLeft = bedwarsTeam.getAllTeamPlayers().size();
+                    scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                    scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + (playersLeft + 1))));
+                    Score score = objective.getScore(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + playersLeft));
+                    score.setScore(7);
+                }
+                if (bedwarsTeam.getTeamStatus() == TeamStatus.DEAD) {
+                    scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                    scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%1")));
+                    Score score = objective.getScore(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%red%%✗"));
+                    score.setScore(7);
+                }
+            }
+        }
+
+        // We've updated everyone's scoreboard, so let's flag this so we don't have to go through this logic again
+        bedwarsTeam.setNeedsUpdate(false);
     }
 
     /**
@@ -190,6 +249,12 @@ public class BedwarsGameLoop {
         score.setScore(3);
 
         bedwarsPlayer.setNeedsUpdate(false);
+    }
+
+    private int checkValidPlayers(BedwarsTeam bedwarsTeam) {
+        return (int) bedwarsTeam.getAllTeamPlayers().stream()
+                .filter(player -> player.getStatus() != PlayerStatus.FINAL_DEAD)
+                .count();
     }
 
     /**

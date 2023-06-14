@@ -39,6 +39,7 @@ public class BedBreakListener implements Listener {
                 if (team.getBedLocation().equals(event.getBlock().getLocation())) {
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%") + team.getTeamDisplayName() + "'s bed has been broken!");
                     team.setTeamStatus(TeamStatus.BED_BROKEN);
+                    team.setNeedsUpdate(true);
                     return;
                 }
             }

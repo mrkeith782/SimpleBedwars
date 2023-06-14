@@ -17,6 +17,7 @@ public class BedwarsTeam {
     Location upgradesLocation;
     TeamStatus teamStatus;
     List<BedwarsPlayer> teamPlayers;
+    boolean needsUpdate = false;
 
     public BedwarsTeam(String name, Color color, Location bedLoc, Location chestLoc, Location eChestLoc, Location teamGenLoc, Location shopLoc, Location upgradeLoc) {
         this.teamDisplayName = name;
@@ -81,5 +82,21 @@ public class BedwarsTeam {
 
     public TeamStatus getTeamStatus() {
         return teamStatus;
+    }
+
+    /**
+     * Get if the team's scoreboard needs updated
+     * @return True if it does, false if not
+     */
+    public boolean getNeedsUpdate() {
+        return needsUpdate;
+    }
+
+    /**
+     * If the team needs updated in the scoreboard, we flag it here
+     * @param update true if it needs updated, false if not
+     */
+    public void setNeedsUpdate(boolean update) {
+        this.needsUpdate = update;
     }
 }

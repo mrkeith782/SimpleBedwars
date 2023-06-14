@@ -180,7 +180,7 @@ public class BedwarsGame {
      *
      * @return True if could be deleted
      */
-    boolean deleteDirectory(File directoryToBeDeleted) {
+    private boolean deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
