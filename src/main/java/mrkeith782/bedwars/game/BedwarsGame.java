@@ -68,7 +68,6 @@ public class BedwarsGame {
         this.menuManager.registerMenu(new UpgradeMenu());
 
         // Copy and create our world for the game.
-        Bukkit.broadcastMessage("Working dir " + System.getProperty("user.dir"));
         initializeWorld(new File(System.getProperty("user.dir") + "\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
 
         Bukkit.getServer().createWorld(new WorldCreator("bedwars_world").generatorSettings("2;0;12"));
