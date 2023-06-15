@@ -6,7 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.entity.Player;
 
-public class TextUtil {
+public interface TextUtil {
 
     /**
      * Used to parse strings with easy to type colors into color strings.
@@ -15,7 +15,7 @@ public class TextUtil {
      *
      * @return TextComponent with valid color codes
      */
-    public static String parseColoredString(String string) {
+    static String parseColoredString(String string) {
         string = string.replace("%%black%%", "§0");
         string = string.replace("%%dark_blue%%", "§1");
         string = string.replace("%%dark_green%%", "§2");
@@ -50,7 +50,7 @@ public class TextUtil {
      *
      * @return TextComponent with hover
      */
-    public static TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
+    static TextComponent addHoverText(TextComponent string, TextComponent hoverString) {
         string.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverString.getText())));
         return string;
     }
@@ -61,7 +61,7 @@ public class TextUtil {
      * @param player Player to display the string to.
      * @param string String to display. Does not parse color codes.
      */
-    public static void displayActionBar(Player player, String string) {
+    static void displayActionBar(Player player, String string) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(string));
     }
 
@@ -72,7 +72,7 @@ public class TextUtil {
      *
      * @return Formatted string
      */
-    public static String formatPrettyTime(int sec) {
+    static String formatPrettyTime(int sec) {
         return (sec / 60) + ":" + (sec % 60 < 10 ? "0" : "") + sec % 60;
     }
 }

@@ -12,7 +12,6 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BedwarsGameLoop {
@@ -25,7 +24,7 @@ public class BedwarsGameLoop {
      */
     public BedwarsGameLoop() {
         this.gameLoop = new BukkitRunnable() {
-            int CURRENT_TIME = 0;
+            int currentGameTime = 0;
 
             @Override
             public void run() {
@@ -34,70 +33,70 @@ public class BedwarsGameLoop {
                     game = Bedwars.getInstance().getBedwarsGame();
                 }
 
-                if (CURRENT_TIME < 300) {
-                    removeScoreboardTime("Diamond II in ", 300 - CURRENT_TIME);
-                    addNewScoreboardTime("Diamond II in ", 300 - CURRENT_TIME - 1);
+                if (currentGameTime < 300) {
+                    removeScoreboardTime("Diamond II in ", 300 - currentGameTime);
+                    addNewScoreboardTime("Diamond II in ", 300 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 300) {
+                else if (currentGameTime == 300) {
                     removeScoreboardTime("Diamond II in ", 0);
-                    addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
+                    addNewScoreboardTime("Emerald II in ", 600 - currentGameTime - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 2!"));
                     game.gameStatus = GameStatus.PHASE_1;
                 }
-                else if (CURRENT_TIME < 600) {
-                    removeScoreboardTime("Emerald II in ", 600 - CURRENT_TIME);
-                    addNewScoreboardTime("Emerald II in ", 600 - CURRENT_TIME - 1);
+                else if (currentGameTime < 600) {
+                    removeScoreboardTime("Emerald II in ", 600 - currentGameTime);
+                    addNewScoreboardTime("Emerald II in ", 600 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 600) {
+                else if (currentGameTime == 600) {
                     removeScoreboardTime("Emerald II in ", 0);
-                    addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
+                    addNewScoreboardTime("Diamond III in ", 900 - currentGameTime - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 2!"));
                     game.gameStatus = GameStatus.PHASE_2;
                 }
-                else if (CURRENT_TIME < 900) {
-                    removeScoreboardTime("Diamond III in ", 900 - CURRENT_TIME);
-                    addNewScoreboardTime("Diamond III in ", 900 - CURRENT_TIME - 1);
+                else if (currentGameTime < 900) {
+                    removeScoreboardTime("Diamond III in ", 900 - currentGameTime);
+                    addNewScoreboardTime("Diamond III in ", 900 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 900) {
+                else if (currentGameTime == 900) {
                     removeScoreboardTime("Diamond III in ", 0);
-                    addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                    addNewScoreboardTime("Emerald III in ", 1200 - currentGameTime - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Diamond generators upgraded to level 3!"));
                     game.gameStatus = GameStatus.PHASE_3;
                 }
-                else if (CURRENT_TIME < 1200) {
-                    removeScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME);
-                    addNewScoreboardTime("Emerald III in ", 1200 - CURRENT_TIME - 1);
+                else if (currentGameTime < 1200) {
+                    removeScoreboardTime("Emerald III in ", 1200 - currentGameTime);
+                    addNewScoreboardTime("Emerald III in ", 1200 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 1200) {
+                else if (currentGameTime == 1200) {
                     removeScoreboardTime("Emerald III in ", 0);
-                    addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
+                    addNewScoreboardTime("Beds break in ", 1500 - currentGameTime - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Emerald generators upgraded to level 3!"));
                     game.gameStatus = GameStatus.PHASE_4;
                 }
-                else if (CURRENT_TIME < 1500) {
-                    removeScoreboardTime("Beds break in ", 1500 - CURRENT_TIME);
-                    addNewScoreboardTime("Beds break in ", 1500 - CURRENT_TIME - 1);
+                else if (currentGameTime < 1500) {
+                    removeScoreboardTime("Beds break in ", 1500 - currentGameTime);
+                    addNewScoreboardTime("Beds break in ", 1500 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 1500) {
+                else if (currentGameTime == 1500) {
                     removeScoreboardTime("Beds break in ", 0);
-                    addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
+                    addNewScoreboardTime("Game ends in ", 1800 - currentGameTime - 1);
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Beds broken!"));
                     game.gameStatus = GameStatus.PHASE_5;
                 }
-                else if (CURRENT_TIME < 1800) {
-                    removeScoreboardTime("Game ends in ", 1800 - CURRENT_TIME);
-                    addNewScoreboardTime("Game ends in ", 1800 - CURRENT_TIME - 1);
+                else if (currentGameTime < 1800) {
+                    removeScoreboardTime("Game ends in ", 1800 - currentGameTime);
+                    addNewScoreboardTime("Game ends in ", 1800 - currentGameTime - 1);
                 }
-                else if (CURRENT_TIME == 1800) {
+                else if (currentGameTime == 1800) {
                     game.gameStatus = GameStatus.ENDING;
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%Game ended fuckos!"));
                 }
 
                 // Let's see if we can drop items, and do so here
-                game.generatorManager.checkAndDropItems(CURRENT_TIME);
+                game.generatorManager.checkAndDropItems(currentGameTime);
 
                 List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
-                if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+                if (bedwarsPlayers == null || bedwarsPlayers.isEmpty()) {
                     return;
                 }
 
@@ -113,26 +112,15 @@ public class BedwarsGameLoop {
                     }
                 }
 
-                // Let's check if we have a team that meets the win condition, and if we do, end the game.
-                BedwarsTeam bedwarsTeam = checkWinCondition();
-                if (bedwarsTeam != null) {
-                    game.gameStatus = GameStatus.ENDING;
-                    game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Game is over! %%yellow%%" + bedwarsTeam.getTeamDisplayName() + " team won!"));
-
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(Bedwars.getInstance(), () -> {
-                        Bedwars.getInstance().closeGame();
-                    }, 100L);
-                    stopGameLoop();
-                }
-
-                CURRENT_TIME++;
+                checkWinCondition();
+                currentGameTime++;
             }
         };
     }
 
     private void updateTeamScoreboardValues(BedwarsTeam bedwarsTeam) {
         List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
-        if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+        if (bedwarsPlayers == null || bedwarsPlayers.isEmpty()) {
             return;
         }
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
@@ -153,30 +141,32 @@ public class BedwarsGameLoop {
             // Change the team's state in the scoreboard, hopefully successfully.
             // It's really weird that I hard coded this, would be better to absolutely fucking not do this
             if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Red")) {
+                String redCheck = TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓");
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
                     int playersLeft = bedwarsTeam.getTeamPlayers().size();
-                    scoreboard.resetScores(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
+                    scoreboard.resetScores(redCheck);
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + (playersLeft + 1))));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%" + playersLeft));
                     score.setScore(8);
                 }
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.DEAD) {
-                    scoreboard.resetScores(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%✓"));
+                    scoreboard.resetScores(redCheck);
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%green%%1")));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%red%%R %%white%%Red: %%red%%✗"));
                     score.setScore(8);
                 }
             } else if (bedwarsTeam.getTeamDisplayName().equalsIgnoreCase("Blue")) {
-                scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                String blueCheck = TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓");
+                scoreboard.resetScores(blueCheck);
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN) {
                     int playersLeft = bedwarsTeam.getTeamPlayers().size();
-                    scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                    scoreboard.resetScores(blueCheck);
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + (playersLeft + 1))));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%" + playersLeft));
                     score.setScore(7);
                 }
                 if (bedwarsTeam.getTeamStatus() == TeamStatus.DEAD) {
-                    scoreboard.resetScores(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%✓"));
+                    scoreboard.resetScores(blueCheck);
                     scoreboard.resetScores(TextUtil.parseColoredString(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%green%%1")));
                     Score score = objective.getScore(TextUtil.parseColoredString("%%blue%%B %%white%%Blue: %%red%%✗"));
                     score.setScore(7);
@@ -195,7 +185,7 @@ public class BedwarsGameLoop {
      */
     private void removeScoreboardTime(String prepend, int value) {
         List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
-        if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+        if (bedwarsPlayers == null || bedwarsPlayers.isEmpty()) {
             return;
         }
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
@@ -219,7 +209,7 @@ public class BedwarsGameLoop {
      */
     private void addNewScoreboardTime(String prepend, int value) {
         List<BedwarsPlayer> bedwarsPlayers = game.getBedwarsPlayers();
-        if (bedwarsPlayers == null || bedwarsPlayers.size() == 0) {
+        if (bedwarsPlayers == null || bedwarsPlayers.isEmpty()) {
             return;
         }
 
@@ -268,6 +258,11 @@ public class BedwarsGameLoop {
         bedwarsPlayer.setNeedsUpdate(false);
     }
 
+    /**
+     * Check how many players are not final killed on a team
+     * @param bedwarsTeam BedwarsTeam to check players
+     * @return Amount of players left alive on the team
+     */
     private int checkValidPlayers(BedwarsTeam bedwarsTeam) {
         return (int) bedwarsTeam.getTeamPlayers().stream()
                 .filter(player -> player.getStatus() != PlayerStatus.FINAL_DEAD)
@@ -276,10 +271,8 @@ public class BedwarsGameLoop {
 
     /**
      * Loop through all our teams to see if only one remains.
-     * @return The BedwarsTeam that has won, null if none have won yet
      */
-    @Nullable
-    private BedwarsTeam checkWinCondition() {
+    private void checkWinCondition() {
         int teamsAlive = 0;
         BedwarsTeam currTeam = null;
 
@@ -293,9 +286,11 @@ public class BedwarsGameLoop {
 
         // If only one team is alive, store the team and return it.
         if (teamsAlive == 1) {
-            return currTeam;
-        } else {
-            return null;
+            game.gameStatus = GameStatus.ENDING;
+            game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%red%%Game is over! %%yellow%%" + currTeam.getTeamDisplayName() + " team won!"));
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Bedwars.getInstance(), () -> Bedwars.getInstance().closeGame(), 100L);
+            stopGameLoop();
         }
     }
 

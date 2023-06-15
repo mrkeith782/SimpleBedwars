@@ -44,12 +44,9 @@ public abstract class Menu {
             return null;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
-        for (int key : contents.keySet()) {
-            ItemStack item = contents.get(key);
-            inventory.setItem(key, item);
-        }
+        Inventory inv = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
+        contents.forEach(inv::setItem);
 
-        return inventory;
+        return inv;
     }
 }

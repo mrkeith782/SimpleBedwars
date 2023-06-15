@@ -94,7 +94,7 @@ public class BedwarsGame {
     }
 
     /**
-     * Literally stole this code from https://www.spigotmc.org/threads/world-copy.37932/
+     * Literally stole this code from <a href="https://www.spigotmc.org/threads/world-copy.37932/">...</a>
      *
      * @param source Location to copy from
      * @param target Location to copy to
@@ -104,10 +104,8 @@ public class BedwarsGame {
             List<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
             if (!ignore.contains(source.getName())) {
                 if (source.isDirectory()) {
-                    if (!target.exists()) {
-                        if (!target.mkdirs()) {
-                            throw new IOException("Couldn't create world directory!");
-                        }
+                    if (!target.exists() && !target.mkdirs()) {
+                        throw new IOException("Couldn't create world directory!");
                     }
 
                     String[] files = source.list();
@@ -141,7 +139,7 @@ public class BedwarsGame {
     private void initializeTeams() {
         // This is a bunch of hard coded values which isn't exactly nice. It'd be better if we read this in from a config
         World world = Bukkit.getWorld("bedwars_world");
-        BedwarsTeam RED_TEAM = new BedwarsTeam(
+        BedwarsTeam redTeam = new BedwarsTeam(
                 "Red",
                 Color.RED,
                 new Location(world, -33, 66, -64),
@@ -151,7 +149,7 @@ public class BedwarsGame {
                 new Location(world, -28.5, 66, -73),
                 new Location(world, -38.5, 66, -73)
         );
-        BedwarsTeam BLUE_TEAM = new BedwarsTeam(
+        BedwarsTeam blueTeam = new BedwarsTeam(
                 "Blue",
                 Color.BLUE,
                 new Location(world, 33, 66, -64),
@@ -162,8 +160,8 @@ public class BedwarsGame {
                 new Location(world, 27, 66, -73)
         );
         // Cool! I could do the rest of the teams but fuck that :)
-        bedwarsTeams.add(RED_TEAM);
-        bedwarsTeams.add(BLUE_TEAM);
+        bedwarsTeams.add(redTeam);
+        bedwarsTeams.add(blueTeam);
     }
 
     /**
@@ -181,7 +179,7 @@ public class BedwarsGame {
     }
 
     /**
-     * Used to delete the physical files of the BedwarsWorld. Stolen from https://www.baeldung.com/java-delete-directory
+     * Used to delete the physical files of the BedwarsWorld. Stolen from <a href="https://www.baeldung.com/java-delete-directory">...</a>
      *
      * @param directoryToBeDeleted Take a fucking guess
      *
@@ -206,7 +204,7 @@ public class BedwarsGame {
 
         // Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            BedwarsTeam team = this.getSmallestTeam();
+            BedwarsTeam team = getSmallestTeam();
 
             // Double check to make sure we actually init'd our teams
             if (team == null) {
@@ -216,10 +214,8 @@ public class BedwarsGame {
                 return;
             }
 
-            // Assign team to player
-            BedwarsTeam bedwarsTeam = getSmallestTeam();
-            bedwarsTeam.addPlayerToTeam(bedwarsPlayer);
-            bedwarsPlayer.setTeam(bedwarsTeam);
+            team.addPlayerToTeam(bedwarsPlayer);
+            bedwarsPlayer.setTeam(team);
 
             // Update scoreboards
             Player player = bedwarsPlayer.getPlayer();
