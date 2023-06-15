@@ -29,11 +29,6 @@ public class NPCManager {
     BukkitTask npcLook;
 
     /**
-     * Store an NPC in the NPCManager, and spawn it
-     * @param npc NPC to store
-     * @param location Location to spawn the NPC
-     */
-    /**
      * Spawn a brand new NPC and store it in the NPC Manager.
      * @param npc NPC to spawn
      * @param location Location to spawn the NPC

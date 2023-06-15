@@ -27,7 +27,7 @@ public class NPCLeftClickListener implements Listener {
         }
 
         //Try to figure out which type of NPC the player clicked
-        for (NPC npc : game.getNpcManager().getNpcList()) {
+        for (NPC npc : game.getNpcManager().getNpcClassList()) {
             if (npc.getEntity().getUniqueId() == event.getRightClicked().getUniqueId()) {
                 npc.handleClick(event);
             }
