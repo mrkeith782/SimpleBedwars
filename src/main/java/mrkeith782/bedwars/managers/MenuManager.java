@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.managers;
 
+import lombok.Getter;
 import mrkeith782.bedwars.menus.Menu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,8 +16,9 @@ import java.util.Map;
 
 public class MenuManager {
     private final Map<String, Inventory> inventories = new HashMap<>();
+    @Getter
     private final List<Menu> menus = new ArrayList<>();
-    private ItemStack BLANK_ITEM;
+    private ItemStack blankItem;
 
     /**
      * Registers a menu from a class that implements Menu
@@ -24,7 +26,7 @@ public class MenuManager {
      * @param menu Specific menu to register in the MM
      */
     public void registerMenu(Menu menu) {
-        menus.add(menu); // TODO: logic if the menu is already registered?
+        menus.add(menu);
         inventories.put(menu.getMenuID(), menu.getInventory());
     }
 
@@ -83,8 +85,8 @@ public class MenuManager {
      */
     @Nullable
     public ItemStack getBlankItem() {
-        if (BLANK_ITEM != null) { // Early break so we aren't constantly creating new objects
-            return BLANK_ITEM;
+        if (blankItem != null) { // Early break so we aren't constantly creating new objects
+            return blankItem;
         }
 
         ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -95,8 +97,8 @@ public class MenuManager {
         itemMeta.setDisplayName(" ");
         item.setItemMeta(itemMeta);
 
-        BLANK_ITEM = item;
-        return BLANK_ITEM;
+        blankItem = item;
+        return blankItem;
     }
 
     /**
@@ -127,9 +129,5 @@ public class MenuManager {
         for (Menu menu : this.menus) {
             this.menus.remove(menu);
         }
-    }
-
-    public List<Menu> getMenus() {
-        return menus;
     }
 }

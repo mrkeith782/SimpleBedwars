@@ -84,7 +84,7 @@ public class PlayerDeathListener implements Listener {
         player.setGameMode(GameMode.SPECTATOR);
         event.setRespawnLocation(bedwarsTeam.getTeamGeneratorLocation());
 
-        if (!(bedwarsTeam.getTeamStatus() == TeamStatus.BED_BROKEN)) {
+        if (bedwarsTeam.getTeamStatus() != TeamStatus.BED_BROKEN) {
             // If the player is still alive, respawn them
             player.sendMessage(TextUtil.parseColoredString("%%yellow%%You will respawn in 5 seconds..."));
             bedwarsPlayer.setStatus(PlayerStatus.DEAD);

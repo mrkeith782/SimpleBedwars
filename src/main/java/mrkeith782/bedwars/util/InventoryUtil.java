@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryUtil {
+public interface InventoryUtil {
     /**
      * Removes specific amount of materials from a player's inventory.
      *
@@ -14,7 +14,7 @@ public class InventoryUtil {
      *
      * @return True if successful, false if not
      */
-    public static boolean removeIfExists(Player player, Material material, int amount) {
+    static boolean removeIfExists(Player player, Material material, int amount) {
         if (!player.getInventory().containsAtLeast(new ItemStack(material), 4)) {
             return false;
         }
@@ -42,7 +42,7 @@ public class InventoryUtil {
      * @param material Material to give
      * @param amount   Amount of material to give
      */
-    public static void giveItem(Player player, Material material, int amount) {
+    static void giveItem(Player player, Material material, int amount) {
         ItemStack item = new ItemStack(material, amount);
         player.getInventory().addItem(item);
     }
@@ -56,7 +56,7 @@ public class InventoryUtil {
      *
      * @return True if the player can hold the item, false if not.
      */
-    public static boolean hasSpace(Player player, ItemStack material, int amount) {
+    static boolean hasSpace(Player player, ItemStack material, int amount) {
         if (player.getInventory().firstEmpty() != -1) { // They have an empty slot
             return true;
         }

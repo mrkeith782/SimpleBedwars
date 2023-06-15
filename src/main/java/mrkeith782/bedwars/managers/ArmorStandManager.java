@@ -67,7 +67,6 @@ public class ArmorStandManager {
 
         as.remove();
         holograms.remove(ID);
-        return;
     }
 
     /**

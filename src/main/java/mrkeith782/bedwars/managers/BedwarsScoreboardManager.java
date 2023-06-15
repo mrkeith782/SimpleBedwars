@@ -15,14 +15,10 @@ import java.util.Map;
 
 public class BedwarsScoreboardManager {
     private final ScoreboardManager scoreboardManager;
-
-    // Should I be initializing here?
     private final Map<String, Scoreboard> scoreboards = new HashMap<>();
 
     public BedwarsScoreboardManager() {
         scoreboardManager = Bedwars.getInstance().getServer().getScoreboardManager();
-
-        //scoreboards = new HashMap<>(); Or should it be here?
     }
 
     /**

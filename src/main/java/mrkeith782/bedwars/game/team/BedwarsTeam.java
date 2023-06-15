@@ -1,5 +1,7 @@
 package mrkeith782.bedwars.game.team;
 
+import lombok.Getter;
+import lombok.Setter;
 import mrkeith782.bedwars.game.player.BedwarsPlayer;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -8,16 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BedwarsTeam {
+    @Getter
     String teamDisplayName;
+    @Getter
     Color teamDisplayColor;
+    @Getter
     Location bedLocation;
+    @Getter
     Location chestLocation;
+    @Getter
     Location enderChestLocation;
+    @Getter
     Location teamGeneratorLocation;
+    @Getter
     Location shopLocation;
+    @Getter
     Location upgradesLocation;
+    @Getter
+    @Setter
     TeamStatus teamStatus;
+    @Getter
     List<BedwarsPlayer> teamPlayers;
+    @Setter
     boolean needsUpdate = false;
 
     public BedwarsTeam(String name, Color color, Location bedLoc, Location chestLoc, Location eChestLoc, Location teamGenLoc, Location shopLoc, Location upgradeLoc) {
@@ -41,63 +55,7 @@ public class BedwarsTeam {
         teamPlayers.remove(player);
     }
 
-    public List<BedwarsPlayer> getAllTeamPlayers() {
-        return teamPlayers;
-    }
-
-    public Location getTeamGeneratorLocation() {
-        return teamGeneratorLocation;
-    }
-
-    public Location getBedLocation() {
-        return bedLocation;
-    }
-
-    public Location getEnderChestLocation() {
-        return enderChestLocation;
-    }
-
-    public Location getChestLocation() {
-        return chestLocation;
-    }
-
-    public Location getShopLocation() {
-        return shopLocation;
-    }
-
-    public Location getUpgradesLocation() {
-        return upgradesLocation;
-    }
-
-    public Color getTeamDisplayColor() {
-        return teamDisplayColor;
-    }
-
-    public String getTeamDisplayName() {
-        return teamDisplayName;
-    }
-
-    public void setTeamStatus(TeamStatus teamStatus) {
-        this.teamStatus = teamStatus;
-    }
-
-    public TeamStatus getTeamStatus() {
-        return teamStatus;
-    }
-
-    /**
-     * Get if the team's scoreboard needs updated
-     * @return True if it does, false if not
-     */
     public boolean getNeedsUpdate() {
-        return needsUpdate;
-    }
-
-    /**
-     * If the team needs updated in the scoreboard, we flag it here
-     * @param update true if it needs updated, false if not
-     */
-    public void setNeedsUpdate(boolean update) {
-        this.needsUpdate = update;
+        return this.needsUpdate;
     }
 }

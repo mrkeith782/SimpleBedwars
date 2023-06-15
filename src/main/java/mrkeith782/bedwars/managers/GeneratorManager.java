@@ -195,8 +195,4 @@ public class GeneratorManager {
     public void addNewGenerator(String id, Location location) {
         generatorLocations.put(id, location);
     }
-
-    public Map<String, Location> getGeneratorLocations() {
-        return generatorLocations;
-    }
 }

@@ -1,5 +1,7 @@
 package mrkeith782.bedwars.game;
 
+import lombok.Getter;
+import lombok.Setter;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.game.player.BedwarsPlayer;
 import mrkeith782.bedwars.game.team.BedwarsTeam;
@@ -23,15 +25,22 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class BedwarsGame {
+    @Getter
+    @Setter
     public GameStatus gameStatus;
-
+    @Getter
     final ArmorStandManager armorStandManager;
+    @Getter
     final BedwarsScoreboardManager scoreboardManager;
+    @Getter
     final MenuManager menuManager;
+    @Getter
     final NPCManager npcManager;
+    @Getter
     final GeneratorManager generatorManager;
-
+    @Getter
     final List<BedwarsPlayer> bedwarsPlayers = new ArrayList<>();
+    @Getter
     final List<BedwarsTeam> bedwarsTeams = new ArrayList<>();
     BedwarsGameLoop gameLoop;
 
@@ -60,9 +69,10 @@ public class BedwarsGame {
 
         // Copy and create our world for the game.
         Bukkit.broadcastMessage("Working dir " + System.getProperty("user.dir"));
-        initializeWorld(new File("C:\\1.19.4 server\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
+        initializeWorld(new File(System.getProperty("user.dir") + "\\plugins\\bedwars\\bedwars_world"), new File(Bukkit.getWorldContainer(), "bedwars_world"));
 
-        new WorldCreator("bedwars_world").createWorld();
+        Bukkit.getServer().createWorld(new WorldCreator("bedwars_world").generatorSettings("2;0;12"));
+
         if (Bukkit.getWorld("bedwars_world") == null) {
             this.gameStatus = GameStatus.FAILED;
             return;
@@ -84,7 +94,7 @@ public class BedwarsGame {
     }
 
     /**
-     * Literally stole this code from https://www.spigotmc.org/threads/world-copy.37932/
+     * Literally stole this code from <a href="https://www.spigotmc.org/threads/world-copy.37932/">...</a>
      *
      * @param source Location to copy from
      * @param target Location to copy to
@@ -94,10 +104,8 @@ public class BedwarsGame {
             List<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
             if (!ignore.contains(source.getName())) {
                 if (source.isDirectory()) {
-                    if (!target.exists()) {
-                        if (!target.mkdirs()) {
-                            throw new IOException("Couldn't create world directory!");
-                        }
+                    if (!target.exists() && !target.mkdirs()) {
+                        throw new IOException("Couldn't create world directory!");
                     }
 
                     String[] files = source.list();
@@ -131,7 +139,7 @@ public class BedwarsGame {
     private void initializeTeams() {
         // This is a bunch of hard coded values which isn't exactly nice. It'd be better if we read this in from a config
         World world = Bukkit.getWorld("bedwars_world");
-        BedwarsTeam RED_TEAM = new BedwarsTeam(
+        BedwarsTeam redTeam = new BedwarsTeam(
                 "Red",
                 Color.RED,
                 new Location(world, -33, 66, -64),
@@ -141,7 +149,7 @@ public class BedwarsGame {
                 new Location(world, -28.5, 66, -73),
                 new Location(world, -38.5, 66, -73)
         );
-        BedwarsTeam BLUE_TEAM = new BedwarsTeam(
+        BedwarsTeam blueTeam = new BedwarsTeam(
                 "Blue",
                 Color.BLUE,
                 new Location(world, 33, 66, -64),
@@ -152,8 +160,8 @@ public class BedwarsGame {
                 new Location(world, 27, 66, -73)
         );
         // Cool! I could do the rest of the teams but fuck that :)
-        bedwarsTeams.add(RED_TEAM);
-        bedwarsTeams.add(BLUE_TEAM);
+        bedwarsTeams.add(redTeam);
+        bedwarsTeams.add(blueTeam);
     }
 
     /**
@@ -171,7 +179,7 @@ public class BedwarsGame {
     }
 
     /**
-     * Used to delete the physical files of the BedwarsWorld. Stolen from https://www.baeldung.com/java-delete-directory
+     * Used to delete the physical files of the BedwarsWorld. Stolen from <a href="https://www.baeldung.com/java-delete-directory">...</a>
      *
      * @param directoryToBeDeleted Take a fucking guess
      *
@@ -196,7 +204,7 @@ public class BedwarsGame {
 
         // Assign players to teams
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            BedwarsTeam team = this.getSmallestTeam();
+            BedwarsTeam team = getSmallestTeam();
 
             // Double check to make sure we actually init'd our teams
             if (team == null) {
@@ -206,10 +214,8 @@ public class BedwarsGame {
                 return;
             }
 
-            // Assign team to player
-            BedwarsTeam bedwarsTeam = getSmallestTeam();
-            bedwarsTeam.addPlayerToTeam(bedwarsPlayer);
-            bedwarsPlayer.setTeam(bedwarsTeam);
+            team.addPlayerToTeam(bedwarsPlayer);
+            bedwarsPlayer.setTeam(team);
 
             // Update scoreboards
             Player player = bedwarsPlayer.getPlayer();
@@ -244,9 +250,9 @@ public class BedwarsGame {
 
         for (BedwarsTeam bedwarsTeam : bedwarsTeams) {
             // Teleport all players to their team's generator
-            List<BedwarsPlayer> players = bedwarsTeam.getAllTeamPlayers();
+            List<BedwarsPlayer> players = bedwarsTeam.getTeamPlayers();
             for (BedwarsPlayer bedwarsPlayer : players) {
-                Player player = Bukkit.getPlayer(bedwarsPlayer.getPlayerUUID());
+                Player player = bedwarsPlayer.getPlayer();
                 if (player == null) {
                     continue;
                 }
@@ -337,7 +343,7 @@ public class BedwarsGame {
     @Nullable
     private BedwarsTeam getSmallestTeam() {
         return bedwarsTeams.stream()
-                .min(Comparator.comparingInt(team -> team.getAllTeamPlayers().size()))
+                .min(Comparator.comparingInt(team -> team.getTeamPlayers().size()))
                 .orElse(null);
     }
 
@@ -412,12 +418,12 @@ public class BedwarsGame {
      * @param string Message to send
      */
     public void messageAllBedwarsPlayers(String string) {
-        bedwarsPlayers.forEach(bwPlayer -> Objects.requireNonNull(Bukkit.getPlayer(bwPlayer.getPlayerUUID())).sendMessage(string));
+        bedwarsPlayers.forEach(bedwarsPlayer -> Objects.requireNonNull(bedwarsPlayer.getPlayer()).sendMessage(string));
     }
 
     public boolean contains(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return true;
             }
         }
@@ -432,49 +438,20 @@ public class BedwarsGame {
     @Nullable
     public BedwarsTeam getTeamByPlayer(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return bedwarsPlayer.getTeam();
             }
         }
         return null;
     }
 
-    public ArmorStandManager getArmorStandManager() {
-        return this.armorStandManager;
-    }
-
-    public BedwarsScoreboardManager getScoreboardManager() {
-        return this.scoreboardManager;
-    }
-
-    public MenuManager getMenuManager() {
-        return this.menuManager;
-    }
-
-    public NPCManager getNpcManager() {
-        return this.npcManager;
-    }
-
-    public GameStatus getGameStatus() {
-        return this.gameStatus;
-    }
-
-    public List<BedwarsTeam> getBedwarsTeams() {
-        return this.bedwarsTeams;
-    }
-
     @Nullable
     public BedwarsPlayer getBedwarsPlayer(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
-            if (bedwarsPlayer.getPlayerUUID() == player.getUniqueId()) {
+            if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
                 return bedwarsPlayer;
             }
         }
         return null;
-    }
-
-    @Nullable
-    public List<BedwarsPlayer> getBedwarsPlayers() {
-        return this.bedwarsPlayers;
     }
 }

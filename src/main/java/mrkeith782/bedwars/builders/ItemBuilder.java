@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.builders;
 
+import lombok.Getter;
 import mrkeith782.bedwars.Bedwars;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.NamespacedKey;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class ItemBuilder {
     private final Bedwars bedwars = Bedwars.getInstance();
+    @Getter
     private final ItemStack item;
 
     public ItemBuilder(ItemStack item) {
@@ -122,9 +124,5 @@ public class ItemBuilder {
 
     public void setStackSize(int count) {
         item.setAmount(count); // I know this is a weird wrapper but seeing as I'm using it a lot, meh
-    }
-
-    public ItemStack getItem() {
-        return item;
     }
 }

@@ -1,5 +1,6 @@
 package mrkeith782.bedwars.menus;
 
+import lombok.Getter;
 import mrkeith782.bedwars.util.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,8 +11,11 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public abstract class Menu {
+    @Getter
     String menuID;
+    @Getter
     String menuName;
+    @Getter
     Inventory inventory;
 
     /**
@@ -40,24 +44,9 @@ public abstract class Menu {
             return null;
         }
 
-        Inventory inventory = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
-        for (int key : contents.keySet()) {
-            ItemStack item = contents.get(key);
-            inventory.setItem(key, item);
-        }
+        Inventory inv = Bukkit.createInventory(null, rows * 9, TextUtil.parseColoredString(this.menuName));
+        contents.forEach(inv::setItem);
 
-        return inventory;
-    }
-
-    public String getMenuID() {
-        return menuID;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
+        return inv;
     }
 }
