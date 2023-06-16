@@ -418,6 +418,11 @@ public class BedwarsGame {
         bedwarsPlayers.forEach(bedwarsPlayer -> Objects.requireNonNull(bedwarsPlayer.getPlayer()).sendMessage(string));
     }
 
+    /**
+     * Returns if the player is in the game
+     * @param player Player to test
+     * @return True if the player is in the game, false if not
+     */
     public boolean contains(Player player) {
         for (BedwarsPlayer bedwarsPlayer : bedwarsPlayers) {
             if (bedwarsPlayer.getPlayer().getUniqueId() == player.getUniqueId()) {
