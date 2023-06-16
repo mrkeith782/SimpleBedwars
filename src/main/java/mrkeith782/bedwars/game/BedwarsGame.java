@@ -61,8 +61,6 @@ public class BedwarsGame {
      * Called after creation, and before players are allowed in the game.
      */
     public void build() {
-        this.gameStatus = GameStatus.BUILDING;
-
         // Initialize our menus for the game
         this.menuManager.registerMenu(new ShopMenu());
         this.menuManager.registerMenu(new UpgradeMenu());
