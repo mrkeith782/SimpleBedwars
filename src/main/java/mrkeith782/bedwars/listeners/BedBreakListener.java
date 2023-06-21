@@ -34,7 +34,6 @@ public class BedBreakListener implements Listener {
             }
 
             //TODO: This is inherently fragile because the bed takes up two blocks worth of space
-            //TODO: This is fragile because the bed takes up two blocks worth of space
             for (BedwarsTeam team : game.getBedwarsTeams()) {
                 if (team.getBedLocation().equals(event.getBlock().getLocation())) {
                     game.messageAllBedwarsPlayers(TextUtil.parseColoredString("%%yellow%%") + team.getTeamDisplayName() + "'s bed has been broken!");
